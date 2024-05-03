@@ -32,8 +32,8 @@ export default function LoginPage() {
                 </div>
                 <Input id="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button className="w-full">
+                <Link href={"/"}>Login</Link>
               </Button>
             </div>
             <div className="text-center text-sm flex flex-col gap-1">
