@@ -3,6 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers";
+import { Sidebar } from "@/components/sidebar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,7 +34,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Sidebar />
+          <div className={"ml-14"}>{children}</div>
         </ThemeProvider>
       </body>
     </html>
