@@ -1,3 +1,3 @@
-export default function CustomersPage() {
+export default function EventsPage() {
   return <section>{/* Página Principal */}</section>;
 }

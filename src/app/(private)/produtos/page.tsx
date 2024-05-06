@@ -1,3 +1,3 @@
 export default function ProductsPage() {
-  return <main>{/* Página Principal */}</main>;
+  return <section>{/* Página Principal */}</section>;
 }

@@ -9,7 +9,9 @@ export default function PrivateLayout({
   return (
     <>
       <Sidebar />
-      <div className={"ml-14"}>{children}</div>
+      <div className={"ml-14"}>
+        <main className={"bg-accent min-h-screen p-5"}>{children}</main>
+      </div>
     </>
   );
 }
