@@ -10,7 +10,11 @@ export default function SidebarRoot({
   children: React.ReactNode;
 }) {
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+    <aside
+      className={
+        "fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex"
+      }
+    >
       <TooltipProvider>
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
           <Link
@@ -24,7 +28,7 @@ export default function SidebarRoot({
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
           <SidebarItem
-            link={"#"}
+            link={"/configuracoes"}
             tooltipText={"Configurações"}
             icon={{
               Component: Settings,

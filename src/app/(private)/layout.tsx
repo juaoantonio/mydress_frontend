@@ -1,5 +1,6 @@
 import "../globals.css";
 import { Sidebar } from "@/components/sidebar";
+import MobileNav from "@/components/mobile-nav";
 
 export default function PrivateLayout({
   children,
@@ -9,7 +10,8 @@ export default function PrivateLayout({
   return (
     <>
       <Sidebar />
-      <div className={"ml-14"}>
+      <MobileNav />
+      <div className={"sm:ml-14"}>
         <main className={"grid bg-accent min-h-screen p-5"}>{children}</main>
       </div>
     </>
