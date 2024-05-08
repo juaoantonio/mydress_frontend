@@ -1,13 +1,4 @@
-import * as fs from "node:fs";
-
-const dotenv = require("dotenv");
-
-if (fs.existsSync(".env")) {
-  dotenv.config();
-} else {
-  dotenv.config({ path: ".env.development" });
-}
-
 export const env = {
-  ...process.env,
+  API_BASE_URL: process.env.API_BASE_URL,
+  AUTH_SECRET: process.env.AUTH_SECRET,
 };
