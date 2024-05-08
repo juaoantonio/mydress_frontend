@@ -1,6 +1,6 @@
 import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { getUserTokens } from "@/services/auth.service";
+import { getUserTokens } from "@/services/auth/auth.service";
 import { UserSignInOutputDTO } from "@/types/user";
 import { userSignSchema } from "@/schemas/user.schemas";
 import { ZodError } from "zod";
