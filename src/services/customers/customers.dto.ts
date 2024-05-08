@@ -1,6 +1,6 @@
-import { Customer } from "@/types/customer";
+import { CustomerType } from "@/types/customer";
 
 export type CreateCustomerDto = Omit<
-  Customer,
+  CustomerType,
   "created_at" | "updated_at" | "id"
 >;
