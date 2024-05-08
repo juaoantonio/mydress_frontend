@@ -1,8 +1,6 @@
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { LoginForm } from "@/app/(public)/login/components";
 
 export default function LoginPage() {
   return (
@@ -16,26 +14,7 @@ export default function LoginPage() {
                 Entre com sua conta para acessar o sistema My Dress - Pro Suite
               </p>
             </div>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="email@exemplo.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Senha</Label>
-                </div>
-                <Input id="password" type="password" required />
-              </div>
-              <Button className="w-full">
-                <Link href={"/"}>Login</Link>
-              </Button>
-            </div>
+            <LoginForm />
             <div className="text-center text-sm flex flex-col gap-1">
               <p>Ocorreu algum problema?</p>
               <Link

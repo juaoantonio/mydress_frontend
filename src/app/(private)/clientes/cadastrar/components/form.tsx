@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { createCustomerSchema } from "@/schemas/customer/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -15,7 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
+import { createCustomerSchema } from "@/schemas/customer.schemas";
+import { toast } from "sonner";
 
 type InputType = {
   field: keyof z.infer<typeof createCustomerSchema>;
@@ -72,14 +72,14 @@ export function CreateCustomerForm() {
   async function onSubmit(data: z.infer<typeof createCustomerSchema>) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[360px] rounded-md bg-slate-950 p-4">
+    toast.success(
+      <div className={"overflow-x-scroll"}>
+        <h2>Dados enviados pelo formulario:</h2>
+        <pre className="mt-2 rounded-md bg-slate-950 p-4 w-fit">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
-      ),
-    });
+      </div>,
+    );
 
     form.reset();
   }

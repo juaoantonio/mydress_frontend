@@ -1,4 +1,4 @@
-import NextAuth, { type DefaultSession } from "next-auth";
+import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { getUserTokens } from "@/services/auth.service";
 import { UserSignInOutputDTO } from "@/types/user";
@@ -16,11 +16,10 @@ declare module "next-auth" {
   interface User extends UserSignInOutputDTO {}
 }
 
-// @ts-ignore
-// @ts-ignore
 export const { handlers, signOut, signIn, auth } = NextAuth({
   providers: [
     Credentials({
+      id: "credentials",
       credentials: {
         username: {},
         password: {},
@@ -31,8 +30,10 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
         try {
           let user = null;
 
-          const { username, password } =
-            await userSignSchema.parseAsync(credentials);
+          const { username, password } = await userSignSchema.parseAsync({
+            username: credentials.username,
+            password: credentials.password,
+          });
 
           user = await getUserTokens({
             username,
@@ -40,7 +41,7 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
           });
 
           if (!user) {
-            throw new Error("Usuário não encontrado.");
+            throw new CredentialsSignin("Usuário não encontrado.");
           }
 
           return user;
