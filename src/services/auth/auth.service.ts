@@ -1,11 +1,10 @@
 import { UserSignInInputDTO, UserSignInOutputDTO } from "@/types/user";
-import { env } from "@/env";
 import { User } from "next-auth";
 
 export async function getUserTokens(
   credentials: UserSignInInputDTO,
 ): Promise<User | null> {
-  const getTokensUrl = `${env.API_BASE_URL}/token/`;
+  const getTokensUrl = `mydress.joaobarbosa.dev.br/api/v1/token/`;
 
   const response = await fetch(getTokensUrl, {
     method: "POST",
