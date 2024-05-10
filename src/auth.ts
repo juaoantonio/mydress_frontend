@@ -1,10 +1,9 @@
-import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
+import NextAuth, { CredentialsSignin, DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { getUserTokens } from "@/services/auth/auth.service";
-import { UserSignInOutputDTO } from "@/types/user";
+import { authenticateUser } from "@/services/auth/auth.service";
 import { userSignSchema } from "@/schemas/user.schemas";
 import { ZodError } from "zod";
-import log from "logging-service";
+import { UserSignInOutputDTO } from "@/types/user";
 
 declare module "next-auth" {
   /**
@@ -14,21 +13,12 @@ declare module "next-auth" {
     user: UserSignInOutputDTO & DefaultSession["user"];
   }
 
-  interface User extends UserSignInOutputDTO {}
+  interface User extends UserSignInOutputDTO {
+    error?: string;
+  }
 }
 
 export const { handlers, signOut, signIn, auth } = NextAuth({
-  logger: {
-    error(code, ...message) {
-      log.error(code, message);
-    },
-    warn(code, ...message) {
-      log.warn(code, message);
-    },
-    debug(code, ...message) {
-      log.debug(code, message);
-    },
-  },
   providers: [
     Credentials({
       id: "credentials",
@@ -47,7 +37,7 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
             password: credentials.password,
           });
 
-          user = await getUserTokens({
+          user = await authenticateUser({
             username,
             password,
           });
