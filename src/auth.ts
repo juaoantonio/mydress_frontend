@@ -4,6 +4,7 @@ import { getUserTokens } from "@/services/auth/auth.service";
 import { UserSignInOutputDTO } from "@/types/user";
 import { userSignSchema } from "@/schemas/user.schemas";
 import { ZodError } from "zod";
+import log from "logging-service";
 
 declare module "next-auth" {
   /**
@@ -17,6 +18,17 @@ declare module "next-auth" {
 }
 
 export const { handlers, signOut, signIn, auth } = NextAuth({
+  logger: {
+    error(code, ...message) {
+      log.error(code, message);
+    },
+    warn(code, ...message) {
+      log.warn(code, message);
+    },
+    debug(code, ...message) {
+      log.debug(code, message);
+    },
+  },
   providers: [
     Credentials({
       id: "credentials",
