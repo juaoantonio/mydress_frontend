@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createCustomerSchema } from "@/schemas/customer.schemas";
 import { toast } from "sonner";
+import { customersService } from "@/services/customers/customers.service";
+import { getSession } from "next-auth/react";
 
 type InputType = {
   field: keyof z.infer<typeof createCustomerSchema>;
@@ -70,16 +72,27 @@ export function CreateCustomerForm() {
   });
 
   async function onSubmit(data: z.infer<typeof createCustomerSchema>) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const session = await getSession();
+    console.log(session);
 
-    toast.success(
-      <div className={"overflow-x-scroll"}>
-        <h2>Dados enviados pelo formulario:</h2>
-        <pre className="mt-2 rounded-md bg-slate-950 p-4 w-fit">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      </div>,
-    );
+    if (!session) {
+      toast.error("Você precisa estar logado para cadastrar um cliente!");
+      return;
+    }
+
+    const result = await customersService.create(data, session.user.access);
+
+    if (result.errors) {
+      result.errors.map((error) => {
+        const field = error.field as keyof z.infer<typeof createCustomerSchema>;
+        const message = error.messages[0].replace("customer", "Cliente");
+        form.setError(field, { message });
+      });
+
+      return;
+    }
+
+    toast.success("Cliente cadastrado com sucesso!");
 
     form.reset();
   }
