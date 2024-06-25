@@ -4,6 +4,7 @@ import { authenticateUser } from "@/services/auth/auth.service";
 import { userSignSchema } from "@/schemas/user.schemas";
 import { ZodError } from "zod";
 import { UserSignInOutputDTO } from "@/types/user";
+import { jwtDecode } from "jwt-decode";
 
 declare module "next-auth" {
   /**
@@ -13,10 +14,22 @@ declare module "next-auth" {
     user: UserSignInOutputDTO & DefaultSession["user"];
   }
 
+  interface JWT {
+    user: UserSignInOutputDTO;
+  }
+
   interface User extends UserSignInOutputDTO {
     error?: string;
   }
 }
+
+type CommonToken = {
+  token_type: string;
+  iat: number;
+  exp: number;
+  jti: string;
+  user_id: number;
+};
 
 export const { handlers, signOut, signIn, auth } = NextAuth({
   providers: [
@@ -60,12 +73,44 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
     signOut: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.user = user;
+        return token;
+      }
+      const decodedRefreshToken = jwtDecode(token.user.refresh) as CommonToken;
+
+      if (Date.now() >= decodedRefreshToken.exp * 1000) {
+        await signOut({
+          redirect: true,
+          redirectTo: "/login",
+        });
       }
 
-      return token;
+      const decodedAccessToken = jwtDecode(token.user.access) as CommonToken;
+
+      if (Date.now() < decodedAccessToken.exp * 1000) {
+        return token;
+      }
+
+      const newAccessToken = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/token/refresh/`,
+        {
+          method: "POST",
+          body: JSON.stringify(token.user.refresh),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      ).then((res) => res.json());
+
+      return {
+        ...token,
+        user: {
+          ...token.user,
+          access: newAccessToken.access,
+        },
+      };
     },
     async session({ session, token, user }) {
       if (token) {
