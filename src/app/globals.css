@@ -76,3 +76,7 @@
   font-weight: 600;
   text-transform: capitalize;
 }
+
+td[role="gridcell"]:nth-child(6), td[role="gridcell"]:nth-child(7) {
+  background: hsl(var(--ring) / 0.25);
+}
