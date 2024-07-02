@@ -3,25 +3,15 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
+  BookUser,
   Home,
-  LineChart,
   Package,
   Package2,
   PanelLeft,
-  Search,
-  ShoppingCart,
+  PartyPopper,
   Users2,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,10 +23,18 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function MobileNav() {
+  const pathname = usePathname();
+
+  function isActiveLink(href: string) {
+    return pathname.slice(1).split("/")[0] === href.toString().slice(1);
+  }
+
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:hidden sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 justify-between sm:hidden sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
@@ -45,79 +43,78 @@ export default function MobileNav() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="sm:max-w-xs">
-          <nav className="grid gap-6 text-lg font-medium">
+          <nav className="grid gap-3 text-lg font-medium">
             <Link
-              href="#"
+              href="/"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
               <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Acme Inc</span>
+              <span className="sr-only">My Dress - Pro Suite</span>
             </Link>
             <Link
-              href="#"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              href={"/"}
+              className={cn(
+                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                isActiveLink("/")
+                  ? "bg-accent text-accent-foreground"
+                  : " text-muted-foreground",
+              )}
             >
               <Home className="h-5 w-5" />
-              Dashboard
+              Painel Principal
             </Link>
             <Link
-              href="#"
-              className="flex items-center gap-4 px-2.5 text-foreground"
+              href={"/reservas"}
+              className={cn(
+                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                isActiveLink("/reservas")
+                  ? "bg-accent text-accent-foreground"
+                  : " text-muted-foreground",
+              )}
             >
-              <ShoppingCart className="h-5 w-5" />
-              Orders
+              <BookUser className="h-5 w-5" />
+              Reservas
             </Link>
             <Link
-              href="#"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              href="/produtos"
+              className={cn(
+                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                isActiveLink("/produtos")
+                  ? "bg-accent text-accent-foreground"
+                  : " text-muted-foreground",
+              )}
             >
               <Package className="h-5 w-5" />
-              Products
+              Produtos
             </Link>
             <Link
-              href="#"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              href="/eventos"
+              className={cn(
+                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                isActiveLink("/eventos")
+                  ? "bg-accent text-accent-foreground"
+                  : " text-muted-foreground",
+              )}
+            >
+              <PartyPopper className="h-5 w-5" />
+              Eventos
+            </Link>
+            <Link
+              href="/clientes/cadastrar"
+              className={cn(
+                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                isActiveLink("/clientes")
+                  ? "bg-accent text-accent-foreground"
+                  : " text-muted-foreground",
+              )}
             >
               <Users2 className="h-5 w-5" />
-              Customers
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <LineChart className="h-5 w-5" />
-              Settings
+              Clientes
             </Link>
           </nav>
         </SheetContent>
       </Sheet>
-      <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Orders</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Recent Orders</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="relative ml-auto flex-1 md:grow-0">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-        />
-      </div>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
