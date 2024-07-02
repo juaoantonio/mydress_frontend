@@ -18,6 +18,8 @@ import { createCustomerSchema } from "@/schemas/customer.schemas";
 import { toast } from "sonner";
 import { customersService } from "@/services/customers/customers.service";
 import { getSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type InputType = {
   field: keyof z.infer<typeof createCustomerSchema>;
@@ -58,6 +60,7 @@ const inputs: InputType[] = [
 ];
 
 export function CreateCustomerForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof createCustomerSchema>>({
     resolver: zodResolver(createCustomerSchema),
     defaultValues: {
@@ -73,7 +76,6 @@ export function CreateCustomerForm() {
 
   async function onSubmit(data: z.infer<typeof createCustomerSchema>) {
     const session = await getSession();
-    console.log(session);
 
     if (!session) {
       toast.error("Você precisa estar logado para cadastrar um cliente!");
@@ -94,20 +96,20 @@ export function CreateCustomerForm() {
 
     toast.success("Cliente cadastrado com sucesso!");
 
-    form.reset();
+    router.push("/clientes");
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
-        <div className={"grid-cols-2 grid gap-4"}>
+        <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
           {inputs.map((input) => (
             <FormField
               key={input.field}
               control={form.control}
               name={input.field}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={"space-y-1"}>
                   <FormLabel>{input.label}</FormLabel>
                   <FormControl>
                     <Input placeholder={input.placeholder} {...field} />
@@ -125,7 +127,7 @@ export function CreateCustomerForm() {
               <FormItem className={"col-span-full"}>
                 <FormLabel>Observações</FormLabel>
                 <FormControl>
-                  <Textarea rows={10} {...field} />
+                  <Textarea rows={6} {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -133,9 +135,18 @@ export function CreateCustomerForm() {
             )}
           />
         </div>
-        <Button type={"submit"} disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Carregando..." : "Cadastrar"}
-        </Button>
+        <div className={"justfy-between flex gap-2"}>
+          <Button type={"button"} variant={"outline"} className={"flex-1"}>
+            <Link href={"/clientes"}>Cancelar</Link>
+          </Button>
+          <Button
+            type={"submit"}
+            disabled={form.formState.isSubmitting}
+            className={"flex-1"}
+          >
+            {form.formState.isSubmitting ? "Carregando..." : "Cadastrar"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

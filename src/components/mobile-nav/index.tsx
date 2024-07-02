@@ -25,8 +25,10 @@ import {
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export default function MobileNav() {
+  const [openMobileNav, setOpenMobileNav] = useState(false);
   const pathname = usePathname();
 
   function isActiveLink(href: string) {
@@ -34,8 +36,8 @@ export default function MobileNav() {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 justify-between sm:hidden sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-      <Sheet>
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:hidden sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+      <Sheet open={openMobileNav} onOpenChange={setOpenMobileNav}>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
             <PanelLeft className="h-5 w-5" />
@@ -54,11 +56,12 @@ export default function MobileNav() {
             <Link
               href={"/"}
               className={cn(
-                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                 isActiveLink("/")
                   ? "bg-accent text-accent-foreground"
-                  : " text-muted-foreground",
+                  : "text-muted-foreground",
               )}
+              onClick={() => setOpenMobileNav(false)}
             >
               <Home className="h-5 w-5" />
               Painel Principal
@@ -66,11 +69,12 @@ export default function MobileNav() {
             <Link
               href={"/reservas"}
               className={cn(
-                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                 isActiveLink("/reservas")
                   ? "bg-accent text-accent-foreground"
-                  : " text-muted-foreground",
+                  : "text-muted-foreground",
               )}
+              onClick={() => setOpenMobileNav(false)}
             >
               <BookUser className="h-5 w-5" />
               Reservas
@@ -78,11 +82,12 @@ export default function MobileNav() {
             <Link
               href="/produtos"
               className={cn(
-                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                 isActiveLink("/produtos")
                   ? "bg-accent text-accent-foreground"
-                  : " text-muted-foreground",
+                  : "text-muted-foreground",
               )}
+              onClick={() => setOpenMobileNav(false)}
             >
               <Package className="h-5 w-5" />
               Produtos
@@ -90,23 +95,25 @@ export default function MobileNav() {
             <Link
               href="/eventos"
               className={cn(
-                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                 isActiveLink("/eventos")
                   ? "bg-accent text-accent-foreground"
-                  : " text-muted-foreground",
+                  : "text-muted-foreground",
               )}
+              onClick={() => setOpenMobileNav(false)}
             >
               <PartyPopper className="h-5 w-5" />
               Eventos
             </Link>
             <Link
-              href="/clientes/cadastrar"
+              href="/clientes"
               className={cn(
-                "flex items-center gap-4 py-2 px-4 rounded-lg text-muted-foreground hover:text-foreground",
+                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                 isActiveLink("/clientes")
                   ? "bg-accent text-accent-foreground"
-                  : " text-muted-foreground",
+                  : "text-muted-foreground",
               )}
+              onClick={() => setOpenMobileNav(false)}
             >
               <Users2 className="h-5 w-5" />
               Clientes
