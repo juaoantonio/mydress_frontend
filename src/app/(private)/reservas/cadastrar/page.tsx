@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CreateBookingForm } from "@/app/(private)/reservas/cadastrar/components/form";
 
 export default function CreateBookingPage() {
   return (
@@ -7,7 +8,9 @@ export default function CreateBookingPage() {
         <CardHeader>
           <CardTitle>Criar reserva</CardTitle>
         </CardHeader>
-        <CardContent>{/*<CreateCustomerForm />*/}</CardContent>
+        <CardContent>
+          <CreateBookingForm />
+        </CardContent>
       </Card>
     </section>
   );

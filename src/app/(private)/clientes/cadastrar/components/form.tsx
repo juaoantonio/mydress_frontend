@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { InputType } from "@/types/input";
 
-const inputs: InputType[] = [
+const inputs: InputType<typeof createCustomerSchema>[] = [
   {
     field: "name",
     label: "Nome",
@@ -119,7 +119,10 @@ export function CreateCustomerForm() {
                 <FormItem className={"space-y-1"}>
                   <FormLabel>{input.label}</FormLabel>
                   <FormControl>
-                    {input.inputComponentRender({ ...field })}
+                    {input.inputComponentRender({
+                      placeholder: input.placeholder,
+                      ...field,
+                    })}
                   </FormControl>
 
                   <FormMessage />
