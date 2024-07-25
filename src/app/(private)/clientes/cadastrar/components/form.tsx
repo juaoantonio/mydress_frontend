@@ -20,42 +20,49 @@ import { customersService } from "@/services/customers/customers.service";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-type InputType = {
-  field: keyof z.infer<typeof createCustomerSchema>;
-  label: string;
-  placeholder?: string;
-};
+import React from "react";
+import { InputType } from "@/types/input";
 
 const inputs: InputType[] = [
   {
     field: "name",
     label: "Nome",
+    inputComponentRender: (props) => <Input {...props} />,
   },
   {
     field: "email",
     label: "Email",
     placeholder: "fulano@gmail.com",
+    inputComponentRender: (props) => <Input {...props} />,
   },
   {
     field: "cpf",
     label: "CPF",
     placeholder: "00011122289",
+    inputComponentRender: (props) => <Input {...props} />,
   },
   {
     field: "rg",
     label: "RG",
     placeholder: "7001112",
+    inputComponentRender: (props) => <Input {...props} />,
   },
   {
     field: "address",
     label: "Endereço",
+    inputComponentRender: (props) => <Input {...props} />,
   },
 
   {
     field: "phone",
     label: "Telefone",
     placeholder: "91999221212 ",
+    inputComponentRender: (props) => <Input {...props} />,
+  },
+  {
+    field: "notes",
+    label: "Observações",
+    inputComponentRender: (props) => <Textarea {...props} />,
   },
 ];
 
@@ -112,7 +119,7 @@ export function CreateCustomerForm() {
                 <FormItem className={"space-y-1"}>
                   <FormLabel>{input.label}</FormLabel>
                   <FormControl>
-                    <Input placeholder={input.placeholder} {...field} />
+                    {input.inputComponentRender({ ...field })}
                   </FormControl>
 
                   <FormMessage />
@@ -120,6 +127,7 @@ export function CreateCustomerForm() {
               )}
             />
           ))}
+
           <FormField
             control={form.control}
             name={"notes"}
