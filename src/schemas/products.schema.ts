@@ -31,7 +31,7 @@ const createProductSchema = z.object({
   rentable: z.boolean().default(true),
 });
 
-const createDressForm = createProductSchema.extend({
+const createDressSchema = createProductSchema.extend({
   fabric: z.string({
     message: "O tipo de tecido deve ser preenchido",
   }),
