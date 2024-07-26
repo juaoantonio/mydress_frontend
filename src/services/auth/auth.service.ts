@@ -1,4 +1,4 @@
-import { UserSignInInputDTO, UserSignInOutputDTO } from "@/types/user";
+import { UserSignInInputDTO, UserSignInOutputDTO } from "@/types/user.types";
 import { User } from "next-auth";
 import { env } from "@/env";
 

@@ -3,7 +3,7 @@ import {
   CreateCustomerOutputDto,
 } from "@/services/customers/customers.dto";
 import { env } from "@/env";
-import { CustomerType } from "@/types/customer";
+import { CustomerType } from "@/types/customer.types";
 
 async function createCustomer(
   customer: CreateCustomerInputDto,

@@ -1,4 +1,4 @@
-import { CustomerType } from "@/types/customer";
+import { CustomerType } from "@/types/customer.types";
 
 export type CreateCustomerInputDto = Omit<
   CustomerType,

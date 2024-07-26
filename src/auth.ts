@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { authenticateUser } from "@/services/auth/auth.service";
 import { userSignSchema } from "@/schemas/user.schemas";
 import { ZodError } from "zod";
-import { UserSignInOutputDTO } from "@/types/user";
+import { UserSignInOutputDTO } from "@/types/user.types";
 import { jwtDecode } from "jwt-decode";
 
 declare module "next-auth" {

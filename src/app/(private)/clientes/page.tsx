@@ -14,7 +14,7 @@ export default async function CustomersPage() {
   return (
     <section>
       <div className={"mb-4 flex items-center justify-between"}>
-        <h1 className={"text-xl font-semibold"}>Clientes Cadastrados</h1>
+        <h1 className={"text-xl font-semibold"}>Clientes</h1>
         <Link href={"/clientes/cadastrar"}>
           <Button size={"sm"} className={"gap-1"}>
             <Plus size={18} />

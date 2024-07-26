@@ -12,7 +12,9 @@ export default function PrivateLayout({
       <Sidebar />
       <MobileNav />
       <div className={"sm:ml-14"}>
-        <main className={"grid bg-accent min-h-screen p-5"}>{children}</main>
+        <main className={"grid min-h-screen bg-background p-5"}>
+          {children}
+        </main>
       </div>
     </>
   );

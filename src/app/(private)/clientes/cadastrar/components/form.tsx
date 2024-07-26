@@ -21,7 +21,7 @@ import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { InputType } from "@/types/input";
+import { InputType } from "@/types/input.types";
 
 const inputs: InputType<typeof createCustomerSchema>[] = [
   {
@@ -146,7 +146,7 @@ export function CreateCustomerForm() {
             )}
           />
         </div>
-        <div className={"justfy-between flex gap-2"}>
+        <div className={"flex justify-between gap-2"}>
           <Button type={"button"} variant={"outline"} className={"flex-1"}>
             <Link href={"/clientes"}>Cancelar</Link>
           </Button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { InputType } from "@/types/input";
+import { InputType } from "@/types/input.types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createBookingSchema } from "@/schemas/booking.schemas";

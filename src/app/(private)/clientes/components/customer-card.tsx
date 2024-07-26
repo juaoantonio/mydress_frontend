@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
-import { CustomerType } from "@/types/customer";
+import { CustomerType } from "@/types/customer.types";
 import {
   DropdownMenu,
   DropdownMenuContent,

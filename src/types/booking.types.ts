@@ -1,3 +1,5 @@
+import { BookingStatus } from "@/types/booking.enums";
+
 export type BookingType = {
   id: string;
   customer: string;
@@ -9,10 +11,3 @@ export type BookingType = {
   notes?: string;
 };
 
-export enum BookingStatus {
-  CONFIRMED = "CONFIRMED",
-  CANCELED = "CANCELED",
-  IN_PROGRESS = "IN_PROGRESS",
-  OVERDUE = "OVERDUE",
-  CONCLUDED = "CONCLUDED",
-}

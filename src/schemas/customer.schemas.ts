@@ -34,6 +34,8 @@ export const createCustomerSchema = z.object({
     .string({
       message: "Email deve ser preenchido",
     })
-    .email(),
+    .email({
+      message: "Email inválido",
+    }),
   notes: z.string().optional(),
 });
