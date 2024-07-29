@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { InputType } from "@/types/input.types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createBookingSchema } from "@/schemas/booking.schemas";
@@ -14,54 +13,45 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import React from "react";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { SelectWithAdd } from "@/components/select-with-add";
+import { CalendarIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { addDays, format, setDefaultOptions } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { ptBR } from "date-fns/locale";
+import {
+  clients,
+  dresses,
+  events,
+} from "@/app/(private)/reservas/cadastrar/components/mocks";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
-const inputs: InputType<typeof createBookingSchema>[] = [
-  {
-    field: "customer",
-    label: "Cliente",
-    inputComponentRender: (props) => <></>,
-  },
-];
+setDefaultOptions({ locale: ptBR });
 
 export function CreateBookingForm() {
   const router = useRouter();
+
   const form = useForm<z.infer<typeof createBookingSchema>>({
     resolver: zodResolver(createBookingSchema),
     defaultValues: {
       status: "CONFIRMED",
-      start_date: "",
-      end_date: "",
-      products: [],
       event: "",
+      range_date: {
+        start_date: new Date(),
+        end_date: addDays(new Date(), 4),
+      },
       customer: "",
       notes: "",
     },
   });
-
-  const clients = [
-    {
-      id: "1",
-      name: "Cliente 1",
-    },
-    {
-      id: "2",
-      name: "Cliente 2",
-    },
-    {
-      id: "3",
-      name: "Cliente 3",
-    },
-  ];
 
   async function onSubmit(data: z.infer<typeof createBookingSchema>) {
     try {
@@ -76,44 +66,129 @@ export function CreateBookingForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
         <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
-          <FormField
+          <SelectWithAdd
             control={form.control}
             name={"customer"}
+            label={"Selecionar Cliente"}
+            options={clients}
+            addActionLink={"/clientes/cadastrar"}
+            addActionMessage={"Criar cliente"}
+          />
+
+          <SelectWithAdd
+            control={form.control}
+            name={"event"}
+            label={"Evento"}
+            options={events}
+            addActionMessage={"Criar evento"}
+            addActionLink={"/eventos/cadastrar"}
+          />
+
+          <FormField
+            control={form.control}
+            name={"range_date"}
             render={({ field }) => (
-              <FormItem className={"space-y-1"}>
-                <FormLabel>Cliente</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um cliente" />
-                    </SelectTrigger>
-                  </FormControl>
+              <FormItem className={"col-span-full space-y-1"}>
+                <FormLabel>Período da reserva</FormLabel>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="date"
+                        variant={"outline"}
+                        className={cn(
+                          "flex w-[300px] justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value.start_date ? (
+                          field.value.end_date ? (
+                            <>
+                              {format(field.value.start_date, "LLL dd, y")} -{" "}
+                              {format(field.value.end_date, "LLL dd, y")}
+                            </>
+                          ) : (
+                            format(field.value.start_date, "LLL dd, y")
+                          )
+                        ) : (
+                          <span>Escolha um intervalo de data</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        initialFocus
+                        mode="range"
+                        locale={ptBR}
+                        selected={{
+                          from: field.value.start_date,
+                          to: field.value.end_date,
+                        }}
+                        onSelect={(range) => {
+                          if (range?.from && range?.to)
+                            form.setValue("range_date", {
+                              start_date: range.from,
+                              end_date: range.to,
+                            });
+                        }}
+                        numberOfMonths={2}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
 
-                  <SelectContent>
-                    {
-                      <>
-                        {clients.map((client) => (
-                          <SelectItem key={client.id} value={client.id}>
-                            {client.name}
-                          </SelectItem>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={"dresses"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Vestidos</FormLabel>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant={"outline"} className={"block"}>
+                        Selecionar vestidos
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent>
+                      <ul>
+                        {dresses.map((dress, index) => (
+                          <>
+                            {index > 0 && <Separator />}
+                            <Separator />
+                            <div
+                              key={dress.id}
+                              className={
+                                "flex items-center border-gray-200 p-1"
+                              }
+                            >
+                              <Image
+                                src={dress.image}
+                                alt={dress.description}
+                                width={500}
+                                height={500}
+                                className={
+                                  "mr-2 h-16 w-16 rounded-md object-cover"
+                                }
+                              />
+
+                              <p className={"text-sm text-gray-800"}>
+                                {dress.description}
+                              </p>
+                            </div>
+                          </>
                         ))}
-                        <Link
-                          href={"/clientes/cadastrar"}
-                          className={
-                            "flex w-full cursor-pointer items-center gap-1 rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-gray-100 focus:bg-accent focus:text-accent-foreground"
-                          }
-                        >
-                          <Plus size={18} />
-                          Adicionar Cliente
-                        </Link>
-                      </>
-                    }
-                  </SelectContent>
-                </Select>
-
+                      </ul>
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
