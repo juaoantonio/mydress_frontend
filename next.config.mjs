@@ -8,6 +8,12 @@ const nextConfig = {
       }, {
         protocol: "https",
         hostname: 'images.tcdn.com.br'
+      },{
+        protocol: "https",
+        hostname: 'img.irroba.com.br'
+      },{
+        protocol: "https",
+        hostname: 'ae01.alicdn.com'
       }
     ]
   }

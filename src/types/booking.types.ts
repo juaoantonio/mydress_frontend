@@ -11,3 +11,8 @@ export type BookingType = {
   notes?: string;
 };
 
+export type SelectMultipleInputOption = {
+  id: string;
+  image: string;
+  description: string;
+};

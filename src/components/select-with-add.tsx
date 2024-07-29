@@ -32,6 +32,7 @@ export function SelectWithAdd<
   options,
   addActionMessage,
   addActionLink,
+  placeholder,
 }: {
   control: Control<TFieldValues>;
   name: TName;
@@ -39,6 +40,7 @@ export function SelectWithAdd<
   options: SelectOption[];
   addActionMessage: string;
   addActionLink: string;
+  placeholder?: string;
 }) {
   return (
     <FormField
@@ -50,7 +52,7 @@ export function SelectWithAdd<
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione um cliente" />
+                <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
 
