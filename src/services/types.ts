@@ -1,16 +1,16 @@
 type SuccessOutputDto<DataType> = {
-  data: DataType;
+  body: DataType;
   errors: null;
 };
 
 type ErrorOutputDto = {
-  data: null;
+  body: null;
   errors: {
     code: number;
     content: any;
   };
 };
 
-export type CommonOutputDto<DataType> =
+export type CommonCreateUpdateOutputDto<DataType> =
   | SuccessOutputDto<DataType>
   | ErrorOutputDto;

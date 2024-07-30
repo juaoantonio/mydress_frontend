@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { getSession } from "next-auth/react";
-import { customersService } from "@/services/customers/customers.service";
+import { CustomersService } from "@/services/customers/customer.service";
 import { useRouter } from "next/navigation";
 
 export function CustomerCard({ customer }: { customer: CustomerType }) {
+  const customerService = new CustomersService();
   const router = useRouter();
   async function handleCustomerDelete(id: string) {
     const session = await getSession();
@@ -26,7 +27,7 @@ export function CustomerCard({ customer }: { customer: CustomerType }) {
     const loadingToast = toast.loading("Removendo cliente...");
 
     try {
-      await customersService.deleteById(id, session.user.access);
+      await customerService.deleteById(id);
       router.refresh();
       toast.success("Cliente removido com sucesso!");
     } catch (error) {

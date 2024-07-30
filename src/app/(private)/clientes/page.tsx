@@ -1,11 +1,15 @@
-import { customersService } from "@/services/customers/customers.service";
-import { Button } from "@/components/ui/button";
+import { CustomersService } from "@/services/customers/customer.service";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { CustomerCard } from "@/app/(private)/clientes/components/customer-card";
+import { CustomerCard } from "@/app/(private)/clientes/components";
+import { cache } from "react";
+
+export const dynamic = "force-dynamic";
 
 export default async function CustomersPage() {
-  const customers = await customersService.listAll();
+  const customersService = new CustomersService();
+  const customers = await cache(async () => await customersService.getAll())();
 
   return (
     <section>

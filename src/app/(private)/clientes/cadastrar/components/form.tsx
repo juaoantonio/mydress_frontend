@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,12 +16,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createCustomerSchema } from "@/schemas/customer.schemas";
 import { toast } from "sonner";
-import { customersService } from "@/services/customers/customers.service";
+import { CustomersService } from "@/services/customers/customer.service";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { InputType } from "@/types/input.types";
+import { useMutation } from "@tanstack/react-query";
+import { handleCreationFormError } from "@/lib/utils";
 
 const inputs: InputType<typeof createCustomerSchema>[] = [
   {
@@ -61,9 +63,20 @@ const inputs: InputType<typeof createCustomerSchema>[] = [
   },
 ];
 
+type CustomerFormSchemaType = z.infer<typeof createCustomerSchema>;
+
+function handleCustomerCreationError(
+  error: unknown,
+  form: UseFormReturn<CustomerFormSchemaType>,
+) {
+  handleCreationFormError(error, form, "Erro ao cadastrar cliente", (message) =>
+    message.replace("customer", "Cliente"),
+  );
+}
+
 export function CreateCustomerForm() {
   const router = useRouter();
-  const form = useForm<z.infer<typeof createCustomerSchema>>({
+  const form = useForm<CustomerFormSchemaType>({
     resolver: zodResolver(createCustomerSchema),
     defaultValues: {
       name: "",
@@ -76,7 +89,12 @@ export function CreateCustomerForm() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof createCustomerSchema>) {
+  const service = new CustomersService();
+  const mutation = useMutation({
+    mutationFn: (data: CustomerFormSchemaType) => service.create(data),
+  });
+
+  async function onSubmit(data: CustomerFormSchemaType) {
     const session = await getSession();
 
     if (!session) {
@@ -84,21 +102,14 @@ export function CreateCustomerForm() {
       return;
     }
 
-    const result = await customersService.create(data, session.user.access);
+    try {
+      await mutation.mutateAsync(data);
 
-    if (result.errors) {
-      result.errors.map((error) => {
-        const field = error.field as keyof z.infer<typeof createCustomerSchema>;
-        const message = error.messages[0].replace("customer", "Cliente");
-        form.setError(field, { message });
-      });
-
-      return;
+      toast.success("Cliente cadastrado com sucesso!");
+      router.back();
+    } catch (error) {
+      handleCustomerCreationError(error, form);
     }
-
-    toast.success("Cliente cadastrado com sucesso!");
-
-    router.back();
   }
 
   return (

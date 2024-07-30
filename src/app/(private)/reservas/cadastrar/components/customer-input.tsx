@@ -1,17 +1,18 @@
 import React from "react";
 import { Control } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import { customersService } from "@/services/customers/customers.service";
+import { CustomersService } from "@/services/customers/customer.service";
 import { SelectWithAdd } from "@/components/select-with-add";
 
 export function CustomerInput({ control }: { control: Control<any> }) {
+  const customerService = new CustomersService();
   const {
     isPending,
     isError,
     data: customers,
   } = useQuery({
     queryKey: ["customers"],
-    queryFn: customersService.listAll,
+    queryFn: customerService.getAll,
   });
 
   return (
