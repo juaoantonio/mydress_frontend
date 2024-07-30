@@ -34,7 +34,7 @@ import {
   jewelry,
   purses,
 } from "@/app/(private)/reservas/cadastrar/components/mocks";
-import { SelectMultipleInput } from "@/app/(private)/reservas/cadastrar/components/components/select-multiple-input";
+import { SelectMultipleInput } from "@/components/select-multiple-input";
 import { Textarea } from "@/components/ui/textarea";
 
 setDefaultOptions({ locale: ptBR });
