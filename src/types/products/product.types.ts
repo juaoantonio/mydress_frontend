@@ -1,6 +1,6 @@
-import { DressStatus, JewelryStatus, PurseStatus } from "@/types/product.enums";
+import { JewelryStatus, PurseStatus } from "@/types/products/product.enums";
 
-type ProductType = {
+export type ProductType = {
   id: string;
   img: string;
   description: string;
@@ -10,14 +10,6 @@ type ProductType = {
   sku: string;
   created_at: string;
   updated_at: string;
-};
-
-export type DressType = ProductType & {
-  status: DressStatus;
-  fabric: string;
-  color: string;
-  model: string;
-  available_for_adjustment: boolean;
 };
 
 export type PurseType = ProductType & {

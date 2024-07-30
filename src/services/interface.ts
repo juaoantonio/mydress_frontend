@@ -1,9 +1,7 @@
 import { CommonOutputDto } from "@/services/types";
 
 export interface Service<Entity> {
-  create<EntityCreateInputDTO>(
-    data: EntityCreateInputDTO,
-  ): Promise<CommonOutputDto<Entity>>;
+  create(data: any): Promise<CommonOutputDto<Entity>>;
 
   getAll(): Promise<CommonOutputDto<Entity[]>>;
 
