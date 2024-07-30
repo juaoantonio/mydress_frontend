@@ -25,23 +25,17 @@ export class CustomersService implements Service<CustomerType> {
   async getAll() {
     const response = await axiosClient.get<CustomerType[]>("/customers");
 
-    if (response.status === 500) throw new Error("Internal server error");
-
     return response.data;
   }
 
   async getById(id: string) {
     const response = await axiosClient.get<CustomerType>(`/customers/${id}`);
 
-    if (response.status === 500) throw new Error("Internal server error");
-
     return response.data;
   }
 
   async deleteById(id: string) {
-    const response = await axiosClient.delete<null>(`/customers/${id}`);
-
-    if (response.status === 500) throw new Error("Internal server error");
+    await axiosClient.delete<null>(`/customers/${id}`);
 
     return;
   }
@@ -51,8 +45,6 @@ export class CustomersService implements Service<CustomerType> {
       `/customers/${id}`,
       data,
     );
-
-    if (response.status === 500) throw new Error("Internal server error");
 
     return response.data;
   }
