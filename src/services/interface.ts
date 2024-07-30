@@ -1,16 +1,11 @@
-import { CommonOutputDto } from "@/services/types";
-
 export interface Service<Entity> {
-  create(data: any): Promise<CommonOutputDto<Entity>>;
+  create(data: any): Promise<Entity>;
 
-  getAll(): Promise<CommonOutputDto<Entity[]>>;
+  getAll(): Promise<Entity[]>;
 
-  getById(id: string): Promise<CommonOutputDto<Entity>>;
+  getById(id: string): Promise<Entity>;
 
-  deleteById(id: string): Promise<CommonOutputDto<null>>;
+  deleteById(id: string): Promise<void>;
 
-  updateById(
-    id: string,
-    data: Partial<Entity>,
-  ): Promise<CommonOutputDto<Entity>>;
+  updateById(id: string, data: Partial<Entity>): Promise<Entity>;
 }

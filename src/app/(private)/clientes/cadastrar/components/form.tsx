@@ -59,11 +59,6 @@ const inputs: InputType<typeof createCustomerSchema>[] = [
     placeholder: "91999221212 ",
     inputComponentRender: (props) => <Input {...props} />,
   },
-  {
-    field: "notes",
-    label: "Observações",
-    inputComponentRender: (props) => <Textarea {...props} />,
-  },
 ];
 
 export function CreateCustomerForm() {
@@ -103,7 +98,7 @@ export function CreateCustomerForm() {
 
     toast.success("Cliente cadastrado com sucesso!");
 
-    router.push("/clientes");
+    router.back();
   }
 
   return (

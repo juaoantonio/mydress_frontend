@@ -13,6 +13,6 @@ export type BookingType = {
 
 export type SelectMultipleInputOption = {
   id: string;
-  image: string;
+  img: string;
   description: string;
 };

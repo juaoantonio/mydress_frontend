@@ -22,6 +22,7 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { SelectMultipleInputOption } from "@/types/booking.types";
+import { LoaderCircle } from "lucide-react";
 
 export function SelectMultipleInput<
   TFieldValues extends FieldValues = FieldValues,
@@ -32,12 +33,16 @@ export function SelectMultipleInput<
   form,
   fieldName,
   options,
+  loading,
+  error,
 }: {
   label: string;
   triggerText: string;
   form: UseFormReturn<TFieldValues>;
   fieldName: TName;
-  options: SelectMultipleInputOption[];
+  options?: SelectMultipleInputOption[];
+  loading?: boolean;
+  error?: boolean;
 }) {
   return (
     <FormField
@@ -56,7 +61,14 @@ export function SelectMultipleInput<
 
               <PopoverContent>
                 <ul className={"space-y-2"}>
-                  {options.map((option, index) => (
+                  {loading && (
+                    <div className={"flex items-center justify-center p-2"}>
+                      <LoaderCircle className={"animate-spin text-primary"} />
+                    </div>
+                  )}
+                  {error && <p>Erro ao carregar vestidos</p>}
+
+                  {options?.map((option, index) => (
                     <>
                       {index > 0 && <Separator />}
                       <div
@@ -84,7 +96,7 @@ export function SelectMultipleInput<
                           }}
                         />
                         <Image
-                          src={option.image}
+                          src={option.img}
                           alt={option.description}
                           width={500}
                           height={500}

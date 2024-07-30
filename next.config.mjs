@@ -14,7 +14,10 @@ const nextConfig = {
       },{
         protocol: "https",
         hostname: 'ae01.alicdn.com'
-      }
+      },{
+        protocol: "https",
+        hostname: 'my-dress-dev.s3.amazonaws.com'
+      },
     ]
   }
 };

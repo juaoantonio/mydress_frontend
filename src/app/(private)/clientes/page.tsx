@@ -1,15 +1,11 @@
 import { customersService } from "@/services/customers/customers.service";
-import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { CustomerCard } from "@/app/(private)/clientes/components/customer-card";
 
 export default async function CustomersPage() {
-  const session = await auth();
-  if (!session) return null;
-
-  const customers = await customersService.listAll(session.user.access);
+  const customers = await customersService.listAll();
 
   return (
     <section>

@@ -4,6 +4,7 @@ import {
 } from "@/services/customers/customers.dto";
 import { env } from "@/env";
 import { CustomerType } from "@/types/customer.types";
+import { axiosClient } from "@/lib/axios.client";
 
 async function createCustomer(
   customer: CreateCustomerInputDto,
@@ -41,17 +42,12 @@ async function createCustomer(
   }
 }
 
-async function getCustomers(accessToken: string) {
-  const response = await fetch(`${env.API_BASE_URL}/customers`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+async function getCustomers() {
+  const response = await axiosClient.get("/customers");
 
   if (response.status === 500) throw new Error("Erro interno no servidor");
-  if (!response.ok) throw new Error("Erro ao buscar clientes");
 
-  return (await response.json()) as CustomerType[];
+  return (await response.data) as CustomerType[];
 }
 
 async function deleteCustomerById(id: string, accessToken: string) {

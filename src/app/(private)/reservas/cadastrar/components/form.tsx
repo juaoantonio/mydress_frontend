@@ -28,14 +28,14 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 import {
-  clients,
-  dresses,
   events,
   jewelry,
   purses,
 } from "@/app/(private)/reservas/cadastrar/components/mocks";
 import { SelectMultipleInput } from "@/components/select-multiple-input";
 import { Textarea } from "@/components/ui/textarea";
+import { CustomerInput } from "@/app/(private)/reservas/cadastrar/components/customer-input";
+import { DressesInput } from "@/app/(private)/reservas/cadastrar/components/dresses-input";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -73,15 +73,7 @@ export function CreateBookingForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
           <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
-            <SelectWithAdd
-              control={form.control}
-              name={"customer"}
-              label={"Selecionar Cliente"}
-              placeholder={"Selecione um cliente"}
-              options={clients}
-              addActionLink={"/clientes/cadastrar"}
-              addActionMessage={"Criar cliente"}
-            />
+            <CustomerInput control={form.control} />
 
             <SelectWithAdd
               control={form.control}
@@ -152,13 +144,7 @@ export function CreateBookingForm() {
               )}
             />
 
-            <SelectMultipleInput
-              label={"Selecionar vestidos"}
-              triggerText={"Adicionar vestidos"}
-              form={form}
-              fieldName={"dresses"}
-              options={dresses}
-            />
+            <DressesInput form={form} />
 
             <SelectMultipleInput
               label={"Selecionar bolsas"}

@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
 import React from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -33,14 +33,18 @@ export function SelectWithAdd<
   addActionMessage,
   addActionLink,
   placeholder,
+  loading,
+  error,
 }: {
   control: Control<TFieldValues>;
   name: TName;
   label: string;
-  options: SelectOption[];
+  options?: SelectOption[];
   addActionMessage: string;
   addActionLink: string;
   placeholder?: string;
+  loading?: boolean;
+  error?: boolean;
 }) {
   return (
     <FormField
@@ -59,7 +63,13 @@ export function SelectWithAdd<
             <SelectContent>
               {
                 <>
-                  {options.map((option) => (
+                  {loading && (
+                    <div className={"flex items-center justify-center p-2"}>
+                      <LoaderCircle className={"animate-spin text-primary"} />
+                    </div>
+                  )}
+                  {error && <p>Erro ao carregar opções</p>}
+                  {options?.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
