@@ -10,6 +10,7 @@ export function DressesInput({ form }: { form: UseFormReturn<any> }) {
   const {
     isPending,
     isError,
+    error,
     data: dresses,
   } = useQuery({
     queryKey: ["dresses"],
@@ -24,6 +25,7 @@ export function DressesInput({ form }: { form: UseFormReturn<any> }) {
       fieldName={"dresses"}
       loading={isPending}
       error={isError}
+      errorMessage={"Erro ao buscar vestidos"}
       options={
         dresses &&
         dresses.map(({ id, description, img }) => ({

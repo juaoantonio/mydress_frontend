@@ -8,11 +8,4 @@ export type DressType = ProductType & {
   model: string;
   available_for_adjustment: boolean;
 };
-export type CreateDressInputDTO = Partial<
-  Omit<DressType, "created_at" | "id" | "updated_at" | "sku">
-> & {
-  rentable?: boolean;
-  purchaseable?: boolean;
-  status?: string;
-  available_for_adjustment?: boolean;
-};
+

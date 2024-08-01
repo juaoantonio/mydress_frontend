@@ -3,8 +3,8 @@ import { CreateBookingForm } from "@/app/(private)/reservas/cadastrar/components
 
 export default function CreateBookingPage() {
   return (
-    <section className={"flex h-fit justify-center lg:items-center"}>
-      <Card className={"mx-auto max-w-[800px] flex-1"}>
+    <section className={"flex h-[130vh] justify-center lg:items-center"}>
+      <Card className={"mx-auto h-fit max-w-[800px] flex-1"}>
         <CardHeader>
           <CardTitle>Criar reserva</CardTitle>
         </CardHeader>

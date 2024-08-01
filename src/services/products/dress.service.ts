@@ -1,6 +1,7 @@
 import { axiosClient } from "@/lib/axios.client";
 import { Service } from "@/services/interface";
-import { CreateDressInputDTO, DressType } from "@/types/products/dress.types";
+import { DressType } from "@/types/products/dress.types";
+import { CreateDressInputDTO } from "@/services/products/dress.dto";
 
 export class DressService implements Service<DressType> {
   async create(data: CreateDressInputDTO): Promise<DressType> {
@@ -8,8 +9,6 @@ export class DressService implements Service<DressType> {
       "/products/dresses",
       data,
     );
-
-    if (response.status === 500) throw new Error("Internal server error");
 
     return response.data;
   }
@@ -19,23 +18,17 @@ export class DressService implements Service<DressType> {
       `/products/dresses/${id}`,
     );
 
-    if (response.status === 500) throw new Error("Internal server error");
-
     return response.data;
   }
 
   async getAll() {
     const response = await axiosClient.get<DressType[]>("/products/dresses");
 
-    if (response.status === 500) throw new Error("Internal server error");
-
     return response.data;
   }
 
   async deleteById(id: string) {
     const response = await axiosClient.delete<null>(`/products/dresses/${id}`);
-
-    if (response.status === 500) throw new Error("Internal server error");
 
     return;
   }
@@ -45,8 +38,6 @@ export class DressService implements Service<DressType> {
       `/products/dresses/${id}`,
       data,
     );
-
-    if (response.status === 500) throw new Error("Internal server error");
 
     return response.data;
   }

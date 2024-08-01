@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import { z } from "zod";
 import { createBookingSchema } from "@/schemas/booking.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,27 +14,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import React from "react";
-import { SelectWithAdd } from "@/components/select-with-add";
-import { CalendarIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { addDays, format, setDefaultOptions } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
+import { setDefaultOptions } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {
-  events,
-  jewelry,
-  purses,
-} from "@/app/(private)/reservas/cadastrar/components/mocks";
-import { SelectMultipleInput } from "@/components/select-multiple-input";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomerInput } from "@/app/(private)/reservas/cadastrar/components/customer-input";
 import { DressesInput } from "@/app/(private)/reservas/cadastrar/components/dresses-input";
+import { PursesInput } from "@/app/(private)/reservas/cadastrar/components/purses-input";
+import { EventInput } from "@/app/(private)/reservas/cadastrar/components/event-input";
+import { CalendarInput } from "@/app/(private)/reservas/cadastrar/components/calendar-input";
+import { Button } from "@/components/ui/button";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -47,15 +34,14 @@ export function CreateBookingForm() {
     defaultValues: {
       status: "CONFIRMED",
       event: "",
-      range_date: {
-        start_date: new Date(),
-        end_date: addDays(new Date(), 4),
-      },
       customer: "",
+      range_date: {
+        start_date: null,
+        end_date: null,
+      },
       notes: "",
       dresses: [],
       purses: [],
-      jewelry: [],
     },
   });
 
@@ -69,99 +55,18 @@ export function CreateBookingForm() {
   }
 
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
-          <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
-            <CustomerInput control={form.control} />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
+        <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
+          <CustomerInput control={form.control} />
 
-            <SelectWithAdd
-              control={form.control}
-              name={"event"}
-              label={"Evento"}
-              placeholder={"Selecione um evento"}
-              options={events}
-              addActionMessage={"Criar evento"}
-              addActionLink={"/eventos/cadastrar"}
-            />
+          <EventInput control={form.control} />
 
-            <FormField
-              control={form.control}
-              name={"range_date"}
-              render={({ field }) => (
-                <FormItem className={"col-span-full space-y-1"}>
-                  <FormLabel>Período da reserva</FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          id="date"
-                          variant={"outline"}
-                          className={cn(
-                            "flex w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value.start_date ? (
-                            field.value.end_date ? (
-                              <>
-                                {format(field.value.start_date, "LLL dd, y")} -{" "}
-                                {format(field.value.end_date, "LLL dd, y")}
-                              </>
-                            ) : (
-                              format(field.value.start_date, "LLL dd, y")
-                            )
-                          ) : (
-                            <span>Escolha um intervalo de data</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          initialFocus
-                          mode="range"
-                          locale={ptBR}
-                          selected={{
-                            from: field.value.start_date,
-                            to: field.value.end_date,
-                          }}
-                          onSelect={(range) => {
-                            if (range?.from && range?.to)
-                              form.setValue("range_date", {
-                                start_date: range.from,
-                                end_date: range.to,
-                              });
-                          }}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
+          <CalendarInput form={form} />
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <DressesInput form={form} />
 
-            <DressesInput form={form} />
-
-            <SelectMultipleInput
-              label={"Selecionar bolsas"}
-              triggerText={"Adicionar bolsas"}
-              form={form}
-              fieldName={"purses"}
-              options={purses}
-            />
-
-            <SelectMultipleInput
-              label={"Selecionar jóias"}
-              triggerText={"Adicionar jóias"}
-              form={form}
-              fieldName={"jewelry"}
-              options={jewelry}
-            />
-          </div>
+          <PursesInput form={form} />
 
           <FormField
             control={form.control}
@@ -177,9 +82,21 @@ export function CreateBookingForm() {
               </FormItem>
             )}
           />
-        </form>
-      </Form>
-      <DevTool control={form.control} />
-    </>
+        </div>
+        <div className={"flex gap-2"}>
+          <Button
+            className={"flex-1"}
+            type={"button"}
+            variant={"outline"}
+            onClick={() => router.back()}
+          >
+            Cancelar
+          </Button>
+          <Button className={"flex-1"} type={"submit"}>
+            Salvar
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

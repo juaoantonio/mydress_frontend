@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
-import React from "react";
+import React, { Fragment } from "react";
 import {
   FieldPath,
   FieldValues,
@@ -35,6 +35,7 @@ export function SelectMultipleInput<
   options,
   loading,
   error,
+  errorMessage,
 }: {
   label: string;
   triggerText: string;
@@ -43,6 +44,7 @@ export function SelectMultipleInput<
   options?: SelectMultipleInputOption[];
   loading?: boolean;
   error?: boolean;
+  errorMessage?: string;
 }) {
   return (
     <FormField
@@ -59,17 +61,17 @@ export function SelectMultipleInput<
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent>
+              <PopoverContent className={"p-2"}>
                 <ul className={"space-y-2"}>
                   {loading && (
                     <div className={"flex items-center justify-center p-2"}>
                       <LoaderCircle className={"animate-spin text-primary"} />
                     </div>
                   )}
-                  {error && <p>Erro ao carregar vestidos</p>}
+                  {errorMessage}
 
                   {options?.map((option, index) => (
-                    <>
+                    <Fragment key={option.id}>
                       {index > 0 && <Separator />}
                       <div
                         key={option.id}
@@ -107,7 +109,7 @@ export function SelectMultipleInput<
                           {option.description}
                         </p>
                       </div>
-                    </>
+                    </Fragment>
                   ))}
                 </ul>
               </PopoverContent>
