@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createCustomerSchema } from "@/schemas/customer.schemas";
 import { toast } from "sonner";
-import { CustomersService } from "@/services/customers/customer.service";
+import { CustomerService } from "@/services/customers/customer.service";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -92,7 +92,7 @@ export function CreateCustomerForm() {
         },
     });
 
-    const service = new CustomersService();
+    const service = new CustomerService();
     const mutation = useMutation({
         mutationFn: (data: CustomerFormSchemaType) => service.create(data),
     });

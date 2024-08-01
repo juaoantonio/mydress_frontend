@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { createBookingSchema } from "@/schemas/booking.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,13 +23,28 @@ import { PursesInput } from "@/app/(private)/reservas/cadastrar/components/purse
 import { EventInput } from "@/app/(private)/reservas/cadastrar/components/event-input";
 import { CalendarInput } from "@/app/(private)/reservas/cadastrar/components/calendar-input";
 import { Button } from "@/components/ui/button";
+import { handleCreationFormError } from "@/lib/utils";
+import { BookingService } from "@/services/bookings/booking.service";
+import { useMutation } from "@tanstack/react-query";
+import { getSession } from "next-auth/react";
+import { toast } from "sonner";
 
 setDefaultOptions({ locale: ptBR });
 
+type BookingFormType = z.infer<typeof createBookingSchema>;
+
+function handleBookingCreationError(
+    error: unknown,
+    form: UseFormReturn<BookingFormType>,
+) {
+    handleCreationFormError(error, form, "Erro ao criar a reserva", (message) =>
+        message.replace("booking", "Reserva"),
+    );
+}
+
 export function CreateBookingForm() {
     const router = useRouter();
-
-    const form = useForm<z.infer<typeof createBookingSchema>>({
+    const form = useForm<BookingFormType>({
         resolver: zodResolver(createBookingSchema),
         defaultValues: {
             status: "CONFIRMED",
@@ -45,12 +60,32 @@ export function CreateBookingForm() {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof createBookingSchema>) {
+    const service = new BookingService();
+    const mutation = useMutation({
+        mutationFn: (data: BookingFormType) =>
+            service.create({
+                event: data.event,
+                customer: data.customer,
+                start_date: data.range_date.start_date!.toISOString(),
+                end_date: data.range_date.end_date!.toISOString(),
+                products: [...data.dresses, ...data.purses],
+                notes: data.notes,
+            }),
+    });
+
+    async function onSubmit(data: BookingFormType) {
+        const session = await getSession();
+
+        if (!session) {
+            toast.error("Você precisa estar logado para cadastrar um cliente!");
+            return;
+        }
+
         try {
-            // await createBooking(data);
-            router.back();
+            await mutation.mutateAsync(data);
+            toast.success("Reserva criada com sucesso!");
         } catch (error) {
-            console.error(error);
+            handleBookingCreationError(error, form);
         }
     }
 
