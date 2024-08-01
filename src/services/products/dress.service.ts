@@ -4,41 +4,44 @@ import { DressType } from "@/types/products/dress.types";
 import { CreateDressInputDTO } from "@/services/products/dress.dto";
 
 export class DressService implements Service<DressType> {
-  async create(data: CreateDressInputDTO): Promise<DressType> {
-    const response = await axiosClient.post<DressType>(
-      "/products/dresses",
-      data,
-    );
+    async create(data: CreateDressInputDTO): Promise<DressType> {
+        const response = await axiosClient.post<DressType>(
+            "/products/dresses",
+            data,
+        );
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async getById(id: string) {
-    const response = await axiosClient.get<DressType>(
-      `/products/dresses/${id}`,
-    );
+    async getById(id: string) {
+        const response = await axiosClient.get<DressType>(
+            `/products/dresses/${id}`,
+        );
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async getAll() {
-    const response = await axiosClient.get<DressType[]>("/products/dresses");
+    async getAll() {
+        const response =
+            await axiosClient.get<DressType[]>("/products/dresses");
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async deleteById(id: string) {
-    const response = await axiosClient.delete<null>(`/products/dresses/${id}`);
+    async deleteById(id: string) {
+        const response = await axiosClient.delete<null>(
+            `/products/dresses/${id}`,
+        );
 
-    return;
-  }
+        return;
+    }
 
-  async updateById(id: string, data: Partial<DressType>) {
-    const response = await axiosClient.put<DressType>(
-      `/products/dresses/${id}`,
-      data,
-    );
+    async updateById(id: string, data: Partial<DressType>) {
+        const response = await axiosClient.put<DressType>(
+            `/products/dresses/${id}`,
+            data,
+        );
 
-    return response.data;
-  }
+        return response.data;
+    }
 }

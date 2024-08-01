@@ -5,47 +5,54 @@ import { Service } from "@/services/interface";
 import { ValidationError } from "@/errors/validation.error";
 
 export class CustomersService implements Service<CustomerType> {
-  async create(data: CreateCustomerInputDto): Promise<CustomerType> {
-    const response = await axiosClient.post<CustomerType>("/customers", data);
+    async create(data: CreateCustomerInputDto): Promise<CustomerType> {
+        const response = await axiosClient.post<CustomerType>(
+            "/customers",
+            data,
+        );
 
-    if (response.status === 400)
-      throw new ValidationError(
-        JSON.stringify({
-          code: response.status,
-          errors: Object.entries(response.data).map(([key, value]) => ({
-            field: key,
-            messages: value,
-          })),
-        }),
-      );
+        if (response.status === 400)
+            throw new ValidationError(
+                JSON.stringify({
+                    code: response.status,
+                    errors: Object.entries(response.data).map(
+                        ([key, value]) => ({
+                            field: key,
+                            messages: value,
+                        }),
+                    ),
+                }),
+            );
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async getAll() {
-    const response = await axiosClient.get<CustomerType[]>("/customers");
+    async getAll() {
+        const response = await axiosClient.get<CustomerType[]>("/customers");
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async getById(id: string) {
-    const response = await axiosClient.get<CustomerType>(`/customers/${id}`);
+    async getById(id: string) {
+        const response = await axiosClient.get<CustomerType>(
+            `/customers/${id}`,
+        );
 
-    return response.data;
-  }
+        return response.data;
+    }
 
-  async deleteById(id: string) {
-    await axiosClient.delete<null>(`/customers/${id}`);
+    async deleteById(id: string) {
+        await axiosClient.delete<null>(`/customers/${id}`);
 
-    return;
-  }
+        return;
+    }
 
-  async updateById(id: string, data: Partial<CustomerType>) {
-    const response = await axiosClient.put<CustomerType>(
-      `/customers/${id}`,
-      data,
-    );
+    async updateById(id: string, data: Partial<CustomerType>) {
+        const response = await axiosClient.put<CustomerType>(
+            `/customers/${id}`,
+            data,
+        );
 
-    return response.data;
-  }
+        return response.data;
+    }
 }

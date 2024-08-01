@@ -1,3 +1,3 @@
 export default function EventsPage() {
-  return <section>{/* Página Principal */}</section>;
+    return <section>{/* Página Principal */}</section>;
 }

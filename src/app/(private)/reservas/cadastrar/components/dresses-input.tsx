@@ -6,34 +6,34 @@ import { DressService } from "@/services/products/dress.service";
 import { useQuery } from "@tanstack/react-query";
 
 export function DressesInput({ form }: { form: UseFormReturn<any> }) {
-  const dressService = new DressService();
-  const {
-    isPending,
-    isError,
-    error,
-    data: dresses,
-  } = useQuery({
-    queryKey: ["dresses"],
-    queryFn: dressService.getAll,
-  });
+    const dressService = new DressService();
+    const {
+        isPending,
+        isError,
+        error,
+        data: dresses,
+    } = useQuery({
+        queryKey: ["dresses"],
+        queryFn: dressService.getAll,
+    });
 
-  return (
-    <SelectMultipleInput
-      label={"Selecionar vestidos"}
-      triggerText={"Adicionar vestidos"}
-      form={form}
-      fieldName={"dresses"}
-      loading={isPending}
-      error={isError}
-      errorMessage={"Erro ao buscar vestidos"}
-      options={
-        dresses &&
-        dresses.map(({ id, description, img }) => ({
-          id,
-          description,
-          img,
-        }))
-      }
-    />
-  );
+    return (
+        <SelectMultipleInput
+            label={"Selecionar vestidos"}
+            triggerText={"Adicionar vestidos"}
+            form={form}
+            fieldName={"dresses"}
+            loading={isPending}
+            error={isError}
+            errorMessage={"Erro ao buscar vestidos"}
+            options={
+                dresses &&
+                dresses.map(({ id, description, img }) => ({
+                    id,
+                    description,
+                    img,
+                }))
+            }
+        />
+    );
 }
