@@ -1,5 +1,6 @@
 import axios from "axios";
 import { env } from "@/env";
+import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
 
 const axiosClient = axios.create({
@@ -8,7 +9,7 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  const session = await getSession();
+  const session = window ? await getSession() : await auth();
   if (session) {
     config.headers.Authorization = `Bearer ${session.user.access}`;
   }
