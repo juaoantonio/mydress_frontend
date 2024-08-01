@@ -1,4 +1,4 @@
-import { CustomersService } from "@/services/customers/customer.service";
+import { CustomerService } from "@/services/customers/customer.service";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -8,7 +8,7 @@ import { cache } from "react";
 export const dynamic = "force-dynamic";
 
 export default async function CustomersPage() {
-    const customersService = new CustomersService();
+    const customersService = new CustomerService();
     const customers = await cache(
         async () => await customersService.getAll(),
     )();

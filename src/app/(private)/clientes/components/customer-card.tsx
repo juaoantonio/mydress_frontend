@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { getSession } from "next-auth/react";
-import { CustomersService } from "@/services/customers/customer.service";
+import { CustomerService } from "@/services/customers/customer.service";
 import { useRouter } from "next/navigation";
 
 export function CustomerCard({ customer }: { customer: CustomerType }) {
-    const customerService = new CustomersService();
+    const customerService = new CustomerService();
     const router = useRouter();
     async function handleCustomerDelete(id: string) {
         const session = await getSession();

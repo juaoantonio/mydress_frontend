@@ -4,7 +4,7 @@ import { axiosClient } from "@/lib/axios.client";
 import { Service } from "@/services/interface";
 import { ValidationError } from "@/errors/validation.error";
 
-export class CustomersService implements Service<CustomerType> {
+export class CustomerService implements Service<CustomerType> {
     async create(data: CreateCustomerInputDto): Promise<CustomerType> {
         const response = await axiosClient.post<CustomerType>(
             "/customers",
