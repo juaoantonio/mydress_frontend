@@ -50,61 +50,65 @@ export function SelectWithAdd<
         <FormField
             control={control}
             name={name}
-            render={({ field }) => (
-                <FormItem className={"space-y-1"}>
-                    <FormLabel>{label}</FormLabel>
-                    <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                    >
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder={placeholder} />
-                            </SelectTrigger>
-                        </FormControl>
+            render={({ field, fieldState }) => {
+                return (
+                    <FormItem className={"space-y-1"}>
+                        <FormLabel>{label}</FormLabel>
+                        <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                        >
+                            <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder={placeholder} />
+                                </SelectTrigger>
+                            </FormControl>
 
-                        <SelectContent>
-                            {
-                                <>
-                                    {loading && (
-                                        <div
+                            <SelectContent>
+                                {
+                                    <>
+                                        {loading && (
+                                            <div
+                                                className={
+                                                    "flex items-center justify-center p-2"
+                                                }
+                                            >
+                                                <LoaderCircle
+                                                    className={
+                                                        "animate-spin text-primary"
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+                                        {error && (
+                                            <p>Erro ao carregar opções</p>
+                                        )}
+                                        {options?.map((option) => (
+                                            <SelectItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </SelectItem>
+                                        ))}
+                                        <Link
+                                            href={addActionLink}
                                             className={
-                                                "flex items-center justify-center p-2"
+                                                "flex w-full cursor-pointer items-center gap-1 rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-gray-100 focus:bg-accent focus:text-accent-foreground"
                                             }
                                         >
-                                            <LoaderCircle
-                                                className={
-                                                    "animate-spin text-primary"
-                                                }
-                                            />
-                                        </div>
-                                    )}
-                                    {error && <p>Erro ao carregar opções</p>}
-                                    {options?.map((option) => (
-                                        <SelectItem
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </SelectItem>
-                                    ))}
-                                    <Link
-                                        href={addActionLink}
-                                        className={
-                                            "flex w-full cursor-pointer items-center gap-1 rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-gray-100 focus:bg-accent focus:text-accent-foreground"
-                                        }
-                                    >
-                                        <Plus size={18} />
-                                        {addActionMessage}
-                                    </Link>
-                                </>
-                            }
-                        </SelectContent>
-                    </Select>
+                                            <Plus size={18} />
+                                            {addActionMessage}
+                                        </Link>
+                                    </>
+                                }
+                            </SelectContent>
+                        </Select>
 
-                    <FormMessage />
-                </FormItem>
-            )}
+                        <FormMessage />
+                    </FormItem>
+                );
+            }}
         />
     );
 }

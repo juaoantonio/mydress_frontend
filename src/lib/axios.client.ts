@@ -5,7 +5,6 @@ import { getSession } from "next-auth/react";
 
 const axiosClient = axios.create({
     baseURL: env.API_BASE_URL,
-    validateStatus: (status) => status < 500,
 });
 
 axiosClient.interceptors.request.use(async (config) => {

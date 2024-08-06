@@ -1,6 +1,7 @@
 import { Service } from "@/services/interface";
-import { CreatePurseInputDTO, PurseType } from "@/types/products/purse.types";
+import { PurseType } from "@/types/products/purse.types";
 import { axiosClient } from "@/lib/axios.client";
+import { CreatePurseInputDTO } from "@/services/products/purse.dto";
 
 export class PurseService implements Service<PurseType> {
     async create(data: CreatePurseInputDTO): Promise<PurseType> {

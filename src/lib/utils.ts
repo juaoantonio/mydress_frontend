@@ -1,9 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { FieldValues, UseFormReturn } from "react-hook-form";
-import { ValidationError } from "@/errors/validation.error";
-import { ValidationErrorReturn } from "@/types/validation.types";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { AxiosErrorsEnum } from "@/types/enums/axios-errors.enum";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -27,28 +27,38 @@ export function handleCreationFormError<T extends FieldValues>(
     errorMessage: string,
     messageFormatter: (message: string) => string,
 ) {
-    if (!(error instanceof ValidationError)) {
-        throw error;
-    }
-
-    const parsedError = jsonParse<ValidationErrorReturn>(error.message);
-
-    if (!parsedError) {
+    if (!(error instanceof AxiosError)) {
         toast.error(errorMessage);
         console.error(error);
 
         return;
     }
 
-    if (parsedError.code === 400) {
-        parsedError.errors.map((error: any) => {
-            const field = error.field;
-            const message = messageFormatter(error.messages[0]);
-            form.setError(field, { message });
-        });
+    if (!(error.code === AxiosErrorsEnum.ERR_BAD_REQUEST)) {
+        toast.error(errorMessage);
+        console.error(error);
 
         return;
     }
 
-    toast.error(errorMessage);
+    const responseErrors = error.response?.data;
+
+    if (!responseErrors) {
+        toast.error(errorMessage);
+        console.error(error);
+
+        return;
+    }
+
+    const fieldMessage = Object.entries(responseErrors);
+
+    fieldMessage.map((error: any) => {
+        const field = error[0];
+        const message = messageFormatter(error[1][0]);
+
+        if (field === "non_field_errors") {
+            form.setError("root", { message });
+        }
+        form.setError(field, { message });
+    });
 }

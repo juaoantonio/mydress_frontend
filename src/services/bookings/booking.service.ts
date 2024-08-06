@@ -21,9 +21,11 @@ export class BookingService implements Service<BookingType> {
 
         return response.data;
     }
+
     async deleteById(id: string): Promise<void> {
         await axiosClient.delete<null>(`/bookings/${id}`);
     }
+
     async updateById(
         id: string,
         data: Partial<BookingType>,

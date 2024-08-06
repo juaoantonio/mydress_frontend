@@ -80,7 +80,7 @@ export function CalendarInput({ form }: { form: UseFormReturn<any> }) {
                                             to: field.value.end_date,
                                         }}
                                         onSelect={(range) => {
-                                            console.log(range);
+                                            form.clearErrors("range_date");
                                             form.setValue("range_date", {
                                                 start_date: range
                                                     ? range.from

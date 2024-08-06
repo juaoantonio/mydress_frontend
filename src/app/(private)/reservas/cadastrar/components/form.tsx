@@ -28,6 +28,7 @@ import { BookingService } from "@/services/bookings/booking.service";
 import { useMutation } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
 import { toast } from "sonner";
+import { DevTool } from "@hookform/devtools";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -37,8 +38,12 @@ function handleBookingCreationError(
     error: unknown,
     form: UseFormReturn<BookingFormType>,
 ) {
-    handleCreationFormError(error, form, "Erro ao criar a reserva", (message) =>
-        message.replace("booking", "Reserva"),
+    handleCreationFormError(
+        error,
+        form,
+        "Erro ao criar a reserva",
+        (message) =>
+            "Data do evento deve ser entre a data de início e fim da reserva",
     );
 }
 
@@ -62,15 +67,24 @@ export function CreateBookingForm() {
 
     const service = new BookingService();
     const mutation = useMutation({
-        mutationFn: (data: BookingFormType) =>
-            service.create({
+        mutationFn: (data: BookingFormType) => {
+            return service.create({
                 event: data.event,
                 customer: data.customer,
                 start_date: data.range_date.start_date!.toISOString(),
                 end_date: data.range_date.end_date!.toISOString(),
                 products: [...data.dresses, ...data.purses],
                 notes: data.notes,
-            }),
+            });
+        },
+        onError: (error) => {
+            handleBookingCreationError(error, form);
+        },
+        onSuccess: () => {
+            toast.success("Reserva criada com sucesso!");
+
+            router.back();
+        },
     });
 
     async function onSubmit(data: BookingFormType) {
@@ -81,60 +95,61 @@ export function CreateBookingForm() {
             return;
         }
 
-        try {
-            await mutation.mutateAsync(data);
-            toast.success("Reserva criada com sucesso!");
-        } catch (error) {
-            handleBookingCreationError(error, form);
-        }
+        mutation.mutate(data);
     }
 
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className={"space-y-4"}
-            >
-                <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
-                    <CustomerInput control={form.control} />
+        <>
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className={"space-y-4"}
+                >
+                    <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
+                        <CustomerInput control={form.control} />
 
-                    <EventInput control={form.control} />
+                        <EventInput control={form.control} />
 
-                    <CalendarInput form={form} />
+                        <CalendarInput form={form} />
 
-                    <DressesInput form={form} />
+                        <DressesInput form={form} />
 
-                    <PursesInput form={form} />
+                        <PursesInput form={form} />
 
-                    <FormField
-                        control={form.control}
-                        name={"notes"}
-                        render={({ field }) => (
-                            <FormItem className={"space-y-1"}>
-                                <FormLabel>Observações</FormLabel>
-                                <FormControl>
-                                    <Textarea rows={6} {...field} />
-                                </FormControl>
+                        <FormField
+                            control={form.control}
+                            name={"notes"}
+                            render={({ field }) => (
+                                <FormItem className={"space-y-1"}>
+                                    <FormLabel>Observações</FormLabel>
+                                    <FormControl>
+                                        <Textarea rows={6} {...field} />
+                                    </FormControl>
 
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <div className={"flex gap-2"}>
-                    <Button
-                        className={"flex-1"}
-                        type={"button"}
-                        variant={"outline"}
-                        onClick={() => router.back()}
-                    >
-                        Cancelar
-                    </Button>
-                    <Button className={"flex-1"} type={"submit"}>
-                        Salvar
-                    </Button>
-                </div>
-            </form>
-        </Form>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <FormMessage>
+                        {form.formState.errors.root?.message}
+                    </FormMessage>
+                    <div className={"flex gap-2"}>
+                        <Button
+                            className={"flex-1"}
+                            type={"button"}
+                            variant={"outline"}
+                            onClick={() => router.back()}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button className={"flex-1"} type={"submit"}>
+                            Salvar
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+            <DevTool control={form.control} />
+        </>
     );
 }

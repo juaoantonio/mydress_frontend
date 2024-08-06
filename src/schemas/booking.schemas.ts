@@ -20,9 +20,13 @@ export const createBookingSchema = z
 
         purses: z.array(z.string()),
 
-        event: z.string(),
-        customer: z.string(),
+        event: z.string().min(1, "Você deve selecionar um evento"),
+        customer: z.string().min(1, "Você deve selecionar um cliente"),
         notes: z.string().optional(),
+    })
+    .refine((data) => data.dresses.length > 0 || data.purses.length > 0, {
+        message: "É necessário selecionar pelo menos um item de cada categoria",
+        path: ["dresses"],
     })
     .refine(
         (data) => {
@@ -33,8 +37,25 @@ export const createBookingSchema = z
         },
         {
             message: "A data de início deve ser anterior à data de fim",
+            path: ["range_date"],
         },
     )
-    .refine((data) => data.dresses && data.purses, {
-        message: "É necessário selecionar pelo menos um item de cada categoria",
-    });
+
+    .refine(
+        (data) => {
+            if (data.range_date.start_date && data.range_date.end_date) {
+                const currentDate = new Date();
+                const startDate = new Date(data.range_date.start_date);
+                const endDate = new Date(data.range_date.end_date);
+
+                return startDate >= currentDate && endDate >= currentDate;
+            }
+
+            return false;
+        },
+        {
+            message:
+                "A data de início e fim devem ser posteriores à data atual",
+            path: ["range_date"],
+        },
+    );

@@ -1,9 +1,12 @@
-import { BookingType } from "@/types/booking.types";
 import { BookingStatus } from "@/types/booking.enums";
 
-export type CreateBookingInputDto = Omit<
-    BookingType,
-    "id" | "created_at" | "updated_at" | "status"
-> & {
+export type CreateBookingInputDto = {
+    id: string;
+    customer: string;
+    event: string;
     status?: BookingStatus;
+    start_date: string;
+    end_date: string;
+    products: string[];
+    notes?: string;
 };
