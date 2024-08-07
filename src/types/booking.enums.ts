@@ -5,3 +5,13 @@ export enum BookingStatus {
     OVERDUE = "OVERDUE",
     CONCLUDED = "CONCLUDED",
 }
+
+export const BookingStatusLabels: {
+    [key in BookingStatus]: string;
+} = {
+    [BookingStatus.CONFIRMED]: "Confirmada",
+    [BookingStatus.CANCELED]: "Cancelada",
+    [BookingStatus.IN_PROGRESS]: "Em andamento",
+    [BookingStatus.OVERDUE]: "Atrasada",
+    [BookingStatus.CONCLUDED]: "Concluída",
+};

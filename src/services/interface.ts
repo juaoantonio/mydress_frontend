@@ -7,5 +7,5 @@ export interface Service<Entity> {
 
     deleteById(id: string): Promise<void>;
 
-    updateById(id: string, data: Partial<Entity>): Promise<Entity>;
+    updateById(id: string, data: any): Promise<Entity>;
 }

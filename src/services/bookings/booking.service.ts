@@ -28,7 +28,7 @@ export class BookingService implements Service<BookingType> {
 
     async updateById(
         id: string,
-        data: Partial<BookingType>,
+        data: Partial<CreateBookingInputDto>,
     ): Promise<BookingType> {
         const response = await axiosClient.put<BookingType>(
             `/bookings/${id}`,

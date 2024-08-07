@@ -1,15 +1,14 @@
-import Calendar from "@/components/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import CalendarCard from "@/app/(private)/components/calendar-card";
 
 export default function DashboardHome() {
     return (
-        <section className={"flex flex-col gap-4"}>
+        <section className={"mt-2 flex flex-col gap-4"}>
             <div
                 className={
-                    "col-span-full mb-1 flex h-fit items-center justify-between px-2"
+                    "col-span-full mb-1 flex h-fit items-center justify-between"
                 }
             >
                 <h1 className={"self-auto text-xl font-semibold"}>
@@ -22,15 +21,7 @@ export default function DashboardHome() {
                     </Button>
                 </Link>
             </div>
-
-            <Card className={"col-span-full h-[75vh]"}>
-                <CardHeader>
-                    <CardTitle>Calendário de Reservas</CardTitle>
-                </CardHeader>
-                <CardContent className={"h-full text-xs"}>
-                    <Calendar />
-                </CardContent>
-            </Card>
+            <CalendarCard />
         </section>
     );
 }

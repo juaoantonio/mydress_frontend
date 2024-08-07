@@ -21,6 +21,17 @@ export function jsonParse<T>(value: string): T | undefined {
     }
 }
 
+export function numberToCurrency(value: number) {
+    return value.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    });
+}
+
+export function isServer() {
+    return !(typeof window != "undefined" && window.document);
+}
+
 export function handleCreationFormError<T extends FieldValues>(
     error: unknown,
     form: UseFormReturn<T>,

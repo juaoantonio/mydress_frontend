@@ -1,7 +1,6 @@
 import { BookingStatus } from "@/types/booking.enums";
 
 export type CreateBookingInputDto = {
-    id: string;
     customer: string;
     event: string;
     status?: BookingStatus;
