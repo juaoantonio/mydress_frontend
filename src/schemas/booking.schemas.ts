@@ -44,7 +44,12 @@ export const createBookingSchema = z
     .refine(
         (data) => {
             if (data.range_date.start_date && data.range_date.end_date) {
-                const currentDate = new Date();
+                const now = new Date();
+                const currentDate = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate(),
+                );
                 const startDate = new Date(data.range_date.start_date);
                 const endDate = new Date(data.range_date.end_date);
 

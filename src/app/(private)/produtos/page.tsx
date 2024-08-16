@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DressFormCreate } from "@/app/(private)/produtos/components";
+import { CreateDressCard } from "@/app/(private)/produtos/components/create-dress-card";
 
 export default function ProductsPage() {
     return (
@@ -13,7 +13,7 @@ export default function ProductsPage() {
                 </TabsList>
 
                 <TabsContent value={"dress"}>
-                    <DressFormCreate />
+                    <CreateDressCard />
                 </TabsContent>
 
                 <TabsContent value={"purse"}>

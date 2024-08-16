@@ -13,7 +13,7 @@ setDefaultOptions({
 
 export default function CalendarCard() {
     const [calendarView, setCalendarView] = useState<
-        "dayGridMonth" | "dayGridWeek"
+        "dayGridMonth" | "dayGridWeek" | "dayGridDay"
     >("dayGridMonth");
 
     return (
@@ -39,6 +39,12 @@ export default function CalendarCard() {
                                 onClick={() => setCalendarView("dayGridWeek")}
                             >
                                 Semana
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value={"dayGridDay"}
+                                onClick={() => setCalendarView("dayGridDay")}
+                            >
+                                Dia
                             </TabsTrigger>
                         </TabsList>
                     </Tabs>

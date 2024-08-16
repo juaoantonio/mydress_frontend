@@ -1,11 +1,14 @@
-import { DressType } from "@/types/products/dress.types";
+import { DressStatus } from "@/types/products/product.enums";
 
-export type CreateDressInputDTO = Omit<
-    DressType,
-    "created_at" | "id" | "updated_at" | "sku"
-> & {
-    rentable?: boolean;
-    purchaseable?: boolean;
-    status?: string;
-    available_for_adjustment?: boolean;
+export type CreateDressInputDTO = {
+    img: File;
+    description: string;
+    price: number;
+    rentable: boolean;
+    purchaseable: boolean;
+    status: DressStatus;
+    fabric: string;
+    color: string;
+    model: string;
+    available_for_adjustment: boolean;
 };

@@ -73,25 +73,29 @@ export function CreateBookingForm() {
                 customer: data.customer,
                 start_date: data.range_date.start_date!.toISOString(),
                 end_date: data.range_date.end_date!.toISOString(),
-                products: [...data.dresses, ...data.purses],
+                dresses: data.dresses,
+                purses: data.purses,
+                jewels: [],
                 notes: data.notes,
             });
         },
         onError: (error) => {
             handleBookingCreationError(error, form);
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success("Reserva criada com sucesso!");
 
-            router.back();
+            router.replace(`/reservas/cadastrar/ajustes/${data.id}`);
         },
     });
 
-    async function onSubmit(data: BookingFormType) {
+    async function handleBookingCreation(data: BookingFormType) {
         const session = await getSession();
 
         if (!session) {
-            toast.error("Você precisa estar logado para cadastrar um cliente!");
+            toast.error(
+                "Você precisa estar logado para criar uma nova reserva!",
+            );
             return;
         }
 
@@ -102,7 +106,7 @@ export function CreateBookingForm() {
         <>
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    onSubmit={form.handleSubmit(handleBookingCreation)}
                     className={"space-y-4"}
                 >
                     <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
@@ -144,7 +148,7 @@ export function CreateBookingForm() {
                             Cancelar
                         </Button>
                         <Button className={"flex-1"} type={"submit"}>
-                            Salvar
+                            Confirmar
                         </Button>
                     </div>
                 </form>

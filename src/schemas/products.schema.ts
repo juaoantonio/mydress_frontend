@@ -12,11 +12,11 @@ const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 const createProductSchema = z.object({
     img: z
         .any()
-        .refine((files) => {
-            return files?.[0]?.size <= MAX_FILE_SIZE;
+        .refine((file) => {
+            return file?.size <= MAX_FILE_SIZE;
         }, `A imagem deve ter no máximo 5MB.`)
         .refine(
-            (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+            (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type),
             `A imagem deve ser do tipo ${ACCEPTED_IMAGE_TYPES.join(", ")}.`,
         ),
 
@@ -31,7 +31,7 @@ const createProductSchema = z.object({
     rentable: z.boolean().default(true),
 });
 
-const createDressSchema = createProductSchema.extend({
+export const createDressSchema = createProductSchema.extend({
     fabric: z.string({
         message: "O tipo de tecido deve ser preenchido",
     }),
@@ -42,9 +42,20 @@ const createDressSchema = createProductSchema.extend({
 
     availableForAdjustment: z.boolean().default(false),
 
-    status: z.enum(["new", "used"], {
-        message: "O status deve ser preenchido",
-    }),
+    status: z.enum(
+        [
+            "AVAILABLE",
+            "OUT_OF_STOCK",
+            "BOOKED",
+            "PICKED_UP",
+            "RETURNED",
+            "IN_WASH",
+            "DAMAGED",
+        ],
+        {
+            message: "O status deve ser preenchido",
+        },
+    ),
 });
 
 export const createPurseSchema = createProductSchema.extend({

@@ -2,6 +2,8 @@ import { BookingStatus } from "@/types/booking.enums";
 import { ProductType } from "@/types/products/product.types";
 import { EventType } from "@/types/events/event.types";
 import { CustomerType } from "@/types/customer.types";
+import { DressType } from "@/types/products/dress.types";
+import { AdjustmentType } from "@/types/adjustment.types";
 
 export type BookingType = {
     id: string;
@@ -10,7 +12,10 @@ export type BookingType = {
     status: BookingStatus;
     start_date: string;
     end_date: string;
-    products: ProductType[];
+    dresses: DressType[];
+    purses: ProductType[];
+    jewels: ProductType[];
+    adjustments: AdjustmentType[];
     notes?: string;
 };
 

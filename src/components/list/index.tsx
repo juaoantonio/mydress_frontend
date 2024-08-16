@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export function List({
     children,
@@ -13,9 +13,19 @@ export function List({
     return <ul className={mergedClassName}>{children}</ul>;
 }
 
-export function ListItem({ label, value }: { label: string; value: string }) {
+export function ListItem({
+    label,
+    value,
+    className,
+}: {
+    label: string;
+    value: string;
+    className?: string;
+}) {
+    const mergedClassName = cn("flex items-center justify-between", className);
+
     return (
-        <li className="flex items-center justify-between">
+        <li className={mergedClassName}>
             <span className="text-muted-foreground">{label}</span>
             <span>{value}</span>
         </li>
@@ -28,7 +38,7 @@ export function ImageListItem({
     label,
     values,
 }: {
-    img: string;
+    img: string | null;
     imgAlt: string;
     label: string;
     values: { label: string; value: string }[];
@@ -38,7 +48,7 @@ export function ImageListItem({
             <Image
                 width={100}
                 height={100}
-                src={img}
+                src={img ?? ""}
                 alt={imgAlt}
                 className="h-[125px] w-[125px] rounded object-cover object-center"
             />

@@ -79,18 +79,26 @@ export function SelectMultipleInput<
                                             />
                                         </div>
                                     )}
-                                    {errorMessage}
+                                    {error && errorMessage}
 
                                     {options?.map((option, index) => (
                                         <Fragment key={option.id}>
                                             {index > 0 && <Separator />}
-                                            <div
+                                            <label
                                                 key={option.id}
+                                                htmlFor={
+                                                    "checkbox-products-" +
+                                                    option.id
+                                                }
                                                 className={
                                                     "flex items-center gap-2 border-gray-200 p-1"
                                                 }
                                             >
                                                 <Checkbox
+                                                    id={
+                                                        "checkbox-products-" +
+                                                        option.id
+                                                    }
                                                     checked={field.value.includes(
                                                         option.id,
                                                     )}
@@ -123,7 +131,7 @@ export function SelectMultipleInput<
                                                     }}
                                                 />
                                                 <Image
-                                                    src={option.img}
+                                                    src={option.img ?? ""}
                                                     alt={option.description}
                                                     width={500}
                                                     height={500}
@@ -139,7 +147,7 @@ export function SelectMultipleInput<
                                                 >
                                                     {option.description}
                                                 </p>
-                                            </div>
+                                            </label>
                                         </Fragment>
                                     ))}
                                 </ul>

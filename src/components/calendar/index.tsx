@@ -2,21 +2,20 @@ import FullCalendar from "@fullcalendar/react";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { DetailCalendarEvent } from "@/components/calendar/detail-calendar-event";
-import { useEffect, useRef, useState } from "react";
-import { BookingType } from "@/types/booking.types";
+import { useEffect, useRef } from "react";
 import { BookingService } from "@/services/bookings/booking.service";
 import { useQuery } from "@tanstack/react-query";
 import { EventClickArg } from "@fullcalendar/core";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export function Calendar({ view }: { view: "dayGridMonth" | "dayGridWeek" }) {
+export function Calendar({
+    view,
+}: {
+    view: "dayGridMonth" | "dayGridWeek" | "dayGridDay";
+}) {
     const calendarRef = useRef<FullCalendar>(null);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [currentBooking, setCurrentBooking] = useState<BookingType | null>(
-        null,
-    );
+    const router = useRouter();
 
     const bookingService = new BookingService();
     const { data, isError } = useQuery({
@@ -25,10 +24,7 @@ export function Calendar({ view }: { view: "dayGridMonth" | "dayGridWeek" }) {
     });
 
     const handleEventClick = (arg: EventClickArg) => {
-        setCurrentBooking(
-            data?.find((booking) => booking.id === arg.event.id) || null,
-        );
-        setIsOpen(true);
+        router.push(`/reservas/${arg.event.id}`);
     };
 
     useEffect(() => {
@@ -51,28 +47,20 @@ export function Calendar({ view }: { view: "dayGridMonth" | "dayGridWeek" }) {
     }));
 
     return (
-        <>
-            <FullCalendar
-                ref={calendarRef}
-                locale={ptBrLocale}
-                headerToolbar={false}
-                eventClick={handleEventClick}
-                footerToolbar={{
-                    start: "prev,next",
-                    end: "title",
-                }}
-                plugins={[dayGridPlugin, interactionPlugin]}
-                initialView={view}
-                height={"87%"}
-                events={events}
-                customButtons={{}}
-            />
-
-            <DetailCalendarEvent
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                currentBooking={currentBooking}
-            />
-        </>
+        <FullCalendar
+            ref={calendarRef}
+            locale={ptBrLocale}
+            headerToolbar={false}
+            eventClick={handleEventClick}
+            footerToolbar={{
+                start: "prev,next",
+                end: "title",
+            }}
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView={view}
+            height={"87%"}
+            events={events}
+            customButtons={{}}
+        />
     );
 }
