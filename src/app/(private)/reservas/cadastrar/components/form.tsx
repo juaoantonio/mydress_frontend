@@ -42,8 +42,7 @@ function handleBookingCreationError(
         error,
         form,
         "Erro ao criar a reserva",
-        (message) =>
-            "Data do evento deve ser entre a data de início e fim da reserva",
+        (message) => message,
     );
 }
 
@@ -102,6 +101,11 @@ export function CreateBookingForm() {
         mutation.mutate(data);
     }
 
+    const start_date = form.watch("range_date.start_date");
+    const end_date = form.watch("range_date.end_date");
+
+    const areDressAndPurseInputsDisabled = !start_date || !end_date;
+
     return (
         <>
             <Form {...form}>
@@ -116,7 +120,12 @@ export function CreateBookingForm() {
 
                         <CalendarInput form={form} />
 
-                        <DressesInput form={form} />
+                        <DressesInput
+                            form={form}
+                            start_date={start_date}
+                            end_date={end_date}
+                            disabled={areDressAndPurseInputsDisabled}
+                        />
 
                         <PursesInput form={form} />
 

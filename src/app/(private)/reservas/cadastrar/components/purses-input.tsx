@@ -4,7 +4,17 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PurseService } from "@/services/products/purse.service";
 
-export function PursesInput({ form }: { form: UseFormReturn<any> }) {
+export function PursesInput({
+    form,
+    start_date,
+    end_date,
+    disabled = false,
+}: {
+    form: UseFormReturn<any>;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    disabled?: boolean;
+}) {
     const purseService = new PurseService();
     const {
         isPending,

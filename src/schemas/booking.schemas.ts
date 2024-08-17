@@ -16,9 +16,13 @@ export const createBookingSchema = z
             start_date: z.date().nullable().optional(),
             end_date: z.date().nullable().optional(),
         }),
-        dresses: z.array(z.string()),
+        dresses: z.array(z.string(), {
+            required_error: "Você deve selecionar um vestido",
+        }),
 
-        purses: z.array(z.string()),
+        purses: z.array(z.string(), {
+            required_error: "Você deve selecionar uma bolsa",
+        }),
 
         event: z.string().min(1, "Você deve selecionar um evento"),
         customer: z.string().min(1, "Você deve selecionar um cliente"),

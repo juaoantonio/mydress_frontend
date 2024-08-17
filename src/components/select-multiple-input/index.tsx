@@ -45,6 +45,7 @@ export function SelectMultipleInput<
     loading?: boolean;
     error?: boolean;
     errorMessage?: string;
+    disabled?: boolean;
 }) {
     return (
         <FormField

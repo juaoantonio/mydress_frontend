@@ -15,6 +15,8 @@ export async function CreateAdjustmentsCard({
         (dress) => dress.available_for_adjustment,
     );
 
+    console.log(booking);
+
     return (
         <Card className={"mx-auto h-fit max-w-[800px] flex-1"}>
             <CardHeader className={"px-3"}>

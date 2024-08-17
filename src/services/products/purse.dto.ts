@@ -1,9 +1,12 @@
+import { PurseStatus } from "@/types/products/product.enums";
+
 export type CreatePurseInputDTO = {
-    img: string;
+    img?: any;
     price: number;
     description: string;
     rentable: boolean;
-    purchaseable: boolean;
+    purchasable: boolean;
     color: string;
     model: string;
+    status: PurseStatus;
 };

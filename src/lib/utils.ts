@@ -4,6 +4,7 @@ import { FieldValues, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { AxiosErrorsEnum } from "@/types/enums/axios-errors.enum";
+import { ChangeEvent } from "react";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -32,6 +33,12 @@ export function isServer() {
     return !(typeof window != "undefined" && window.document);
 }
 
+/*
+ * This function is used to handle errors from the creation form.
+ * It checks if the error is an AxiosError, if it is a bad request and if it has a response.
+ * If it has a response, it will map the errors and set them in the form.
+ * If it doesn't have a response, it will show a generic error message.
+ */
 export function handleCreationFormError<T extends FieldValues>(
     error: unknown,
     form: UseFormReturn<T>,
@@ -72,4 +79,19 @@ export function handleCreationFormError<T extends FieldValues>(
         }
         form.setError(field, { message });
     });
+}
+
+export function getImageData(event: ChangeEvent<HTMLInputElement>) {
+    if (!event.target.files) return;
+
+    const dataTransfer = new DataTransfer();
+
+    Array.from(event.target.files).forEach((image) =>
+        dataTransfer.items.add(image),
+    );
+
+    const files = dataTransfer.files;
+    const displayUrl = URL.createObjectURL(event.target.files![0]);
+
+    return { files, displayUrl };
 }

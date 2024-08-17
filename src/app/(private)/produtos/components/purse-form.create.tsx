@@ -2,11 +2,9 @@
 
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { createDressSchema } from "@/schemas/products.schema";
+import { createPurseSchema } from "@/schemas/products.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DressService } from "@/services/products/dress.service";
 import { useMutation } from "@tanstack/react-query";
-import { CreateDressInputDTO } from "@/services/products/dress.dto";
 import { getImageData, handleCreationFormError } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -25,7 +23,6 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import {
     Select,
     SelectContent,
@@ -35,55 +32,56 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { PurseService } from "@/services/products/purse.service";
+import { CreatePurseInputDTO } from "@/services/products/purse.dto";
 import { getSession } from "next-auth/react";
 
-type DressFormType = z.infer<typeof createDressSchema>;
+type PurseFormType = z.infer<typeof createPurseSchema>;
 
-function handleDressCreationError(
+function handlePurseCreationError(
     error: unknown,
-    form: UseFormReturn<DressFormType>,
+    form: UseFormReturn<PurseFormType>,
 ) {
     handleCreationFormError(
         error,
         form,
-        "Erro ao criar o vestido",
+        "Erro ao criar o bolsa",
         (message) => "A imagem deve ser do tipo jpeg, jpg, png ou webp",
     );
 }
 
-export function DressFormCreate() {
+export function PurseFormCreate() {
     const [preview, setPreview] = useState<string | undefined>();
 
-    const form = useForm<DressFormType>({
-        resolver: zodResolver(createDressSchema),
+    const form = useForm<PurseFormType>({
+        resolver: zodResolver(createPurseSchema),
         defaultValues: {
             img: null,
+            price: 100.5,
             description: "",
-            model: "",
             purchasable: false,
             rentable: true,
-            fabric: "",
             color: "",
+            model: "",
             status: "AVAILABLE",
-            available_for_adjustment: true,
         },
     });
     const router = useRouter();
 
-    const service = new DressService();
+    const service = new PurseService();
     const mutation = useMutation({
-        mutationFn: (data: CreateDressInputDTO) => service.create(data),
+        mutationFn: (data: CreatePurseInputDTO) => service.create(data),
         onError: (error) => {
             console.error(error);
-            handleDressCreationError(error, form);
+            handlePurseCreationError(error, form);
         },
         onSuccess: () => {
-            toast.success("Vestido criado com sucesso!");
+            toast.success("Bolsa criada com sucesso!");
             router.back();
         },
     });
 
-    async function handleDressCreation(data: DressFormType) {
+    async function handlePurseCreation(data: PurseFormType) {
         const session = await getSession();
 
         if (!session) {
@@ -93,13 +91,13 @@ export function DressFormCreate() {
             return;
         }
 
-        mutation.mutate(data as CreateDressInputDTO);
+        mutation.mutate(data as CreatePurseInputDTO);
     }
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleDressCreation)}
+                onSubmit={form.handleSubmit(handlePurseCreation)}
                 className={"space-y-4"}
             >
                 <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
@@ -117,7 +115,7 @@ export function DressFormCreate() {
                                                         "aspect-square w-full rounded-md object-cover object-center"
                                                     }
                                                     src={preview}
-                                                    alt={"Imagem do vestido"}
+                                                    alt={"Imagem da Bolsa"}
                                                     width={200}
                                                     height={200}
                                                 />
@@ -192,7 +190,6 @@ export function DressFormCreate() {
                                         R$
                                         <Input
                                             type={"number"}
-                                            placeholder={"0,00"}
                                             id={"price"}
                                             {...field}
                                         />
@@ -211,7 +208,7 @@ export function DressFormCreate() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor={"description"}>
-                                    Descrição do Vestido
+                                    Descrição da Bolsa
                                 </FormLabel>
                                 <FormControl>
                                     <Input id={"description"} {...field} />
@@ -222,53 +219,38 @@ export function DressFormCreate() {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name={"model"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={"model"}>
-                                    Modelo do Vestido
-                                </FormLabel>
-                                <FormControl>
-                                    <Input id={"model"} {...field} />
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.model?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"fabric"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={"fabric"}>
-                                    Tecido do Vestido
-                                </FormLabel>
-                                <FormControl>
-                                    <Input id={"fabric"} {...field} />
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.fabric?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
 
                     <FormField
                         control={form.control}
                         name={"color"}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor={"color"}>Cor</FormLabel>
+                                <FormLabel htmlFor={"color"}>
+                                    Cor da Bolsa
+                                </FormLabel>
                                 <FormControl>
                                     <Input id={"color"} {...field} />
                                 </FormControl>
                                 <FormMessage>
                                     {form.formState.errors.color?.message}
+                                </FormMessage>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name={"model"}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor={"model"}>
+                                    Modelo da bolsa
+                                </FormLabel>
+                                <FormControl>
+                                    <Input id={"model"} {...field} />
+                                </FormControl>
+                                <FormMessage>
+                                    {form.formState.errors.model?.message}
                                 </FormMessage>
                             </FormItem>
                         )}
@@ -297,9 +279,6 @@ export function DressFormCreate() {
                                                 <SelectItem value="OUT_OF_STOCK">
                                                     Sem estoque
                                                 </SelectItem>
-                                                <SelectItem value="IN_WASH">
-                                                    Em lavagem
-                                                </SelectItem>
                                                 <SelectItem value="DAMAGED">
                                                     Danificado
                                                 </SelectItem>
@@ -310,29 +289,6 @@ export function DressFormCreate() {
                                 <FormMessage>
                                     {form.formState.errors.status?.message}
                                 </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"available_for_adjustment"}
-                        render={({ field }) => (
-                            <FormItem className={"my-2"}>
-                                <div className={"flex items-center space-x-2"}>
-                                    <FormControl>
-                                        <Switch
-                                            id={"availableForAdjustment"}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <FormLabel
-                                        htmlFor={"availableForAdjustment"}
-                                    >
-                                        Disponível para ajustes
-                                    </FormLabel>
-                                </div>
                             </FormItem>
                         )}
                     />

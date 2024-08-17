@@ -15,7 +15,9 @@ export function ImagePlaceholder({
 
     return (
         <div className={mergedClassName}>
-            <span className={"rounded-full bg-neutral-200 p-7"}>
+            <span
+                className={"rounded-full bg-neutral-200 p-7 text-neutral-500"}
+            >
                 <ImageIcon size={28} />
             </span>
             {description && (
@@ -24,7 +26,7 @@ export function ImagePlaceholder({
                         "max-w-[20ch] text-center text-xs text-muted-foreground"
                     }
                 >
-                    Clique para adicionar uma imagem
+                    {description}
                 </p>
             )}
         </div>

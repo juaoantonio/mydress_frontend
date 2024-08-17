@@ -5,7 +5,7 @@ export type CreateDressInputDTO = {
     description: string;
     price: number;
     rentable: boolean;
-    purchaseable: boolean;
+    purchasable: boolean;
     status: DressStatus;
     fabric: string;
     color: string;
