@@ -1,12 +1,12 @@
 export type CustomerType = {
-  id: string;
-  name: string;
-  cpf: string;
-  rg: string;
-  address: string;
-  phone: string;
-  email: string;
-  notes?: string;
-  created_at: string;
-  updated_at: string;
+    id: string;
+    name: string;
+    cpf: string;
+    rg: string;
+    address: string;
+    phone: string;
+    email: string;
+    notes?: string;
+    created_at: string;
+    updated_at: string;
 };

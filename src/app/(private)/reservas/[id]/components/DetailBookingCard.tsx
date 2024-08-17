@@ -1,0 +1,234 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react";
+import { BookingService } from "@/services/bookings/booking.service";
+import { ImageListItem, List, ListItem } from "@/components/list";
+import { BookingStatusLabels } from "@/types/booking.enums";
+import { format } from "date-fns";
+import { numberToCurrency } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+
+export async function DetailBookingCard({ bookingId }: { bookingId: string }) {
+    const bookingService = new BookingService();
+    const booking = await bookingService.getById(bookingId);
+    const dresses = booking?.dresses ?? [];
+    const purses = booking?.purses ?? [];
+    const totalRentValue = [...dresses, ...purses].reduce(
+        (acc, product) => acc + product.price,
+        0,
+    );
+
+    return (
+        <Card className={"mx-auto h-fit max-w-[800px] flex-1"}>
+            <CardHeader className={"px-3"}>
+                <CardTitle className={"text-lg leading-tight"}>
+                    Reserva de {booking.customer.name} entre{" "}
+                    {format(booking.start_date, "dd/MM/yyyy")} e{" "}
+                    {format(booking.end_date, "dd/MM/yyyy")}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className={"space-y-4 px-3"}>
+                {booking ? (
+                    <List className={"grid gap-2 text-sm"}>
+                        <ListItem
+                            label={"Situação"}
+                            value={BookingStatusLabels[booking.status]}
+                        />
+                        <ListItem
+                            label={"Cliente"}
+                            value={booking.customer.name}
+                        />
+                        <ListItem
+                            label={"Data de início"}
+                            value={format(booking.start_date, "dd/MM/yyyy")}
+                        />
+                        <ListItem
+                            label={"Data de término"}
+                            value={format(booking.end_date, "dd/MM/yyyy")}
+                        />
+                        <ListItem
+                            label={"Recepção do evento"}
+                            value={booking.event.event_reception}
+                        />
+                        <ListItem
+                            label={"Valor total do aluguel"}
+                            value={numberToCurrency(totalRentValue)}
+                        />
+                    </List>
+                ) : null}
+
+                <Separator />
+
+                <div className={"space-y-3"}>
+                    <h2
+                        className={
+                            "text-lg font-semibold leading-none tracking-tight"
+                        }
+                    >
+                        Vestidos reservados
+                    </h2>
+                    <List className={"gap-2"}>
+                        {dresses.length > 0 ? (
+                            dresses.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className={"space-y-2 rounded border p-3"}
+                                >
+                                    <ImageListItem
+                                        label={product.description}
+                                        values={[
+                                            {
+                                                label: "Preço de aluguel",
+                                                value: numberToCurrency(
+                                                    product.price,
+                                                ),
+                                            },
+                                            {
+                                                label: "Disponível para ajuste",
+                                                value: product.available_for_adjustment
+                                                    ? "Sim"
+                                                    : "Não",
+                                            },
+                                            {
+                                                label: "Cor",
+                                                value: product.color,
+                                            },
+                                            {
+                                                label: "Modelo",
+                                                value: product.model,
+                                            },
+                                        ]}
+                                        img={product.img}
+                                        imgAlt={product.description}
+                                    />
+
+                                    <div className={"space-y-2"}>
+                                        <h3 className={"text-sm font-semibold"}>
+                                            Ajustes
+                                        </h3>
+
+                                        <List className={"gap-2 text-xs"}>
+                                            {booking.adjustments.filter(
+                                                (adjustment) =>
+                                                    adjustment.dress ===
+                                                    product.id,
+                                            ).length > 0 ? (
+                                                booking.adjustments
+                                                    .filter(
+                                                        (adjustment) =>
+                                                            adjustment.dress ===
+                                                            product.id,
+                                                    )
+                                                    .map((adjustment) => (
+                                                        <ListItem
+                                                            className={
+                                                                "grid grid-cols-2"
+                                                            }
+                                                            key={adjustment.id}
+                                                            label={
+                                                                adjustment.label
+                                                            }
+                                                            value={
+                                                                adjustment.description
+                                                            }
+                                                        />
+                                                    ))
+                                            ) : (
+                                                <p
+                                                    className={
+                                                        "text-muted-foreground"
+                                                    }
+                                                >
+                                                    Sem ajustes
+                                                </p>
+                                            )}
+                                        </List>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className={"text-muted-foreground"}>
+                                Sem vestidos reservados
+                            </p>
+                        )}
+                    </List>
+                </div>
+
+                <Separator />
+
+                <div className={"space-y-3"}>
+                    <h2
+                        className={
+                            "text-lg font-semibold leading-none tracking-tight"
+                        }
+                    >
+                        Bolsas reservadas
+                    </h2>
+                    <List>
+                        {purses.length > 0 ? (
+                            purses.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className={"rounded border px-3 py-2"}
+                                >
+                                    <ImageListItem
+                                        label={product.description}
+                                        values={[
+                                            {
+                                                label: "Preço de aluguel",
+                                                value: numberToCurrency(
+                                                    product.price,
+                                                ),
+                                            },
+                                            {
+                                                label: "Disponível para ajuste",
+                                                value: product.available_for_adjustment
+                                                    ? "Sim"
+                                                    : "Não",
+                                            },
+                                            {
+                                                label: "Cor",
+                                                value: product.color,
+                                            },
+                                            {
+                                                label: "Modelo",
+                                                value: product.model,
+                                            },
+                                        ]}
+                                        img={product.img}
+                                        imgAlt={product.description}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <p className={"text-muted-foreground"}>
+                                Sem bolsas reservadas
+                            </p>
+                        )}
+                    </List>
+                </div>
+
+                <div className={"flex flex-col gap-2"}>
+                    <Button className={"w-full flex-1"} type="button">
+                        Atualizar Reserva
+                    </Button>
+
+                    <Button
+                        className={"w-full flex-1"}
+                        type="button"
+                        variant={"outline"}
+                    >
+                        Editar
+                    </Button>
+                    <Button
+                        className={"w-full flex-1"}
+                        type="button"
+                        variant={"outline"}
+                    >
+                        Cancelar Reserva
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}

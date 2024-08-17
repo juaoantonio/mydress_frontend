@@ -1,16 +1,20 @@
 import axios from "axios";
 import { env } from "@/env";
+import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { isServer } from "@/lib/utils";
 
-export const client = axios
-  .create({
+const axiosClient = axios.create({
     baseURL: env.API_BASE_URL,
-  })
-  .interceptors.request.use(async (config) => {
-    const session = await getSession();
+});
+
+axiosClient.interceptors.request.use(async (config) => {
+    const session = isServer() ? await auth() : await getSession();
     if (session) {
-      config.headers.Authorization = `Bearer ${session.user.access}`;
+        config.headers.Authorization = `Bearer ${session.user.access}`;
     }
 
     return config;
-  });
+});
+
+export { axiosClient };

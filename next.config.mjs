@@ -5,7 +5,19 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: 'randomuser.me'
-      }
+      }, {
+        protocol: "https",
+        hostname: 'images.tcdn.com.br'
+      },{
+        protocol: "https",
+        hostname: 'img.irroba.com.br'
+      },{
+        protocol: "https",
+        hostname: 'ae01.alicdn.com'
+      },{
+        protocol: "https",
+        hostname: 'my-dress-dev.s3.amazonaws.com'
+      },
     ]
   }
 };
