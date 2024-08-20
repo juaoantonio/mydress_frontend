@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
-import { PurseFormCreate } from "@/app/(private)/produtos/components/purse-form.create";
+import { PurseFormCreate } from "@/app/(private)/produtos/cadastrar/components/purse-form.create";
 
 export function CreatePurseCard() {
     return (

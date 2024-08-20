@@ -1,26 +1,26 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-    CreateDressCard,
-    CreatePurseCard,
-} from "@/app/(private)/produtos/components";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { ListProductsSection } from "@/app/(private)/produtos/components";
 
-export default function ProductsPage() {
+export default async function ListProductsPage() {
     return (
-        <section className={"h-fit space-y-4"}>
-            <Tabs defaultValue={"dress"}>
-                <TabsList className={"grid w-full grid-cols-2"}>
-                    <TabsTrigger value={"dress"}>Vestido</TabsTrigger>
-                    <TabsTrigger value={"purse"}>Bolsa</TabsTrigger>
-                </TabsList>
+        <section className={"mt-2 flex flex-col gap-4"}>
+            <div
+                className={
+                    "col-span-full mb-1 flex h-fit items-center justify-between"
+                }
+            >
+                <h1 className={"self-auto text-xl font-semibold"}>Produtos</h1>
+                <Link href={"/produtos/cadastrar"}>
+                    <Button size={"sm"} className={"gap-1"}>
+                        <Plus size={18} />
+                        Criar Novo Produto
+                    </Button>
+                </Link>
+            </div>
 
-                <TabsContent value={"dress"}>
-                    <CreateDressCard />
-                </TabsContent>
-
-                <TabsContent value={"purse"}>
-                    <CreatePurseCard />
-                </TabsContent>
-            </Tabs>
+            <ListProductsSection />
         </section>
     );
 }

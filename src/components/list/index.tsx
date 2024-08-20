@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -19,15 +19,15 @@ export function ListItem({
     className,
 }: {
     label: string;
-    value: string;
+    value: string | ReactElement;
     className?: string;
 }) {
     const mergedClassName = cn("flex items-center justify-between", className);
 
     return (
         <li className={mergedClassName}>
-            <span className="text-muted-foreground">{label}</span>
-            <span>{value}</span>
+            <span className="inline-block text-muted-foreground">{label}</span>
+            <span className={"inline-block"}>{value}</span>
         </li>
     );
 }

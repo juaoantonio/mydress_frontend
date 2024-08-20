@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
-import { DressFormCreate } from "@/app/(private)/produtos/components/dress-form.create";
+import { DressFormCreate } from "@/app/(private)/produtos/cadastrar/components/dress-form.create";
 
 export function CreateDressCard() {
     return (

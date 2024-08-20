@@ -1,2 +1,1 @@
-export { CreateDressCard } from "@/app/(private)/produtos/components/create-dress-card";
-export { CreatePurseCard } from "@/app/(private)/produtos/components/create-purse-card";
+export { ListProductsSection } from "@/app/(private)/produtos/components/list-products-section";

@@ -17,6 +17,12 @@ const nextConfig = {
       },{
         protocol: "https",
         hostname: 'my-dress-dev.s3.amazonaws.com'
+      },{
+        protocol: "http",
+        hostname: 'localhost'
+      },{
+        protocol: "https",
+        hostname: 'my-dress-prod.s3.amazonaws.com'
       },
     ]
   }
