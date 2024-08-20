@@ -87,7 +87,7 @@ export function DressFormCreate() {
     });
 
     async function handleDressCreation(data: DressFormType) {
-        await mutation.mutateAsync(data as CreateDressInputDTO);
+        mutation.mutate(data as CreateDressInputDTO);
     }
 
     return (
@@ -192,9 +192,7 @@ export function DressFormCreate() {
                                         />
                                     </div>
                                 </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.price?.message}
-                                </FormMessage>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
