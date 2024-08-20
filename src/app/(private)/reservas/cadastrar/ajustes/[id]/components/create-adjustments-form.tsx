@@ -68,6 +68,7 @@ export function CreateAdjustmentsForm({
                 adjustments: data.adjustments,
             });
         },
+        onMutate: () => toast.loading("Salvando ajustes"),
         onError: (error) => {
             console.error(error);
             toast.error("Erro ao salvar ajustes");
@@ -180,8 +181,12 @@ export function CreateAdjustmentsForm({
                 ))}
 
                 <div className={"flex gap-2"}>
-                    <Button className={"flex-1"} type={"submit"}>
-                        Confirmar
+                    <Button
+                        className={"flex-1"}
+                        type={"submit"}
+                        disabled={form.formState.isSubmitting}
+                    >
+                        {form.formState.isSubmitting ? "Salvando..." : "Salvar"}
                     </Button>
                 </div>
             </form>

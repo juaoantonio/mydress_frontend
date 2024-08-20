@@ -28,7 +28,6 @@ import { BookingService } from "@/services/bookings/booking.service";
 import { useMutation } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
 import { toast } from "sonner";
-import { DevTool } from "@hookform/devtools";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -78,10 +77,15 @@ export function CreateBookingForm() {
                 notes: data.notes,
             });
         },
+        onMutate: () => toast.loading("Criando reserva"),
         onError: (error) => {
+            toast.dismiss();
+            toast.error(error.message);
+
             handleBookingCreationError(error, form);
         },
         onSuccess: (data) => {
+            toast.dismiss();
             toast.success("Reserva criada com sucesso!");
 
             router.replace(`/reservas/cadastrar/ajustes/${data.id}`);
@@ -107,62 +111,63 @@ export function CreateBookingForm() {
     const areDressAndPurseInputsDisabled = !start_date || !end_date;
 
     return (
-        <>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(handleBookingCreation)}
-                    className={"space-y-4"}
-                >
-                    <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
-                        <CustomerInput control={form.control} />
+        <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(handleBookingCreation)}
+                className={"space-y-4"}
+            >
+                <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
+                    <CustomerInput control={form.control} />
 
-                        <EventInput control={form.control} />
+                    <EventInput control={form.control} />
 
-                        <CalendarInput form={form} />
+                    <CalendarInput form={form} />
 
-                        <DressesInput
-                            form={form}
-                            start_date={start_date}
-                            end_date={end_date}
-                            disabled={areDressAndPurseInputsDisabled}
-                        />
+                    <DressesInput
+                        form={form}
+                        start_date={start_date}
+                        end_date={end_date}
+                        disabled={areDressAndPurseInputsDisabled}
+                    />
 
-                        <PursesInput form={form} />
+                    <PursesInput form={form} />
 
-                        <FormField
-                            control={form.control}
-                            name={"notes"}
-                            render={({ field }) => (
-                                <FormItem className={"space-y-1"}>
-                                    <FormLabel>Observações</FormLabel>
-                                    <FormControl>
-                                        <Textarea rows={6} {...field} />
-                                    </FormControl>
+                    <FormField
+                        control={form.control}
+                        name={"notes"}
+                        render={({ field }) => (
+                            <FormItem className={"space-y-1"}>
+                                <FormLabel>Observações</FormLabel>
+                                <FormControl>
+                                    <Textarea rows={6} {...field} />
+                                </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <FormMessage>
-                        {form.formState.errors.root?.message}
-                    </FormMessage>
-                    <div className={"flex gap-2"}>
-                        <Button
-                            className={"flex-1"}
-                            type={"button"}
-                            variant={"outline"}
-                            onClick={() => router.back()}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button className={"flex-1"} type={"submit"}>
-                            Confirmar
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-            <DevTool control={form.control} />
-        </>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <FormMessage>{form.formState.errors.root?.message}</FormMessage>
+                <div className={"flex gap-2"}>
+                    <Button
+                        className={"flex-1"}
+                        type={"button"}
+                        variant={"outline"}
+                        onClick={() => router.back()}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        className={"flex-1"}
+                        type={"submit"}
+                        disabled={form.formState.isSubmitting}
+                    >
+                        {form.formState.isSubmitting
+                            ? "Salvando..."
+                            : "Salvar reserva"}
+                    </Button>
+                </div>
+            </form>
+        </Form>
     );
 }

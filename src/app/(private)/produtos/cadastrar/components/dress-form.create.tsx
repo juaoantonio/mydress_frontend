@@ -346,9 +346,9 @@ export function DressFormCreate() {
                     <Button
                         className={"flex-1"}
                         type={"submit"}
-                        disabled={mutation.isPending}
+                        disabled={form.formState.isSubmitting}
                     >
-                        {mutation.isPending ? "Salvando..." : "Salvar"}
+                        {form.formState.isSubmitting ? "Salvando..." : "Salvar"}
                     </Button>
                 </div>
             </form>

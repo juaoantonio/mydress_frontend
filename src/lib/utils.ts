@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { FieldValues, UseFormReturn } from "react-hook-form";
-import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { AxiosErrorsEnum } from "@/types/enums/axios-errors.enum";
 import { ChangeEvent } from "react";
@@ -46,14 +45,12 @@ export function handleCreationFormError<T extends FieldValues>(
     messageFormatter: (message: string) => string,
 ) {
     if (!(error instanceof AxiosError)) {
-        toast.error(errorMessage);
         console.error(error);
 
         return;
     }
 
     if (!(error.code === AxiosErrorsEnum.ERR_BAD_REQUEST)) {
-        toast.error(errorMessage);
         console.error(error);
 
         return;
@@ -62,7 +59,6 @@ export function handleCreationFormError<T extends FieldValues>(
     const responseErrors = error.response?.data;
 
     if (!responseErrors) {
-        toast.error(errorMessage);
         console.error(error);
 
         return;

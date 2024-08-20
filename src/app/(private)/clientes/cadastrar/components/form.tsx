@@ -95,6 +95,19 @@ export function CreateCustomerForm() {
     const service = new CustomerService();
     const mutation = useMutation({
         mutationFn: (data: CustomerFormSchemaType) => service.create(data),
+        onMutate: () => toast.loading("Salvando cliente"),
+        onError: (error) => {
+            toast.dismiss();
+            toast.error(error.message);
+            console.error(error);
+
+            handleCustomerCreationError(error, form);
+        },
+        onSuccess: () => {
+            toast.dismiss();
+            toast.success("Cliente cadastrado com sucesso!");
+            router.back();
+        },
     });
 
     async function onSubmit(data: CustomerFormSchemaType) {
@@ -105,14 +118,7 @@ export function CreateCustomerForm() {
             return;
         }
 
-        try {
-            await mutation.mutateAsync(data);
-
-            toast.success("Cliente cadastrado com sucesso!");
-            router.back();
-        } catch (error) {
-            handleCustomerCreationError(error, form);
-        }
+        mutation.mutate(data);
     }
 
     return (
