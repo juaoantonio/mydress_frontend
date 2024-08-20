@@ -24,6 +24,7 @@ export function DressesInput({
         error,
         data: dresses,
     } = useQuery({
+        enabled: !!start_date && !!end_date,
         queryKey: ["dresses", start_date, end_date],
         queryFn: () =>
             dressService.getAllAvailableBetweenDates({ start_date, end_date }),

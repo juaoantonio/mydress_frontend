@@ -42,6 +42,31 @@ export class PurseService implements Service<PurseType> {
         return response.data;
     }
 
+    /*
+     * This method is used to get all purses that are available between two dates.
+     * @param {Date} start_date - The start date of the date range.
+     * @param {Date} end_date - The end date of the date range.
+     */
+    async getAllAvailableBetweenDates({
+        start_date,
+        end_date,
+    }: {
+        start_date?: Date | null;
+        end_date?: Date | null;
+    }) {
+        const response = await axiosClient.get<PurseType[]>(
+            "/products/purses/list_available_between_dates",
+            {
+                params: {
+                    start_date: start_date ? start_date.toISOString() : "",
+                    end_date: end_date ? end_date.toISOString() : "",
+                },
+            },
+        );
+
+        return response.data;
+    }
+
     async deleteById(id: string): Promise<void> {
         await axiosClient.delete<null>(`/products/purses/${id}`);
     }

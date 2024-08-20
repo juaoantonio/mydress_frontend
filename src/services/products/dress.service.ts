@@ -50,7 +50,6 @@ export class DressService implements Service<DressType> {
 
     /*
      * This method is used to get all dresses that are available between two dates.
-     * It is used in the CreateBookingForm component to show the user only the dresses that are available for the selected date range.
      * @param {Date} start_date - The start date of the date range.
      * @param {Date} end_date - The end date of the date range.
      */

@@ -130,7 +130,12 @@ export function CreateBookingForm() {
                         disabled={areDressAndPurseInputsDisabled}
                     />
 
-                    <PursesInput form={form} />
+                    <PursesInput
+                        form={form}
+                        start_date={start_date}
+                        end_date={end_date}
+                        disabled={areDressAndPurseInputsDisabled}
+                    />
 
                     <FormField
                         control={form.control}

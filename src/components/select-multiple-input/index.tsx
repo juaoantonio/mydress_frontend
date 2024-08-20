@@ -65,7 +65,11 @@ export function SelectMultipleInput<
                                 </Button>
                             </PopoverTrigger>
 
-                            <PopoverContent className={"p-2"}>
+                            <PopoverContent
+                                className={
+                                    "max-h-[300px] overflow-x-scroll p-2"
+                                }
+                            >
                                 <ul className={"space-y-2"}>
                                     {loading && (
                                         <div

@@ -16,6 +16,7 @@ export type BookingType = {
     purses: ProductType[];
     jewels: ProductType[];
     adjustments: AdjustmentType[];
+    payment_amount: number;
     notes?: string;
 };
 
