@@ -6,14 +6,14 @@ export const createEventSchema = z.object({
         .min(1, {
             message: "Recepção do evento é obrigatória",
         })
-        .default("Não informado"),
+        .default("Recepção não informada"),
 
     event_address: z
         .string()
         .min(1, {
             message: "Endereço do evento é obrigatório",
         })
-        .default("Não informado"),
+        .default("Endereço não informado"),
 
     event_datetime: z.date({
         message: "Data do evento é obrigatória",
