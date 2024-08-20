@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DressStatus } from "@/types/products/product.enums";
 import { ReactElement } from "react";
 import { Trash } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
 
 export function ListDressSection() {
@@ -85,6 +85,10 @@ export function ListDressSection() {
                             </span>
                         </div>
                         <List className={"gap-1.5"}>
+                            <ListItem
+                                label={"Preço de aluguel"}
+                                value={numberToCurrency(dress.price)}
+                            />
                             <ListItem label={"Modelo"} value={dress.model} />
                             <ListItem label={"Cor"} value={dress.color} />
                             <ListItem label={"Tecido"} value={dress.fabric} />

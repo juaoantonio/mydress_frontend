@@ -19,7 +19,7 @@ export function ListItem({
     className,
 }: {
     label: string;
-    value: string | ReactElement;
+    value: string | number | ReactElement;
     className?: string;
 }) {
     const mergedClassName = cn("flex items-center justify-between", className);
