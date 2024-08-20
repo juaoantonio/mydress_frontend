@@ -19,19 +19,26 @@ export function ListDressSection() {
     });
     const mutation = useMutation({
         mutationFn: (id: string) => dressService.deleteById(id),
+        onMutate: () => toast.loading("Removendo vestido"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: ["dresses"],
             });
-            toast.success("Vestido deletado com sucesso");
+            toast.dismiss();
+            toast.success("Vestido removido com sucesso");
         },
         onError: () => {
-            toast.error("Erro ao deletar vestido");
+            toast.dismiss();
+            toast.error("Erro ao remover vestido");
         },
     });
 
     if (isPending) {
-        return <Loading />;
+        return (
+            <div className={"min-h-[500px]"}>
+                <Loading />
+            </div>
+        );
     }
 
     if (isError) {
@@ -52,7 +59,7 @@ export function ListDressSection() {
                             className={cn(
                                 "absolute right-4 top-4 flex aspect-square h-9 items-center justify-center rounded-lg bg-red-500 text-white",
                                 mutation.isPending &&
-                                    "pointer-events-none cursor-not-allowed opacity-80",
+                                    "pointer-events-none cursor-not-allowed opacity-60",
                             )}
                             onClick={() => handleDressDelete(dress.id)}
                         >

@@ -35,7 +35,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { getSession } from "next-auth/react";
 
 type DressFormType = z.infer<typeof createDressSchema>;
 
@@ -47,7 +46,7 @@ function handleDressCreationError(
         error,
         form,
         "Erro ao criar o vestido",
-        (message) => "A imagem deve ser do tipo jpeg, jpg, png ou webp",
+        () => "A imagem deve ser do tipo jpeg, jpg, png ou webp",
     );
 }
 
@@ -73,27 +72,22 @@ export function DressFormCreate() {
     const service = new DressService();
     const mutation = useMutation({
         mutationFn: (data: CreateDressInputDTO) => service.create(data),
+        onMutate: async () => toast.loading("Criando vestido..."),
         onError: (error) => {
             console.error(error);
+            toast.dismiss();
+            toast.error("Erro ao criar vestido");
             handleDressCreationError(error, form);
         },
         onSuccess: () => {
+            toast.dismiss();
             toast.success("Vestido criado com sucesso!");
             router.back();
         },
     });
 
     async function handleDressCreation(data: DressFormType) {
-        const session = await getSession();
-
-        if (!session) {
-            toast.error(
-                "Você precisa estar logado para criar uma nova reserva!",
-            );
-            return;
-        }
-
-        mutation.mutate(data as CreateDressInputDTO);
+        await mutation.mutateAsync(data as CreateDressInputDTO);
     }
 
     return (
@@ -349,8 +343,12 @@ export function DressFormCreate() {
                     >
                         Cancelar
                     </Button>
-                    <Button className={"flex-1"} type={"submit"}>
-                        Salvar
+                    <Button
+                        className={"flex-1"}
+                        type={"submit"}
+                        disabled={mutation.isPending}
+                    >
+                        {mutation.isPending ? "Salvando..." : "Salvar"}
                     </Button>
                 </div>
             </form>

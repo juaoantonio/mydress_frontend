@@ -1,9 +1,9 @@
-import { LoaderCircle } from "lucide-react";
+import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 
 export default function Loading() {
     return (
-        <div className={"flex h-full w-full items-center justify-center"}>
-            <LoaderCircle className={"animate-spin text-primary"} />
+        <div className={"flex min-h-screen w-full items-center justify-center"}>
+            <LoadingSpinner />
         </div>
     );
 }
