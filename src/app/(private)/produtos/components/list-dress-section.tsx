@@ -55,13 +55,13 @@ export function ListDressSection() {
                 <Card
                     key={dress.id}
                     className={
-                        "grid grid-cols-[180px,1fr] flex-row overflow-hidden rounded-lg"
+                        "grid grid-cols-[120px,1fr] flex-row overflow-hidden rounded-lg"
                     }
                 >
                     <div className={"relative"}>
                         <div
                             className={cn(
-                                "absolute left-2.5 top-2.5 flex aspect-square h-7 items-center justify-center rounded bg-red-500 text-white",
+                                "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
                                 mutation.isPending &&
                                     "pointer-events-none cursor-not-allowed opacity-60",
                             )}
@@ -74,17 +74,15 @@ export function ListDressSection() {
                             alt={"Vestido"}
                             width={200}
                             height={200}
-                            className={
-                                "aspect-[5/6] h-full w-full object-cover"
-                            }
+                            className={"aspect-[5/6] h-full object-cover"}
                         />
                     </div>
                     <CardContent className={"space-y-3 py-3"}>
                         <div className={"space-y-2"}>
-                            <h3 className={"text-lg font-semibold"}>
+                            <h3 className={"font-semibold"}>
                                 {dress.description}
                             </h3>
-                            <span className={"inline-block text-xs"}>
+                            <span className={"inline-block text-[0.6rem]"}>
                                 {DressStatusMapping[dress.status]}
                             </span>
                         </div>

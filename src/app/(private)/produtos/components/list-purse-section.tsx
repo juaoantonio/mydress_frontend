@@ -8,7 +8,7 @@ import { cn, numberToCurrency } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list";
-import { DressStatusMapping } from "@/mappings/products.mapping";
+import { PurseStatusMapping } from "@/mappings/products.mapping";
 
 export function ListPurseSection() {
     const purseService = new PurseService();
@@ -56,13 +56,13 @@ export function ListPurseSection() {
                 <Card
                     key={purse.id}
                     className={
-                        "grid grid-cols-[180px,1fr] flex-row overflow-hidden rounded-lg"
+                        "grid grid-cols-[120px,1fr] overflow-hidden rounded-lg"
                     }
                 >
                     <div className={"relative"}>
                         <div
                             className={cn(
-                                "absolute left-2.5 top-2.5 flex aspect-square h-7 items-center justify-center rounded bg-red-500 text-white",
+                                "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
                                 mutation.isPending &&
                                     "pointer-events-none cursor-not-allowed opacity-60",
                             )}
@@ -75,16 +75,16 @@ export function ListPurseSection() {
                             alt={"Vestido"}
                             width={200}
                             height={200}
-                            className={"h-full w-full object-cover"}
+                            className={"aspect-[5/6] h-full object-cover"}
                         />
                     </div>
                     <CardContent className={"space-y-3 py-3"}>
                         <div className={"space-y-2"}>
-                            <h3 className={"text-lg font-semibold"}>
+                            <h3 className={"font-semibold"}>
                                 {purse.description}
                             </h3>
-                            <span className={"inline-block text-xs"}>
-                                {DressStatusMapping[purse.status]}
+                            <span className={"inline-block text-[0.6rem]"}>
+                                {PurseStatusMapping[purse.status]}
                             </span>
                         </div>
                         <List className={"gap-1.5 text-xs"}>

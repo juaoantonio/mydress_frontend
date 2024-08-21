@@ -27,7 +27,7 @@ export function ListItem({
     return (
         <li className={mergedClassName}>
             <span className="inline-block text-muted-foreground">{label}</span>
-            <span className={"inline-block"}>{value}</span>
+            <span className={"inline-block text-right"}>{value}</span>
         </li>
     );
 }
