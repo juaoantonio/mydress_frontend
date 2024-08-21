@@ -1,6 +1,5 @@
-import React, { Suspense } from "react";
-import { LoaderCircle } from "lucide-react";
-import { DetailBookingCard } from "@/app/(private)/reservas/[id]/components/DetailBookingCard";
+import React from "react";
+import { DetailBookingCard } from "@/app/(private)/reservas/[id]/components/detail-booking-card";
 
 export default function BookingDetail({
     params: { id },
@@ -10,20 +9,11 @@ export default function BookingDetail({
     };
 }) {
     return (
-        <section className={"flex h-[130vh] justify-center lg:items-center"}>
-            <Suspense
-                fallback={
-                    <div
-                        className={
-                            "flex h-full w-full items-center justify-center"
-                        }
-                    >
-                        <LoaderCircle className={"animate-spin text-primary"} />
-                    </div>
-                }
-            >
-                <DetailBookingCard bookingId={id} />
-            </Suspense>
+        <section className={"flex flex-col justify-center lg:items-center"}>
+            <h1 className={"mb-5 mt-1 text-xl font-bold text-foreground"}>
+                Detalhes da reserva
+            </h1>
+            <DetailBookingCard bookingId={id} />
         </section>
     );
 }

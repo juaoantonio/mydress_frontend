@@ -8,7 +8,7 @@ export function ListProductsSection() {
     return (
         <section className={"h-fit space-y-4"}>
             <Tabs defaultValue={"dress"}>
-                <TabsList className={"grid w-full grid-cols-2"}>
+                <TabsList className={"mb-4 grid w-full grid-cols-2"}>
                     <TabsTrigger value={"dress"}>Vestidos</TabsTrigger>
                     <TabsTrigger value={"purse"}>Bolsas</TabsTrigger>
                 </TabsList>

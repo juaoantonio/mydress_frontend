@@ -1,38 +1,69 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import React from "react";
 import { BookingService } from "@/services/bookings/booking.service";
 import { ImageListItem, List, ListItem } from "@/components/list";
-import { BookingStatusLabels } from "@/types/booking.enums";
 import { format } from "date-fns";
-import { numberToCurrency } from "@/lib/utils";
+import { getPercentage, numberToCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { UpdateBookingPaymentTrigger } from "@/app/(private)/reservas/[id]/components/update-booking-payment-trigger";
+import { BookingStatusMapping } from "@/mappings/bookings.mapping";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/app/loading";
+import { useRouter } from "next/navigation";
+import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
 
-export async function DetailBookingCard({ bookingId }: { bookingId: string }) {
+export function DetailBookingCard({ bookingId }: { bookingId: string }) {
+    const router = useRouter();
     const bookingService = new BookingService();
-    const booking = await bookingService.getById(bookingId);
-    const dresses = booking?.dresses ?? [];
-    const purses = booking?.purses ?? [];
-    const totalRentValue = [...dresses, ...purses].reduce(
-        (acc, product) => acc + product.price,
-        0,
-    );
+    const {
+        data: booking,
+        isError,
+        isPending,
+    } = useQuery({
+        queryKey: ["booking", bookingId],
+        queryFn: () => bookingService.getById(bookingId),
+    });
+    const dresses = booking?.dresses || [];
+    const purses = booking?.purses || [];
+
+    if (isError) {
+        return <p>Erro ao carregar reserva</p>;
+    }
+
+    if (isPending) {
+        return <Loading />;
+    }
 
     return (
-        <Card className={"mx-auto h-fit max-w-[800px] flex-1"}>
-            <CardHeader className={"px-3"}>
-                <CardTitle className={"text-lg leading-tight"}>
-                    Reserva de {booking.customer.name} entre{" "}
-                    {format(booking.start_date, "dd/MM/yyyy")} e{" "}
-                    {format(booking.end_date, "dd/MM/yyyy")}
+        <Card className={"h-fit max-w-[800px] flex-1"}>
+            <CardHeader
+                className={
+                    "flex flex-row items-center justify-between space-y-0 py-5 text-sm"
+                }
+            >
+                <CardTitle
+                    className={
+                        "items-center justify-between text-lg leading-tight"
+                    }
+                >
+                    Reserva de {booking.customer.name}{" "}
                 </CardTitle>
+
+                {BookingStatusMapping[booking.status]}
             </CardHeader>
-            <CardContent className={"space-y-4 px-3"}>
+            <CardContent className={"space-y-6"}>
                 {booking ? (
                     <List className={"grid gap-2 text-sm"}>
                         <ListItem
-                            label={"Situação"}
-                            value={BookingStatusLabels[booking.status]}
+                            label={"Valor total do aluguel"}
+                            value={numberToCurrency(booking.payment_amount)}
+                        />
+                        <ListItem
+                            label={"Valor pago pela cliente"}
+                            value={` (${getPercentage(booking.amount_paid, booking.payment_amount)}%) ${numberToCurrency(booking.amount_paid)}}`}
                         />
                         <ListItem
                             label={"Cliente"}
@@ -49,10 +80,6 @@ export async function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         <ListItem
                             label={"Recepção do evento"}
                             value={booking.event.event_reception}
-                        />
-                        <ListItem
-                            label={"Valor total do aluguel"}
-                            value={numberToCurrency(totalRentValue)}
                         />
                     </List>
                 ) : null}
@@ -208,25 +235,28 @@ export async function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     </List>
                 </div>
 
+                <Separator />
+
                 <div className={"flex flex-col gap-2"}>
-                    <Button className={"w-full flex-1"} type="button">
-                        Atualizar Reserva
-                    </Button>
+                    <UpdateBookingPaymentTrigger
+                        bookingId={bookingId}
+                        defaultValue={booking.amount_paid}
+                    />
 
                     <Button
                         className={"w-full flex-1"}
                         type="button"
                         variant={"outline"}
+                        onClick={() =>
+                            router.push(
+                                `/reservas/cadastrar/ajustes/${bookingId}`,
+                            )
+                        }
                     >
-                        Editar
+                        Editar Ajustes
                     </Button>
-                    <Button
-                        className={"w-full flex-1"}
-                        type="button"
-                        variant={"outline"}
-                    >
-                        Cancelar Reserva
-                    </Button>
+
+                    <CancelBookingTrigger bookingId={bookingId} />
                 </div>
             </CardContent>
         </Card>

@@ -91,3 +91,7 @@ export function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
     return { files, displayUrl };
 }
+
+export function getPercentage(partial: number, total: number) {
+    return +((partial * 100) / total).toFixed(2);
+}

@@ -71,9 +71,11 @@ export function CreateAdjustmentsForm({
         onMutate: () => toast.loading("Salvando ajustes"),
         onError: (error) => {
             console.error(error);
+            toast.dismiss();
             toast.error("Erro ao salvar ajustes");
         },
         onSuccess: () => {
+            toast.dismiss();
             toast.success("Ajustes salvos com sucesso");
             router.back();
         },
@@ -134,6 +136,7 @@ export function CreateAdjustmentsForm({
                                 <Button
                                     className={"aspect-square h-9 p-1"}
                                     onClick={() => addNewAdjustment(dress.id)}
+                                    type={"button"}
                                 >
                                     <Plus size={24} />
                                 </Button>

@@ -8,7 +8,7 @@ import { cn, numberToCurrency } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list";
-import { DressStatusMapping } from "@/app/(private)/produtos/components/list-dress-section";
+import { DressStatusMapping } from "@/mappings/products.mapping";
 
 export function ListPurseSection() {
     const purseService = new PurseService();
@@ -53,38 +53,41 @@ export function ListPurseSection() {
     return (
         <div className={"space-y-4"}>
             {data.map((purse) => (
-                <Card key={purse.id} className={"overflow-hidden"}>
-                    <div className={"relative mb-4"}>
+                <Card
+                    key={purse.id}
+                    className={
+                        "grid grid-cols-[180px,1fr] flex-row overflow-hidden rounded-lg"
+                    }
+                >
+                    <div className={"relative"}>
                         <div
                             className={cn(
-                                "absolute right-4 top-4 flex aspect-square h-9 items-center justify-center rounded-lg bg-red-500 text-white",
+                                "absolute left-2.5 top-2.5 flex aspect-square h-7 items-center justify-center rounded bg-red-500 text-white",
                                 mutation.isPending &&
                                     "pointer-events-none cursor-not-allowed opacity-60",
                             )}
                             onClick={() => handlePurseDelete(purse.id)}
                         >
-                            <Trash />
+                            <Trash size={16} />
                         </div>
                         <Image
                             src={purse.img ?? ""}
                             alt={"Vestido"}
                             width={200}
                             height={200}
-                            className={
-                                "h-[500px] max-h-[500px] w-full object-cover"
-                            }
+                            className={"h-full w-full object-cover"}
                         />
                     </div>
-                    <CardContent className={"space-y-3"}>
-                        <div className={"flex items-center justify-between"}>
+                    <CardContent className={"space-y-3 py-3"}>
+                        <div className={"space-y-2"}>
                             <h3 className={"text-lg font-semibold"}>
                                 {purse.description}
                             </h3>
-                            <span className={"inline-block text-sm"}>
+                            <span className={"inline-block text-xs"}>
                                 {DressStatusMapping[purse.status]}
                             </span>
                         </div>
-                        <List className={"gap-1.5"}>
+                        <List className={"gap-1.5 text-xs"}>
                             <ListItem
                                 label={"Preço de aluguel"}
                                 value={numberToCurrency(purse.price)}

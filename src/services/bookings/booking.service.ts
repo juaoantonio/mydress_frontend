@@ -37,4 +37,27 @@ export class BookingService implements Service<BookingType> {
 
         return response.data;
     }
+
+    async updatePaymentById({
+        id,
+        amount_paid,
+    }: {
+        id: string;
+        amount_paid: number;
+    }): Promise<BookingType> {
+        const response = await axiosClient.patch<BookingType>(
+            `/bookings/${id}/update_amount_paid`,
+            { amount_paid },
+        );
+
+        return response.data;
+    }
+
+    async cancelBookingById(id: string): Promise<BookingType> {
+        const response = await axiosClient.patch<BookingType>(
+            `/bookings/${id}/cancel`,
+        );
+
+        return response.data;
+    }
 }
