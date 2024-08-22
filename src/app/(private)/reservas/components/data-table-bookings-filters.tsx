@@ -66,13 +66,15 @@ export function DataTableBookingsFilters() {
 function Filters({ handleClose }: { handleClose: () => void }) {
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const createQueryString = useCreateQueryString();
 
-    const status = useSearchParams().get("status") ?? "";
+    const status = searchParams.get("status") ?? "";
 
-    const event_date =
-        (useSearchParams().get("event_date") ?? "") + "T00:00:00";
-    const customer_name = useSearchParams().get("customer_name") ?? "";
+    const event_date = searchParams.get("event_date")
+        ? searchParams.get("event_date") + "T00:00:00"
+        : "";
+    const customer_name = searchParams.get("customer_name") ?? "";
 
     const [filters, setFilters] = useState({
         status,
