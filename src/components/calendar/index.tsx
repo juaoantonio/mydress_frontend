@@ -4,10 +4,10 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useEffect, useRef } from "react";
 import { BookingService } from "@/services/bookings/booking.service";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { EventClickArg } from "@fullcalendar/core";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function Calendar({
     view,
@@ -15,12 +15,23 @@ export function Calendar({
     view: "dayGridMonth" | "dayGridWeek" | "dayGridDay";
 }) {
     const calendarRef = useRef<FullCalendar>(null);
-    const router = useRouter();
 
-    const bookingService = new BookingService();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const status = searchParams.get("status") ?? "";
+    const customer_name = searchParams.get("customer_name") ?? "";
+    const event_date = searchParams.get("event_date") ?? "";
+
+    const service = new BookingService();
     const { data, isError } = useQuery({
-        queryKey: ["bookings"],
-        queryFn: bookingService.getAll,
+        queryKey: ["bookings", status, customer_name, event_date],
+        queryFn: () =>
+            service.getAll({
+                status,
+                customer_name,
+                event_date,
+            }),
+        placeholderData: keepPreviousData,
     });
 
     const handleEventClick = (arg: EventClickArg) => {

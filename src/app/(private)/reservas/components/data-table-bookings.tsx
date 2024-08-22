@@ -17,8 +17,6 @@ export function DataTableBookings() {
     const customer_name = searchParams.get("customer_name") ?? "";
     const event_date = searchParams.get("event_date") ?? "";
 
-    console.log(event_date);
-
     const service = new BookingService();
     const { data, isError, isPending } = useQuery({
         queryKey: ["bookings", status, customer_name, event_date],
