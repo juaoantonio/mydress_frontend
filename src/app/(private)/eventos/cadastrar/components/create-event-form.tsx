@@ -23,6 +23,7 @@ import React from "react";
 import {
     Popover,
     PopoverContent,
+    PopoverPortal,
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -159,22 +160,23 @@ export function CreateEventForm() {
                                             </Button>
                                         </FormControl>
                                     </PopoverTrigger>
-
-                                    <PopoverContent
-                                        className="w-auto p-0"
-                                        align="start"
-                                    >
-                                        <Calendar
-                                            mode="single"
-                                            locale={ptBR}
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date < new Date()
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
+                                    <PopoverPortal>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
+                                        >
+                                            <Calendar
+                                                mode="single"
+                                                locale={ptBR}
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                disabled={(date) =>
+                                                    date < new Date()
+                                                }
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </PopoverPortal>
                                 </Popover>
                                 <FormMessage />
                             </FormItem>

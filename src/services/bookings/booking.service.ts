@@ -10,8 +10,22 @@ export class BookingService implements Service<BookingType> {
         return response.data;
     }
 
-    async getAll(): Promise<BookingType[]> {
-        const response = await axiosClient.get<BookingType[]>("/bookings");
+    async getAll({
+        status,
+        customer_name,
+        event_date,
+    }: {
+        status?: string;
+        customer_name?: string;
+        event_date?: string;
+    }): Promise<BookingType[]> {
+        const response = await axiosClient.get<BookingType[]>("/bookings", {
+            params: {
+                status,
+                customer_name,
+                event_date,
+            },
+        });
 
         return response.data;
     }

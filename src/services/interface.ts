@@ -1,7 +1,7 @@
 export interface Service<Entity> {
     create(data: any): Promise<Entity>;
 
-    getAll(): Promise<Entity[]>;
+    getAll(filters: any): Promise<Entity[]>;
 
     getById(id: string): Promise<Entity>;
 
