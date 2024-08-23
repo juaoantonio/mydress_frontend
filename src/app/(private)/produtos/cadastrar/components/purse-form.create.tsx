@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { ImagePlaceholder } from "@/components/image-placeholder";
+import { ImagePlaceholder } from "@/components/image-placeholder/image-placeholder";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";

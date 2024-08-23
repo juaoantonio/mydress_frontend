@@ -1,7 +1,7 @@
 import React from "react";
 import { Control } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import { SelectWithAdd } from "@/components/select-with-add";
+import { SelectWithAdd } from "@/components/select-with-add/select-with-add";
 import { EventService } from "@/services/events/event.service";
 import { format, setDefaultOptions } from "date-fns";
 import { ptBR } from "date-fns/locale";

@@ -2,7 +2,7 @@ import React from "react";
 import { Control } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { CustomerService } from "@/services/customers/customer.service";
-import { SelectWithAdd } from "@/components/select-with-add";
+import { SelectWithAdd } from "@/components/select-with-add/select-with-add";
 
 export function CustomerInput({ control }: { control: Control<any> }) {
     const customerService = new CustomerService();

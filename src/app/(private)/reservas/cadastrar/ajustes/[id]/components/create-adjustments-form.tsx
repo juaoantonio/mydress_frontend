@@ -1,7 +1,7 @@
 "use client";
 import { DressType } from "@/types/products/dress.types";
 
-import { ImageListItem } from "@/components/list";
+import { ImageListItem } from "@/components/list/list";
 import { numberToCurrency } from "@/lib/utils";
 import React, { Fragment } from "react";
 import { z } from "zod";

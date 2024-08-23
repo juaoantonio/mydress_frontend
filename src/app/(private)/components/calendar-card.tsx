@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { setDefaultOptions } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar } from "@/components/calendar";
+import { Calendar } from "@/components/calendar/calendar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 setDefaultOptions({
@@ -17,42 +16,33 @@ export default function CalendarCard() {
     >("dayGridMonth");
 
     return (
-        <>
-            <Card className={"col-span-full h-[75vh]"}>
-                <CardHeader
-                    className={
-                        "flex flex-row items-center justify-between space-y-0"
-                    }
-                >
-                    <CardTitle>Calendário de Reservas</CardTitle>
+        <div className={"space-y-1.5"}>
+            <Tabs defaultValue={"dayGridMonth"}>
+                <TabsList className={"mb-4 grid w-full grid-cols-3"}>
+                    <TabsTrigger
+                        value={"dayGridMonth"}
+                        onClick={() => setCalendarView("dayGridMonth")}
+                    >
+                        Mês
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value={"dayGridWeek"}
+                        onClick={() => setCalendarView("dayGridWeek")}
+                    >
+                        Semana
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value={"dayGridDay"}
+                        onClick={() => setCalendarView("dayGridDay")}
+                    >
+                        Dia
+                    </TabsTrigger>
+                </TabsList>
+            </Tabs>
 
-                    <Tabs defaultValue={"dayGridMonth"}>
-                        <TabsList>
-                            <TabsTrigger
-                                value={"dayGridMonth"}
-                                onClick={() => setCalendarView("dayGridMonth")}
-                            >
-                                Mês
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value={"dayGridWeek"}
-                                onClick={() => setCalendarView("dayGridWeek")}
-                            >
-                                Semana
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value={"dayGridDay"}
-                                onClick={() => setCalendarView("dayGridDay")}
-                            >
-                                Dia
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </CardHeader>
-                <CardContent className={"h-full text-xs"}>
-                    <Calendar view={calendarView} />
-                </CardContent>
-            </Card>
-        </>
+            <div className={"h-[800px]"}>
+                <Calendar view={calendarView} />
+            </div>
+        </div>
     );
 }

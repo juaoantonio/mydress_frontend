@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import { dresses } from "@/app/(private)/reservas/cadastrar/components/mocks";
-import { SelectMultipleInput } from "@/components/select-multiple-input";
+import { SelectMultipleInput } from "@/components/select-multiple-input/select-multiple-input";
 import React from "react";
 import { DressService } from "@/services/products/dress.service";
 import { useQuery } from "@tanstack/react-query";

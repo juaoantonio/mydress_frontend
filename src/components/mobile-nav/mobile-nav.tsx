@@ -4,11 +4,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
     BookUser,
-    Home,
+    LogOut,
     Package,
     Package2,
     PanelLeft,
-    PartyPopper,
+    Pin,
     Users2,
 } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +26,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function MobileNav() {
     const [openMobileNav, setOpenMobileNav] = useState(false);
@@ -44,7 +45,10 @@ export default function MobileNav() {
                         <span className="sr-only">Toggle Menu</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="sm:max-w-xs">
+                <SheetContent
+                    side="left"
+                    className="flex flex-col justify-between sm:max-w-xs"
+                >
                     <nav className="grid gap-3 text-lg font-medium">
                         <Link
                             href="/"
@@ -60,19 +64,6 @@ export default function MobileNav() {
                             className={cn(
                                 "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                                 isActiveLink("/")
-                                    ? "bg-accent text-accent-foreground"
-                                    : "text-muted-foreground",
-                            )}
-                            onClick={() => setOpenMobileNav(false)}
-                        >
-                            <Home className="h-5 w-5" />
-                            Painel Principal
-                        </Link>
-                        <Link
-                            href={"/reservas"}
-                            className={cn(
-                                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
-                                isActiveLink("/reservas")
                                     ? "bg-accent text-accent-foreground"
                                     : "text-muted-foreground",
                             )}
@@ -95,7 +86,7 @@ export default function MobileNav() {
                             Produtos
                         </Link>
                         <Link
-                            href="/eventos"
+                            href="/ajustes"
                             className={cn(
                                 "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                                 isActiveLink("/eventos")
@@ -104,8 +95,8 @@ export default function MobileNav() {
                             )}
                             onClick={() => setOpenMobileNav(false)}
                         >
-                            <PartyPopper className="h-5 w-5" />
-                            Eventos
+                            <Pin className="h-5 w-5 rotate-45" />
+                            Ajustes
                         </Link>
                         <Link
                             href="/clientes"
@@ -121,6 +112,15 @@ export default function MobileNav() {
                             Clientes
                         </Link>
                     </nav>
+
+                    <Button
+                        variant={"outline"}
+                        onClick={() => signOut()}
+                        className={"flex h-auto items-center gap-2 py-2"}
+                    >
+                        <LogOut size={20} />
+                        Sair
+                    </Button>
                 </SheetContent>
             </Sheet>
 

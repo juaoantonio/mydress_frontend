@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import React from "react";
 import { BookingService } from "@/services/bookings/booking.service";
-import { ImageListItem, List, ListItem } from "@/components/list";
+import { ImageListItem, List, ListItem } from "@/components/list/list";
 import { format } from "date-fns";
 import { getPercentage, numberToCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";

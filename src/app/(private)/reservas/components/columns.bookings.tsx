@@ -8,7 +8,7 @@ import { BookingStatusMapping } from "@/mappings/bookings.mapping";
 import { numberToCurrency } from "@/lib/utils";
 import { CustomerType } from "@/types/customer.types";
 
-export const bookingColumns: ColumnDef<BookingType>[] = [
+export const columnsBookings: ColumnDef<BookingType>[] = [
     {
         accessorKey: "customer",
         header: () => <div className="text-nowrap">Cliente</div>,

@@ -3,7 +3,7 @@ import { DressService } from "@/services/products/dress.service";
 import Loading from "@/app/loading";
 import { toast } from "sonner";
 import Image from "next/image";
-import { List, ListItem } from "@/components/list";
+import { List, ListItem } from "@/components/list/list";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 import { cn, numberToCurrency } from "@/lib/utils";

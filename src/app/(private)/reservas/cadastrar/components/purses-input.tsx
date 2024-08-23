@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { SelectMultipleInput } from "@/components/select-multiple-input";
+import { SelectMultipleInput } from "@/components/select-multiple-input/select-multiple-input";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PurseService } from "@/services/products/purse.service";

@@ -1,6 +1,6 @@
 import "../globals.css";
-import { Sidebar } from "@/components/sidebar";
-import MobileNav from "@/components/mobile-nav";
+import { Sidebar } from "@/components/sidebar/sidebar";
+import MobileNav from "@/components/mobile-nav/mobile-nav";
 
 export default function PrivateLayout({
     children,

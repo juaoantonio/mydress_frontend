@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn, numberToCurrency } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import { List, ListItem } from "@/components/list";
+import { List, ListItem } from "@/components/list/list";
 import { PurseStatusMapping } from "@/mappings/products.mapping";
 
 export function ListPurseSection() {

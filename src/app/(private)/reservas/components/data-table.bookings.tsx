@@ -1,13 +1,13 @@
 "use client";
 
-import { DataTable } from "@/components/data-table/data-table-root";
+import { DataTable } from "@/components/data-table/data-table";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { BookingService } from "@/services/bookings/booking.service";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { toast } from "sonner";
 import { BookingType } from "@/types/booking.types";
 import { useTable } from "@/hooks/useTable";
-import { bookingColumns } from "@/app/(private)/reservas/components/booking-columns";
+import { columnsBookings } from "@/app/(private)/reservas/components/columns.bookings";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { useSearchParams } from "next/navigation";
 
@@ -30,21 +30,24 @@ export function DataTableBookings() {
     });
 
     if (isPending) {
-        return <LoadingSpinner />;
+        return (
+            <div className={"flex items-center justify-center"}>
+                <LoadingSpinner />;
+            </div>
+        );
     }
 
     if (isError) {
         toast.error("Erro ao carregar reservas");
-        return null;
     }
 
-    return <Table data={data} />;
+    return <Table data={isError ? [] : data} />;
 }
 
 function Table({ data }: { data: BookingType[] }) {
     const table = useTable({
         data,
-        columns: bookingColumns,
+        columns: columnsBookings,
     });
 
     return (

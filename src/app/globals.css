@@ -81,7 +81,13 @@
     display: none;
 }
 
-td[role="gridcell"]:nth-child(6),
-td[role="gridcell"]:nth-child(7) {
+.fc-media-screen > .fc-footer-toolbar {
+    margin-top: 1rem !important;
+}
+
+td[role="gridcell"]:nth-child(6) {
     background: hsl(var(--primary) / 0.55) !important;
+}
+td[role="gridcell"]:nth-child(7) {
+    background: hsl(var(--primary) / 0.70) !important;
 }
