@@ -50,7 +50,7 @@ export function SelectWithAdd<
         <FormField
             control={control}
             name={name}
-            render={({ field, fieldState }) => {
+            render={({ field }) => {
                 return (
                     <FormItem className={"space-y-1"}>
                         <FormLabel>{label}</FormLabel>
