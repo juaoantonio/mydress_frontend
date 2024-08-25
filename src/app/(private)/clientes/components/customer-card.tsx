@@ -65,6 +65,9 @@ export function CustomerCard({ customer }: { customer: CustomerType }) {
                     <DropdownMenuContent>
                         <DropdownMenuItem
                             className={"flex items-center gap-1.5"}
+                            onClick={() =>
+                                router.push(`/clientes/${customer.id}/editar`)
+                            }
                         >
                             <Pencil size={16} className={"text-orange-400"} />{" "}
                             Editar

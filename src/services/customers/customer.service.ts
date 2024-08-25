@@ -1,4 +1,7 @@
-import { CreateCustomerInputDto } from "@/services/customers/customers.dto";
+import {
+    CreateCustomerInputDto,
+    UpdateCustomerDto,
+} from "@/services/customers/customers.dto";
 import { CustomerType } from "@/types/customer.types";
 import { axiosClient } from "@/lib/axios.client";
 import { Service } from "@/services/interface";
@@ -47,7 +50,7 @@ export class CustomerService implements Service<CustomerType> {
         return;
     }
 
-    async updateById(id: string, data: Partial<CustomerType>) {
+    async updateById(id: string, data: UpdateCustomerDto) {
         const response = await axiosClient.put<CustomerType>(
             `/customers/${id}`,
             data,

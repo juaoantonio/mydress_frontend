@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreateCustomerForm } from "./components/form";
+import { CreateCustomerForm } from "./components/create-customer-form";
 
 export default function CreateCustomerPage() {
     return (

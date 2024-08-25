@@ -1,18 +1,13 @@
-import { CustomerService } from "@/services/customers/customer.service";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { CustomerCard } from "@/app/(private)/clientes/components";
-import { cache } from "react";
+import { CustomersList } from "@/app/(private)/clientes/components/customers-list";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function CustomersPage() {
-    const customersService = new CustomerService();
-    const customers = await cache(
-        async () => await customersService.getAll(),
-    )();
-
     return (
         <section>
             <div className={"mb-4 mt-2 flex items-center justify-between"}>
@@ -24,17 +19,8 @@ export default async function CustomersPage() {
                     </Button>
                 </Link>
             </div>
-            <ul
-                className={
-                    "grid auto-rows-fr items-stretch gap-2 md:grid-cols-2 lg:grid-cols-3"
-                }
-            >
-                {customers.map((customer) => (
-                    <li key={customer.id}>
-                        <CustomerCard customer={customer} />
-                    </li>
-                ))}
-            </ul>
+
+            <CustomersList />
         </section>
     );
 }

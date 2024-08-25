@@ -18,7 +18,6 @@ import { createCustomerSchema } from "@/schemas/customer.schemas";
 import { toast } from "sonner";
 import { CustomerService } from "@/services/customers/customer.service";
 import { getSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { InputType } from "@/types/input.types";
@@ -34,19 +33,16 @@ const inputs: InputType<typeof createCustomerSchema>[] = [
     {
         field: "email",
         label: "Email",
-        placeholder: "fulano@gmail.com",
         inputComponentRender: (props) => <Input {...props} />,
     },
     {
         field: "cpf",
         label: "CPF",
-        placeholder: "00011122289",
         inputComponentRender: (props) => <Input {...props} />,
     },
     {
         field: "rg",
         label: "RG",
-        placeholder: "7001112",
         inputComponentRender: (props) => <Input {...props} />,
     },
     {
@@ -83,11 +79,11 @@ export function CreateCustomerForm() {
         resolver: zodResolver(createCustomerSchema),
         defaultValues: {
             name: "",
-            email: "",
-            cpf: "",
-            rg: "",
-            address: "",
-            phone: "",
+            email: null,
+            cpf: null,
+            rg: null,
+            address: null,
+            phone: null,
             notes: "",
         },
     });
@@ -169,8 +165,9 @@ export function CreateCustomerForm() {
                         type={"button"}
                         variant={"outline"}
                         className={"flex-1"}
+                        onClick={() => router.back()}
                     >
-                        <Link href={"/clientes"}>Cancelar</Link>
+                        Cancelar
                     </Button>
                     <Button
                         type={"submit"}
