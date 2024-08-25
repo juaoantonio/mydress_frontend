@@ -1,6 +1,6 @@
 "use client";
 
-import { flexRender, Table } from "@tanstack/react-table";
+import { flexRender, Row, Table } from "@tanstack/react-table";
 
 import {
     Table as TableComponent,
@@ -15,11 +15,13 @@ import React from "react";
 interface DataTableProps<TData> {
     table: Table<TData>;
     noResultsMessage?: string;
+    onRowClick?: (row: Row<TData>) => void;
 }
 
 export function DataTable<TData>({
     table,
     noResultsMessage,
+    onRowClick,
 }: DataTableProps<TData>) {
     const columnsLength = table.getAllColumns().length;
 
@@ -51,6 +53,7 @@ export function DataTable<TData>({
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
+                                onClick={() => onRowClick?.(row)}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>

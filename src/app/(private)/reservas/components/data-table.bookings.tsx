@@ -9,7 +9,8 @@ import { BookingType } from "@/types/booking.types";
 import { useTable } from "@/hooks/useTable";
 import { columnsBookings } from "@/app/(private)/reservas/components/columns.bookings";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Row } from "@tanstack/react-table";
 
 export function DataTableBookings() {
     const searchParams = useSearchParams();
@@ -45,15 +46,22 @@ export function DataTableBookings() {
 }
 
 function Table({ data }: { data: BookingType[] }) {
+    const router = useRouter();
     const table = useTable({
         data,
         columns: columnsBookings,
+        getRowId: (row) => row.id,
     });
+
+    function onRowClick(row: Row<BookingType>) {
+        router.push(`/reservas/${row.id}`);
+    }
 
     return (
         <div className={"space-y-4"}>
             <DataTable
                 table={table}
+                onRowClick={onRowClick}
                 noResultsMessage={"Nenhuma reserva encontrada"}
             />
             <DataTablePagination table={table} />

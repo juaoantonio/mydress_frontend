@@ -12,11 +12,13 @@ import { useState } from "react";
 interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    getRowId?: (row: TData) => string;
 }
 
 export function useTable<TData, TValue>({
     columns,
     data,
+    getRowId,
 }: TableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -29,7 +31,7 @@ export function useTable<TData, TValue>({
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
-        // getFilteredRowModel: getFilteredRowModel(),
+        getRowId,
         manualFiltering: true,
         state: {
             sorting,
