@@ -94,6 +94,17 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
                 token.user.access,
             ) as CommonToken;
 
+            console.log(
+                "access expires",
+                new Date(decodedAccessToken.exp * 1000).getDate(),
+                new Date(decodedAccessToken.exp * 1000).getHours(),
+                new Date(decodedAccessToken.exp * 1000).getMinutes(),
+            );
+            const now = new Date(Date.now());
+            console.log("now", now.getDate(), now.getHours(), now.getMinutes());
+
+            console.log(Date.now() < decodedAccessToken.exp * 1000);
+
             if (Date.now() < decodedAccessToken.exp * 1000) {
                 return token;
             }
@@ -102,7 +113,7 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/token/refresh/`,
                 {
                     method: "POST",
-                    body: JSON.stringify(token.user.refresh),
+                    body: JSON.stringify({ refresh: token.user.refresh }),
                     headers: {
                         "Content-Type": "application/json",
                     },
