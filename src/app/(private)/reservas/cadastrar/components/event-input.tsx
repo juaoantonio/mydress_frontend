@@ -16,7 +16,7 @@ export function EventInput({ control }: { control: Control<any> }) {
         data: events,
     } = useQuery({
         queryKey: ["events"],
-        queryFn: eventService.getAll,
+        queryFn: () => eventService.getAll(),
     });
 
     return (

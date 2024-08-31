@@ -12,7 +12,7 @@ export function CustomerInput({ control }: { control: Control<any> }) {
         data: customers,
     } = useQuery({
         queryKey: ["customers"],
-        queryFn: customerService.getAll,
+        queryFn: () => customerService.getAll(),
     });
 
     return (

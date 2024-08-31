@@ -14,7 +14,7 @@ export function CustomersList() {
         isPending,
     } = useQuery({
         queryKey: ["customers"],
-        queryFn: customersService.getAll,
+        queryFn: () => customersService.getAll(),
     });
 
     if (isPending) {
