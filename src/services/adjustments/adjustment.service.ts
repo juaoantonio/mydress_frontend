@@ -7,7 +7,11 @@ import {
 } from "@/services/adjustments/adjustment.dto";
 
 export class AdjustmentService implements Service<AdjustmentType> {
-    async create(data: CreateAdjustmentDto): Promise<AdjustmentType> {
+    async create({
+        data,
+    }: {
+        data: CreateAdjustmentDto;
+    }): Promise<AdjustmentType> {
         const response = await axiosClient.post<AdjustmentType>(
             "/adjustments",
             data,
@@ -16,9 +20,11 @@ export class AdjustmentService implements Service<AdjustmentType> {
         return response.data;
     }
 
-    async createMany(
-        data: CreateManyAdjustmentsDto,
-    ): Promise<AdjustmentType[]> {
+    async createMany({
+        data,
+    }: {
+        data: CreateManyAdjustmentsDto;
+    }): Promise<AdjustmentType[]> {
         const response = await axiosClient.post<AdjustmentType[]>(
             "/adjustments/",
             data,
@@ -27,7 +33,7 @@ export class AdjustmentService implements Service<AdjustmentType> {
         return response.data;
     }
 
-    async getById(id: string): Promise<AdjustmentType> {
+    async getById({ id }: { id: string }): Promise<AdjustmentType> {
         throw new Error("Method not implemented.");
     }
 
@@ -35,7 +41,11 @@ export class AdjustmentService implements Service<AdjustmentType> {
         throw new Error("Method not implemented.");
     }
 
-    async getAllByBookingId(bookingId: string): Promise<AdjustmentType[]> {
+    async getAllByBookingId({
+        bookingId,
+    }: {
+        bookingId: string;
+    }): Promise<AdjustmentType[]> {
         const response = await axiosClient.get<AdjustmentType[]>(
             `/adjustments/?${bookingId}`,
         );
@@ -43,14 +53,17 @@ export class AdjustmentService implements Service<AdjustmentType> {
         return response.data;
     }
 
-    async deleteById(id: string) {
+    async deleteById({ id }: { id: string }) {
         throw new Error("Method not implemented.");
     }
 
-    async updateById(
-        id: string,
-        data: Partial<AdjustmentType>,
-    ): Promise<AdjustmentType> {
+    async updateById({
+        id,
+        data,
+    }: {
+        id: string;
+        data: Partial<AdjustmentType>;
+    }): Promise<AdjustmentType> {
         throw new Error("Method not implemented.");
     }
 }

@@ -10,7 +10,7 @@ export async function CreateAdjustmentsCard({
 }) {
     const bookingService = new BookingService();
 
-    const booking = await bookingService.getById(bookingId);
+    const booking = await bookingService.getById({ id: bookingId });
     const dresses = booking.dresses.filter(
         (dress) => dress.available_for_adjustment,
     );

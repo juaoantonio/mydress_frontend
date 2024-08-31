@@ -4,7 +4,7 @@ import { DressType } from "@/types/products/dress.types";
 import { CreateDressInputDTO } from "@/services/products/dress.dto";
 
 export class DressService implements Service<DressType> {
-    async create(data: CreateDressInputDTO): Promise<DressType> {
+    async create({ data }: { data: CreateDressInputDTO }): Promise<DressType> {
         const formData = new FormData();
         formData.append("img", data.img);
         formData.append("price", data.price.toString());
@@ -33,7 +33,7 @@ export class DressService implements Service<DressType> {
         return response.data;
     }
 
-    async getById(id: string) {
+    async getById({ id }: { id: string }) {
         const response = await axiosClient.get<DressType>(
             `/products/dresses/${id}`,
         );
@@ -73,7 +73,7 @@ export class DressService implements Service<DressType> {
         return response.data;
     }
 
-    async deleteById(id: string) {
+    async deleteById({ id }: { id: string }) {
         const response = await axiosClient.delete<null>(
             `/products/dresses/${id}`,
         );
@@ -81,7 +81,7 @@ export class DressService implements Service<DressType> {
         return;
     }
 
-    async updateById(id: string, data: Partial<DressType>) {
+    async updateById({ id, data }: { id: string; data: Partial<DressType> }) {
         const response = await axiosClient.put<DressType>(
             `/products/dresses/${id}`,
             data,

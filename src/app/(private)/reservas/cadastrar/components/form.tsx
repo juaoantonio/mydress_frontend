@@ -67,14 +67,16 @@ export function CreateBookingForm() {
     const mutation = useMutation({
         mutationFn: (data: BookingFormType) => {
             return service.create({
-                event: data.event,
-                customer: data.customer,
-                start_date: data.range_date.start_date!.toISOString(),
-                end_date: data.range_date.end_date!.toISOString(),
-                dresses: data.dresses,
-                purses: data.purses,
-                jewels: [],
-                notes: data.notes,
+                data: {
+                    event: data.event,
+                    customer: data.customer,
+                    start_date: data.range_date.start_date!.toISOString(),
+                    end_date: data.range_date.end_date!.toISOString(),
+                    dresses: data.dresses,
+                    purses: data.purses,
+                    jewels: [],
+                    notes: data.notes,
+                },
             });
         },
         onMutate: () => toast.loading("Criando reserva"),

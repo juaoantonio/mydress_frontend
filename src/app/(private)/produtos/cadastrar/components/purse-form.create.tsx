@@ -70,7 +70,7 @@ export function PurseFormCreate() {
 
     const service = new PurseService();
     const mutation = useMutation({
-        mutationFn: (data: CreatePurseInputDTO) => service.create(data),
+        mutationFn: (data: CreatePurseInputDTO) => service.create({ data }),
         onError: (error) => {
             console.error(error);
             handlePurseCreationError(error, form);

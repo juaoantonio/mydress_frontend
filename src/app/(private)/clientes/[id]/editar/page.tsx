@@ -10,7 +10,7 @@ export default async function CreateCustomerPage({
     };
 }) {
     const service = new CustomerService();
-    const customer = await service.getById(id);
+    const customer = await service.getById({ id });
 
     return (
         <section className={"flex h-fit justify-center lg:items-center"}>

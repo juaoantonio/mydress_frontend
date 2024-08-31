@@ -90,7 +90,7 @@ export function UpdateCustomerForm({
     const service = new CustomerService();
     const mutation = useMutation({
         mutationFn: (data: UpdateCustomerFormSchemaType) =>
-            service.updateById(customerId, data),
+            service.updateById({ id: customerId, data }),
 
         onMutate: () => toast.loading("Atualizando cliente"),
         onError: (error) => {

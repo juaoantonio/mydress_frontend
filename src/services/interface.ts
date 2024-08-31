@@ -1,11 +1,14 @@
 export interface Service<Entity> {
-    create(data: any): Promise<Entity>;
+    create(options: { data: any; signal?: AbortSignal }): Promise<Entity>;
 
-    getAll(filters: any): Promise<Entity[]>;
+    getAll(options?: {
+        filters?: any;
+        signal?: AbortSignal;
+    }): Promise<Entity[]>;
 
-    getById(id: string): Promise<Entity>;
+    getById(options: { id: string; signal?: AbortSignal }): Promise<Entity>;
 
-    deleteById(id: string): Promise<void>;
+    deleteById(options: { id: string; signal?: AbortSignal }): Promise<void>;
 
-    updateById(id: string, data: any): Promise<Entity>;
+    updateById(options: { id: string; signal?: AbortSignal }): Promise<Entity>;
 }

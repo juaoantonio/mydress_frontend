@@ -56,7 +56,7 @@ export function CreateEventForm() {
     });
 
     const mutation = useMutation({
-        mutationFn: (data: CreateEventInputDTO) => service.create(data),
+        mutationFn: (data: CreateEventInputDTO) => service.create({ data }),
         onMutate: () => toast.loading("Salvando evento..."),
         onError: (error) => {
             console.error(error);

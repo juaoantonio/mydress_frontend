@@ -18,7 +18,7 @@ export function ListPurseSection() {
     });
 
     const mutation = useMutation({
-        mutationFn: (id: string) => purseService.deleteById(id),
+        mutationFn: (id: string) => purseService.deleteById({ id }),
         onMutate: () => toast.loading("Removendo bolsa"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({

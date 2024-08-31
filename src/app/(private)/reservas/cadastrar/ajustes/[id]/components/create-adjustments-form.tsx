@@ -64,8 +64,10 @@ export function CreateAdjustmentsForm({
     const mutation = useMutation({
         mutationFn: (data: CreateAdjustmentsFormType) => {
             return adjustmentService.createMany({
-                booking: bookingId,
-                adjustments: data.adjustments,
+                data: {
+                    booking: bookingId,
+                    adjustments: data.adjustments,
+                },
             });
         },
         onMutate: () => toast.loading("Salvando ajustes"),

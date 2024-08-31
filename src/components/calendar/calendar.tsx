@@ -27,9 +27,11 @@ export function Calendar({
         queryKey: ["bookings", status, customer_name, event_date],
         queryFn: () =>
             service.getAll({
-                status,
-                customer_name,
-                event_date,
+                filters: {
+                    status,
+                    customer_name,
+                    event_date,
+                },
             }),
         placeholderData: keepPreviousData,
     });

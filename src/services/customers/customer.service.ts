@@ -8,7 +8,11 @@ import { Service } from "@/services/interface";
 import { ValidationError } from "@/errors/validation.error";
 
 export class CustomerService implements Service<CustomerType> {
-    async create(data: CreateCustomerInputDto): Promise<CustomerType> {
+    async create({
+        data,
+    }: {
+        data: CreateCustomerInputDto;
+    }): Promise<CustomerType> {
         const response = await axiosClient.post<CustomerType>(
             "/customers",
             data,
@@ -30,13 +34,21 @@ export class CustomerService implements Service<CustomerType> {
         return response.data;
     }
 
-    async getAll() {
-        const response = await axiosClient.get<CustomerType[]>("/customers");
+    async getAll(options?: {
+        filters: { name?: string };
+        signal?: AbortSignal;
+    }) {
+        const response = await axiosClient.get<CustomerType[]>("/customers", {
+            params: {
+                name: options?.filters.name,
+            },
+            signal: options?.signal,
+        });
 
         return response.data;
     }
 
-    async getById(id: string) {
+    async getById({ id }: { id: string }) {
         const response = await axiosClient.get<CustomerType>(
             `/customers/${id}`,
         );
@@ -44,13 +56,13 @@ export class CustomerService implements Service<CustomerType> {
         return response.data;
     }
 
-    async deleteById(id: string) {
+    async deleteById({ id }: { id: string }) {
         await axiosClient.delete<null>(`/customers/${id}`);
 
         return;
     }
 
-    async updateById(id: string, data: UpdateCustomerDto) {
+    async updateById({ id, data }: { id: string; data: UpdateCustomerDto }) {
         const response = await axiosClient.put<CustomerType>(
             `/customers/${id}`,
             data,

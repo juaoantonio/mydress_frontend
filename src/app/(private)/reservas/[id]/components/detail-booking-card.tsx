@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
+import { UpdateEventReceptionTrigger } from "@/app/(private)/reservas/[id]/components/update-event-reception-trigger";
 
 export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     const router = useRouter();
@@ -24,7 +25,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
         isPending,
     } = useQuery({
         queryKey: ["booking", bookingId],
-        queryFn: () => bookingService.getById(bookingId),
+        queryFn: () => bookingService.getById({ id: bookingId }),
     });
     const dresses = booking?.dresses || [];
     const purses = booking?.purses || [];
@@ -55,34 +56,32 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                 {BookingStatusMapping[booking.status]}
             </CardHeader>
             <CardContent className={"space-y-6"}>
-                {booking ? (
-                    <List className={"grid gap-2 text-sm"}>
-                        <ListItem
-                            label={"Valor total do aluguel"}
-                            value={numberToCurrency(booking.payment_amount)}
-                        />
-                        <ListItem
-                            label={"Valor pago pela cliente"}
-                            value={` (${getPercentage(booking.amount_paid, booking.payment_amount)}%) ${numberToCurrency(booking.amount_paid)}}`}
-                        />
-                        <ListItem
-                            label={"Cliente"}
-                            value={booking.customer.name}
-                        />
-                        <ListItem
-                            label={"Data de início"}
-                            value={format(booking.start_date, "dd/MM/yyyy")}
-                        />
-                        <ListItem
-                            label={"Data de término"}
-                            value={format(booking.end_date, "dd/MM/yyyy")}
-                        />
-                        <ListItem
-                            label={"Recepção do evento"}
-                            value={booking.event.event_reception}
-                        />
-                    </List>
-                ) : null}
+                <List className={"grid gap-2 text-sm"}>
+                    <ListItem
+                        label={"Valor total do aluguel"}
+                        value={numberToCurrency(booking?.payment_amount)}
+                    />
+                    <ListItem
+                        label={"Valor pago pela cliente"}
+                        value={` (${getPercentage(booking?.amount_paid, booking?.payment_amount)}%) ${numberToCurrency(booking?.amount_paid)}`}
+                    />
+                    <ListItem
+                        label={"Cliente"}
+                        value={booking?.customer.name}
+                    />
+                    <ListItem
+                        label={"Data de início"}
+                        value={format(booking?.start_date, "dd/MM/yyyy")}
+                    />
+                    <ListItem
+                        label={"Data de término"}
+                        value={format(booking?.end_date, "dd/MM/yyyy")}
+                    />
+                    <ListItem
+                        label={"Recepção do evento"}
+                        value={booking?.event.event_reception}
+                    />
+                </List>
 
                 <Separator />
 
@@ -241,6 +240,12 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     <UpdateBookingPaymentTrigger
                         bookingId={bookingId}
                         defaultValue={booking.amount_paid}
+                    />
+
+                    <UpdateEventReceptionTrigger
+                        eventId={booking?.event.id}
+                        bookingId={bookingId}
+                        defaultValue={booking?.event.event_reception}
                     />
 
                     <Button

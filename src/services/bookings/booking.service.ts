@@ -4,46 +4,53 @@ import { CreateBookingInputDto } from "@/services/bookings/booking.dto";
 import { axiosClient } from "@/lib/axios.client";
 
 export class BookingService implements Service<BookingType> {
-    async create(data: CreateBookingInputDto): Promise<BookingType> {
+    async create({
+        data,
+    }: {
+        data: CreateBookingInputDto;
+    }): Promise<BookingType> {
         const response = await axiosClient.post<BookingType>("/bookings", data);
 
         return response.data;
     }
 
     async getAll({
-        status,
-        customer_name,
-        event_date,
+        filters,
     }: {
-        status?: string;
-        customer_name?: string;
-        event_date?: string;
+        filters: {
+            status?: string;
+            customer_name?: string;
+            event_date?: string;
+        };
     }): Promise<BookingType[]> {
         const response = await axiosClient.get<BookingType[]>("/bookings", {
             params: {
-                status,
-                customer_name,
-                event_date,
+                status: filters.status,
+                customer_name: filters.customer_name,
+                event_date: filters.event_date,
             },
         });
 
         return response.data;
     }
 
-    async getById(id: string): Promise<BookingType> {
+    async getById({ id }: { id: string }): Promise<BookingType> {
         const response = await axiosClient.get<BookingType>(`/bookings/${id}`);
 
         return response.data;
     }
 
-    async deleteById(id: string): Promise<void> {
+    async deleteById({ id }: { id: string }): Promise<void> {
         await axiosClient.delete<null>(`/bookings/${id}`);
     }
 
-    async updateById(
-        id: string,
-        data: Partial<CreateBookingInputDto>,
-    ): Promise<BookingType> {
+    async updateById({
+        id,
+        data,
+    }: {
+        id: string;
+        data: Partial<CreateBookingInputDto>;
+    }): Promise<BookingType> {
         const response = await axiosClient.put<BookingType>(
             `/bookings/${id}`,
             data,
@@ -67,7 +74,7 @@ export class BookingService implements Service<BookingType> {
         return response.data;
     }
 
-    async cancelBookingById(id: string): Promise<BookingType> {
+    async cancelBookingById({ id }: { id: string }): Promise<BookingType> {
         const response = await axiosClient.patch<BookingType>(
             `/bookings/${id}/cancel`,
         );

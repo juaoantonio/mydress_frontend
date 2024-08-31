@@ -4,6 +4,7 @@ export type BookingsFilters = {
     status: string;
     event_date: string;
     customer_name: string;
+    event_reception: string;
 };
 
 export type FilterProps = {

@@ -10,25 +10,19 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import React, { Dispatch } from "react";
-import { BookingsFilters } from "@/app/(private)/reservas/components/filters/filters.bookings.types";
+import React from "react";
+import { FilterProps } from "@/app/(private)/reservas/components/filters/filters.bookings.types";
 
-export function FilterStatusBookings({
-    value,
-    setFilter,
-}: {
-    value: string;
-    setFilter: Dispatch<React.SetStateAction<BookingsFilters>>;
-}) {
+export function FilterStatusBookings({ value, setFilters }: FilterProps) {
     function handleChange(value: string) {
-        setFilter((prev) => ({
+        setFilters((prev) => ({
             ...prev,
             status: value,
         }));
     }
 
     function handleClear() {
-        setFilter((prev) => ({
+        setFilters((prev) => ({
             ...prev,
             status: "",
         }));

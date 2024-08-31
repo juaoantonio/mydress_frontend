@@ -17,7 +17,7 @@ export function ListDressSection() {
         queryFn: dressService.getAll,
     });
     const mutation = useMutation({
-        mutationFn: (id: string) => dressService.deleteById(id),
+        mutationFn: (id: string) => dressService.deleteById({ id }),
         onMutate: () => toast.loading("Removendo vestido"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({

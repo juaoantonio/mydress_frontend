@@ -28,6 +28,16 @@ export const columnsBookings: ColumnDef<BookingType>[] = [
         },
     },
     {
+        accessorKey: "event",
+        header: () => <div className="text-nowrap">Recepção do evento</div>,
+        cell: ({ row }) => {
+            const event = row.getValue("event") as EventType;
+            if (event) {
+                return event.event_reception;
+            }
+        },
+    },
+    {
         accessorKey: "dresses",
         header: "Vestidos",
         cell: ({ row }) => {

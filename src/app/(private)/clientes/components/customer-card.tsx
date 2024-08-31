@@ -27,7 +27,7 @@ export function CustomerCard({ customer }: { customer: CustomerType }) {
         const loadingToast = toast.loading("Removendo cliente...");
 
         try {
-            await customerService.deleteById(id);
+            await customerService.deleteById({ id });
             router.refresh();
             toast.success("Cliente removido com sucesso!");
         } catch (error) {

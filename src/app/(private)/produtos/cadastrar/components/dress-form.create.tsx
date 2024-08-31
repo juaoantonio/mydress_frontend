@@ -71,7 +71,7 @@ export function DressFormCreate() {
 
     const service = new DressService();
     const mutation = useMutation({
-        mutationFn: (data: CreateDressInputDTO) => service.create(data),
+        mutationFn: (data: CreateDressInputDTO) => service.create({ data }),
         onMutate: async () => toast.loading("Criando vestido..."),
         onError: (error) => {
             console.error(error);

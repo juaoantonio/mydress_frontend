@@ -90,7 +90,7 @@ export function CreateCustomerForm() {
 
     const service = new CustomerService();
     const mutation = useMutation({
-        mutationFn: (data: CustomerFormSchemaType) => service.create(data),
+        mutationFn: (data: CustomerFormSchemaType) => service.create({ data }),
         onMutate: () => toast.loading("Salvando cliente"),
         onError: (error) => {
             toast.dismiss();
