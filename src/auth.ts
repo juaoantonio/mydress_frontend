@@ -94,17 +94,6 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
                 token.user.access,
             ) as CommonToken;
 
-            console.log(
-                "access expires",
-                new Date(decodedAccessToken.exp * 1000).getDate(),
-                new Date(decodedAccessToken.exp * 1000).getHours(),
-                new Date(decodedAccessToken.exp * 1000).getMinutes(),
-            );
-            const now = new Date(Date.now());
-            console.log("now", now.getDate(), now.getHours(), now.getMinutes());
-
-            console.log(Date.now() < decodedAccessToken.exp * 1000);
-
             if (Date.now() < decodedAccessToken.exp * 1000) {
                 return token;
             }
