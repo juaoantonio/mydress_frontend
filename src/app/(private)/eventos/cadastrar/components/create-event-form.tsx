@@ -78,6 +78,7 @@ export function CreateEventForm() {
             event_reception: data.event_reception,
         });
     }
+
     return (
         <Form {...form}>
             <form
@@ -88,7 +89,7 @@ export function CreateEventForm() {
                     <FormField
                         control={form.control}
                         name={"event_reception"}
-                        render={({ ...field }) => (
+                        render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor={"event_reception"}>
                                     Recepção do evento
@@ -109,7 +110,7 @@ export function CreateEventForm() {
                     <FormField
                         control={form.control}
                         name={"event_address"}
-                        render={({ ...field }) => (
+                        render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor={"event_address"}>
                                     Endereço do evento
