@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - data:/data
+    environment:
+      MINIO_ACCESS_KEY: dev12345678
+      MINIO_SECRET_KEY: dev12345678
+    command: server /data --console-address ":9001"
+
+  create-bucket:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add --api s3v4 s3 http://minio:9000 dev12345678 dev12345678;
+      /usr/bin/mc mb s3/mydressprod;
+      /usr/bin/mc anonymous set download s3/mydressprod;
+      "
+
+  api:
+    image: juaoantonio/my-dress-api:latest
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+    environment:
+      DB_VENDOR: postgres
+      DB_HOST: db
+      DB_DATABASE: database
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_LOGGING: true
+      DB_AUTO_LOAD_MODELS: true
+      DB_SYNCHRONIZE: true
+      AWS_ENDPOINT: http://minio:9000
+      AWS_SSL_ENABLED: false
+      AWS_S3_FORCE_PATH_STYLE: true
+      AWS_ACCESS_KEY_ID: dev12345678
+      AWS_SECRET_ACCESS_KEY: dev12345678
+      AWS_REGION: us-east-1
+      AWS_S3_BUCKET_NAME: mydressprod
+      USERS: '[{"userId":"1e240626-80eb-4b17-9597-f39a4d48d665","username":"admin","password":"admin"}]'
+      JWT_SECRET: secret
+
+volumes:
+  data:
