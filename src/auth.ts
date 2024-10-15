@@ -24,11 +24,10 @@ declare module "next-auth" {
 }
 
 type CommonToken = {
-    token_type: string;
+    sub: string;
+    username: number;
     iat: number;
     exp: number;
-    jti: string;
-    user_id: number;
 };
 
 export const { handlers, signOut, signIn, auth } = NextAuth({
@@ -79,43 +78,16 @@ export const { handlers, signOut, signIn, auth } = NextAuth({
                 token.user = user;
                 return token;
             }
-            const decodedRefreshToken = jwtDecode(
-                token.user.refresh,
+            const decodedAccessToken = jwtDecode(
+                token.user.accessToken,
             ) as CommonToken;
-
-            if (Date.now() >= decodedRefreshToken.exp * 1000) {
+            if (Date.now() >= decodedAccessToken.exp * 1000) {
                 await signOut({
                     redirect: true,
                     redirectTo: "/login",
                 });
             }
-
-            const decodedAccessToken = jwtDecode(
-                token.user.access,
-            ) as CommonToken;
-
-            if (Date.now() < decodedAccessToken.exp * 1000) {
-                return token;
-            }
-
-            const newAccessToken = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/token/refresh/`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({ refresh: token.user.refresh }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                },
-            ).then((res) => res.json());
-
-            return {
-                ...token,
-                user: {
-                    ...token.user,
-                    access: newAccessToken.access,
-                },
-            };
+            return token;
         },
         async session({ session, token, user }) {
             if (token) {

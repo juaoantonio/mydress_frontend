@@ -6,7 +6,7 @@ export async function authenticateUser(
     credentials: UserSignInInputDTO,
 ): Promise<User | null> {
     try {
-        const getTokensUrl = `${env.API_BASE_URL}/token/`;
+        const getTokensUrl = `${env.API_BASE_URL}/auth/login`;
 
         const response = await fetch(getTokensUrl, {
             method: "POST",
@@ -16,8 +16,9 @@ export async function authenticateUser(
             body: JSON.stringify(credentials),
         });
 
-        if (response.status === 200)
+        if (response.status === 200) {
             return (await response.json()) as UserSignInOutputDTO;
+        }
         if (response.status === 401) return null; // 401 - Unauthorized
 
         throw new Error("Server Error: Failed to get user");

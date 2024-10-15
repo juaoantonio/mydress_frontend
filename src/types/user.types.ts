@@ -5,5 +5,4 @@ export type UserSignInInputDTO = {
 
 export type UserSignInOutputDTO = {
     access: string;
-    refresh: string;
 };
