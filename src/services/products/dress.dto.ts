@@ -1,3 +1,5 @@
 import { IBaseProductCreationInputDto } from "./base.dto";
 
-export interface CreateDressInputDTO extends IBaseProductCreationInputDto {}
+export interface CreateDressInputDTO extends IBaseProductCreationInputDto {
+    fabric: string;
+}
