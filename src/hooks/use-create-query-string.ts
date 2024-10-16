@@ -11,11 +11,7 @@ export function useCreateQueryString() {
             const newSearchParams = new URLSearchParams(searchParams);
 
             for (const [key, value] of Object.entries(params)) {
-                if (!value) {
-                    newSearchParams.delete(key);
-                } else {
-                    newSearchParams.set(key, String(value));
-                }
+                newSearchParams.set(key, String(value));
             }
 
             return newSearchParams.toString();
