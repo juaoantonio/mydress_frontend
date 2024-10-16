@@ -25,16 +25,6 @@ import { ImagePlaceholder } from "@/components/image-placeholder/image-placehold
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 
 type DressFormType = z.infer<typeof createDressSchema>;
 
@@ -56,15 +46,10 @@ export function DressFormCreate() {
     const form = useForm<DressFormType>({
         resolver: zodResolver(createDressSchema),
         defaultValues: {
-            img: null,
-            description: "",
+            image: null,
             model: "",
-            purchasable: false,
-            rentable: true,
             fabric: "",
             color: "",
-            status: "AVAILABLE",
-            available_for_adjustment: true,
         },
     });
     const router = useRouter();
@@ -99,7 +84,7 @@ export function DressFormCreate() {
                 <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
                     <FormField
                         control={form.control}
-                        name="img"
+                        name="image"
                         render={({ field: { onChange, value, ...rest } }) => {
                             return (
                                 <FormItem>
@@ -122,7 +107,7 @@ export function DressFormCreate() {
                                                     }
                                                     onClick={() => {
                                                         form.setValue(
-                                                            "img",
+                                                            "image",
                                                             null,
                                                         );
                                                         setPreview(undefined);
@@ -171,10 +156,10 @@ export function DressFormCreate() {
 
                     <FormField
                         control={form.control}
-                        name={"price"}
+                        name={"rentPrice"}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor={"price"}>
+                                <FormLabel htmlFor={"rentPrice"}>
                                     Preço de Aluguel
                                 </FormLabel>
                                 <FormControl>
@@ -187,7 +172,7 @@ export function DressFormCreate() {
                                         <Input
                                             type={"number"}
                                             placeholder={"0,00"}
-                                            id={"price"}
+                                            id={"rentPrice"}
                                             {...field}
                                         />
                                     </div>
@@ -197,23 +182,6 @@ export function DressFormCreate() {
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name={"description"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={"description"}>
-                                    Descrição do Vestido
-                                </FormLabel>
-                                <FormControl>
-                                    <Input id={"description"} {...field} />
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.description?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name={"model"}
@@ -262,69 +230,6 @@ export function DressFormCreate() {
                                 <FormMessage>
                                     {form.formState.errors.color?.message}
                                 </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"status"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Status</FormLabel>
-                                <FormControl>
-                                    <Select {...field}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Selecione um status" />
-                                        </SelectTrigger>
-
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>
-                                                    Status
-                                                </SelectLabel>
-                                                <SelectItem value="AVAILABLE">
-                                                    Disponível
-                                                </SelectItem>
-                                                <SelectItem value="OUT_OF_STOCK">
-                                                    Sem estoque
-                                                </SelectItem>
-                                                <SelectItem value="IN_WASH">
-                                                    Em lavagem
-                                                </SelectItem>
-                                                <SelectItem value="DAMAGED">
-                                                    Danificado
-                                                </SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.status?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"available_for_adjustment"}
-                        render={({ field }) => (
-                            <FormItem className={"my-2"}>
-                                <div className={"flex items-center space-x-2"}>
-                                    <FormControl>
-                                        <Switch
-                                            id={"availableForAdjustment"}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <FormLabel
-                                        htmlFor={"availableForAdjustment"}
-                                    >
-                                        Disponível para ajustes
-                                    </FormLabel>
-                                </div>
                             </FormItem>
                         )}
                     />
