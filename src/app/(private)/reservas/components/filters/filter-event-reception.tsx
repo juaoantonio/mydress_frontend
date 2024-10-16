@@ -1,6 +1,6 @@
 import { FilterProps } from "./filters.bookings.types";
 import React from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useQuery } from "@tanstack/react-query";
 import { AutoComplete } from "@/components/auto-complete/auto-complete";
 import { EventService } from "@/services/events/event.service";

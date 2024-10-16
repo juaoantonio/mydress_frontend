@@ -6,7 +6,7 @@ import { BookingService } from "@/services/bookings/booking.service";
 import { LoadingSpinner } from "@/components/loading-spinner/loading-spinner";
 import { toast } from "sonner";
 import { BookingType } from "@/types/booking.types";
-import { useTable } from "@/hooks/useTable";
+import { useTable } from "@/hooks/use-table";
 import { columnsBookings } from "@/app/(private)/reservas/components/columns.bookings";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { useRouter, useSearchParams } from "next/navigation";

@@ -4,5 +4,5 @@ export type UserSignInInputDTO = {
 };
 
 export type UserSignInOutputDTO = {
-    access: string;
+    accessToken: string;
 };

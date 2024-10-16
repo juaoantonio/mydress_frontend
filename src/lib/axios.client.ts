@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
     const session = isServer() ? await auth() : await getSession();
     if (session) {
-        config.headers.Authorization = `Bearer ${session.user.access}`;
+        config.headers.Authorization = `Bearer ${session.user.accessToken}`;
     }
 
     return config;

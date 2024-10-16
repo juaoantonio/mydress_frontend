@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import { useCreateQueryString } from "@/hooks/use-create-query-string";
 import React, { useState } from "react";
 import { BookingsFilters } from "@/app/(private)/reservas/components/filters/filters.bookings.types";
 import {

@@ -14,3 +14,22 @@ type ErrorOutputDto = {
 export type CommonCreateUpdateOutputDto<DataType> =
     | SuccessOutputDto<DataType>
     | ErrorOutputDto;
+
+export type GetPaginatedOutputDto<T> = {
+    items: T[];
+    total: number;
+    currentPage: number;
+    perPage: number;
+    lastPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+};
+
+export type GetPaginatedInputDto = {
+    page: number;
+    limit: number;
+    sort?: string;
+    sortDir?: SortDirection;
+};
+
+export type SortDirection = "asc" | "desc";

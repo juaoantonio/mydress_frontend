@@ -2,7 +2,7 @@ import React from "react";
 import { FilterProps } from "@/app/(private)/reservas/components/filters/filters.bookings.types";
 import { useQuery } from "@tanstack/react-query";
 import { CustomerService } from "@/services/customers/customer.service";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@/hooks/use-debounce";
 import { AutoComplete } from "@/components/auto-complete/auto-complete";
 
 export function FilterCustomerNameBookings({ value, setFilters }: FilterProps) {
