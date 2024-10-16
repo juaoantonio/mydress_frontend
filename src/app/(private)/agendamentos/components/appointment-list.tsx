@@ -3,6 +3,7 @@ import { Appointment } from "@/types/appointment.types";
 import { useState } from "react";
 import { AppointmentCard } from "@/app/(private)/agendamentos/components/appointment-card";
 import { AppointmentRescheduleDialog } from "@/app/(private)/agendamentos/components/appointment-reschedule-dialog";
+import { useRouter } from "next/navigation";
 
 export function AppointmentList({
     appointments,
@@ -15,6 +16,7 @@ export function AppointmentList({
     onCancel: (id: string) => void;
     onComplete: (id: string) => void;
 }) {
+    const router = useRouter();
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedAppointmentId, setSelectedAppointmentId] = useState<
         string | null
@@ -43,6 +45,9 @@ export function AppointmentList({
             ) : (
                 appointments.map((appointment) => (
                     <AppointmentCard
+                        onClick={() =>
+                            router.push(`/agendamentos/${appointment.id}`)
+                        }
                         key={appointment.id}
                         appointment={appointment}
                         onRescheduleClick={handleRescheduleClick}

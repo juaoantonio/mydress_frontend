@@ -12,11 +12,13 @@ export function AppointmentCard({
     onRescheduleClick,
     onCancel,
     onComplete,
+    onClick,
 }: {
     appointment: Appointment;
     onRescheduleClick: (id: string) => void;
     onCancel: (id: string) => void;
     onComplete: (id: string) => void;
+    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
 }) {
     return (
         <div className="space-y-4 rounded-lg bg-white p-4 shadow-md">
@@ -34,7 +36,10 @@ export function AppointmentCard({
                 )}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div
+                className="flex cursor-pointer items-center justify-between"
+                onClick={onClick}
+            >
                 <List className="gap-1">
                     <ListItem
                         className="gap-2 text-sm"

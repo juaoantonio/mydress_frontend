@@ -1,5 +1,6 @@
 import React from "react";
-import { DetailBookingCard } from "@/app/(private)/reservas/[id]/components/detail-booking-card";
+import { PageContent } from "@/components/page/page-content";
+import { DetailAppointmentCard } from "@/app/(private)/agendamentos/components/detail-appointment-card";
 
 export default function AppointmentDetail({
     params: { id },
@@ -9,11 +10,8 @@ export default function AppointmentDetail({
     };
 }) {
     return (
-        <section className={"flex flex-col justify-center lg:items-center"}>
-            <h1 className={"mb-5 mt-1 text-xl font-bold text-foreground"}>
-                Detalhes do Agendamento
-            </h1>
-            <DetailBookingCard bookingId={id} />
-        </section>
+        <PageContent pageTitle={"Detalhes da visita"}>
+            <DetailAppointmentCard appointmentId={id} />
+        </PageContent>
     );
 }

@@ -25,4 +25,5 @@ export enum AppointmentStatus {
 export type AppointmentHistoryType = {
     status: AppointmentStatus;
     date: string;
+    appointmentDate: string;
 };

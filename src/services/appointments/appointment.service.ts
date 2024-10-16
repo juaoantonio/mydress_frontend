@@ -3,6 +3,7 @@ import {
     GetPaginatedAppointmentsInputDto,
     GetPaginatedAppointmentsOutputDto,
     RescheduleAppointmentInputDto,
+    ScheduleInitialVisitInputDto,
 } from "@/services/appointments/appointment.dto";
 import { Appointment } from "@/types/appointment.types";
 
@@ -25,6 +26,10 @@ export class AppointmentService {
                 },
             );
         return response.data;
+    }
+
+    async scheduleInitialVisit(input: ScheduleInitialVisitInputDto) {
+        await axiosClient.post("/appointments/initial-visit", input);
     }
 
     async reescheduleAppointment(input: RescheduleAppointmentInputDto) {

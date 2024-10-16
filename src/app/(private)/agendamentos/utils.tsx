@@ -1,12 +1,13 @@
 import { format } from "date-fns";
 import { AppointmentStatus, AppointmentType } from "@/types/appointment.types";
 import { Badge } from "@/components/ui/badge";
+import { ReactElement } from "react";
 
 export function formatDate(dateString: string) {
     return format(new Date(dateString), "dd/MM/yyyy");
 }
 
-export function getStatusBadge(status: AppointmentStatus) {
+export function getStatusBadge(status: AppointmentStatus): ReactElement | null {
     switch (status) {
         case AppointmentStatus.SCHEDULED:
             return <Badge variant="success">Agendado</Badge>;

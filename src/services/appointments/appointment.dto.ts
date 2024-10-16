@@ -13,3 +13,9 @@ export type RescheduleAppointmentInputDto = {
     appointmentId: string;
     newDate: string;
 };
+
+export type ScheduleInitialVisitInputDto = {
+    appointmentDate: string;
+    customerName: string;
+    eventDate: string;
+};

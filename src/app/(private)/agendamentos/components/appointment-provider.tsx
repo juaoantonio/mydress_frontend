@@ -10,19 +10,19 @@ import { AppointmentList } from "@/app/(private)/agendamentos/components/appoint
 import { RescheduleAppointmentInputDto } from "@/services/appointments/appointment.dto";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { SortDirection } from "@/services/types";
+import { queryClient } from "@/providers/react-query.provider";
 
 const PER_NAVIGATION_RANGE = 3;
 
 export function AppointmentProvider() {
-    const { page, limit, sort, sortDir, appointmentDate, customerName, bool } =
+    const { page, limit, sort, sortDir, appointmentDate, customerName } =
         useQueryParams({
             page: 1,
             limit: 5,
-            sort: "status",
-            sortDir: "desc" as SortDirection,
+            sort: "appointmentDate",
+            sortDir: "asc" as SortDirection,
             appointmentDate: undefined,
             customerName: undefined,
-            bool: true,
         });
 
     const service = new AppointmentService();
@@ -47,7 +47,7 @@ export function AppointmentProvider() {
             }),
         placeholderData: keepPreviousData,
     });
-    const reescheduleMutation = useMutation({
+    const rescheduleMutation = useMutation({
         mutationFn: (input: RescheduleAppointmentInputDto) =>
             service.reescheduleAppointment(input),
         onMutate: () => toast.loading("Reagendando visita"),
@@ -56,7 +56,18 @@ export function AppointmentProvider() {
             toast.error("Erro ao reagendar visita");
             console.error(e);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: [
+                    "appointments",
+                    page,
+                    limit,
+                    sort,
+                    sortDir,
+                    appointmentDate,
+                    customerName,
+                ],
+            });
             toast.dismiss();
             toast.success("Visita reagendada com sucesso");
         },
@@ -69,7 +80,21 @@ export function AppointmentProvider() {
             toast.error("Erro ao cancelar visita");
             console.error(e);
         },
-        onSuccess: () => toast.success("Visita cancelada com sucesso"),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: [
+                    "appointments",
+                    page,
+                    limit,
+                    sort,
+                    sortDir,
+                    appointmentDate,
+                    customerName,
+                ],
+            });
+            toast.dismiss();
+            toast.success("Visita cancelada com sucesso");
+        },
     });
     const completeMutation = useMutation({
         mutationFn: (id: string) => service.completeAppointment(id),
@@ -79,7 +104,18 @@ export function AppointmentProvider() {
             toast.error("Erro ao finalizar visita");
             console.error(e);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: [
+                    "appointments",
+                    page,
+                    limit,
+                    sort,
+                    sortDir,
+                    appointmentDate,
+                    customerName,
+                ],
+            });
             toast.dismiss();
             toast.success("Visita finalizada com sucesso");
         },
@@ -115,7 +151,7 @@ export function AppointmentProvider() {
             <AppointmentList
                 appointments={data.items}
                 onReschedule={(id: string, newDate: Date) =>
-                    reescheduleMutation.mutate({
+                    rescheduleMutation.mutate({
                         appointmentId: id,
                         newDate: newDate.toISOString(),
                     })
