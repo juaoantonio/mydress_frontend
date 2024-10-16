@@ -11,19 +11,33 @@ import { RescheduleAppointmentInputDto } from "@/services/appointments/appointme
 import { useQueryParams } from "@/hooks/use-query-params";
 import { SortDirection } from "@/services/types";
 import { queryClient } from "@/providers/react-query.provider";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { useCreateQueryString } from "@/hooks/use-create-query-string";
 
 const PER_NAVIGATION_RANGE = 3;
 
 export function AppointmentProvider() {
-    const { page, limit, sort, sortDir, appointmentDate, customerName } =
-        useQueryParams({
-            page: 1,
-            limit: 5,
-            sort: "appointmentDate",
-            sortDir: "asc" as SortDirection,
-            appointmentDate: undefined,
-            customerName: undefined,
-        });
+    const router = useRouter();
+    const createQueryString = useCreateQueryString();
+    const {
+        page,
+        limit,
+        sort,
+        sortDir,
+        appointmentDate,
+        customerName,
+        includeAll,
+    } = useQueryParams({
+        page: 1,
+        limit: 5,
+        sort: "appointmentDate",
+        sortDir: "desc" as SortDirection,
+        appointmentDate: undefined,
+        customerName: undefined,
+        includeAll: false,
+    });
 
     const service = new AppointmentService();
     const { data, isError, isPending } = useQuery({
@@ -35,15 +49,17 @@ export function AppointmentProvider() {
             sortDir,
             appointmentDate,
             customerName,
+            includeAll,
         ],
         queryFn: () =>
             service.getPaginated({
-                page: Number(page),
-                limit: Number(limit),
+                page,
+                limit,
                 sort,
                 sortDir,
                 appointmentDate,
                 customerName,
+                includeAll,
             }),
         placeholderData: keepPreviousData,
     });
@@ -66,6 +82,7 @@ export function AppointmentProvider() {
                     sortDir,
                     appointmentDate,
                     customerName,
+                    includeAll,
                 ],
             });
             toast.dismiss();
@@ -90,6 +107,7 @@ export function AppointmentProvider() {
                     sortDir,
                     appointmentDate,
                     customerName,
+                    includeAll,
                 ],
             });
             toast.dismiss();
@@ -114,6 +132,7 @@ export function AppointmentProvider() {
                     sortDir,
                     appointmentDate,
                     customerName,
+                    includeAll,
                 ],
             });
             toast.dismiss();
@@ -148,6 +167,19 @@ export function AppointmentProvider() {
 
     return (
         <div className={"space-y-6"}>
+            <div className="flex items-center space-x-2">
+                <Switch
+                    id="include"
+                    defaultChecked={true}
+                    onCheckedChange={(checked) => {
+                        const queryString = createQueryString({
+                            includeAll: !checked,
+                        });
+                        router.push(`?${queryString}`);
+                    }}
+                />
+                <Label htmlFor="include">Mostar apenas visitas ativas</Label>
+            </div>
             <AppointmentList
                 appointments={data.items}
                 onReschedule={(id: string, newDate: Date) =>

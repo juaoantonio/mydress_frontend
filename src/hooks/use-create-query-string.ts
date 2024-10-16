@@ -1,31 +1,25 @@
 import { useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
-export function useQueryParams<T extends Record<string, any>>(
-    defaultValues: T,
-): T {
+export function useCreateQueryString() {
     const searchParams = useSearchParams();
 
-    const result = {} as T;
+    // Get a new searchParams string by merging the current
+    // searchParams with a provided key/value pair
+    return useCallback(
+        (params: { [name: string]: string | number | boolean | null }) => {
+            const newSearchParams = new URLSearchParams(searchParams);
 
-    Object.keys(defaultValues).forEach((param) => {
-        const value = searchParams.get(param);
-        if (value !== null) {
-            const defaultValueType = typeof defaultValues[param];
-
-            if (defaultValueType === "number") {
-                const parsedValue = parseFloat(value);
-                result[param as keyof T] = isNaN(parsedValue)
-                    ? defaultValues[param]
-                    : (parsedValue as T[keyof T]);
-            } else if (defaultValueType === "boolean") {
-                result[param as keyof T] = (value === "true") as T[keyof T];
-            } else {
-                result[param as keyof T] = value as T[keyof T];
+            for (const [key, value] of Object.entries(params)) {
+                if (!value) {
+                    newSearchParams.delete(key);
+                } else {
+                    newSearchParams.set(key, String(value));
+                }
             }
-        } else {
-            result[param as keyof T] = defaultValues[param];
-        }
-    });
 
-    return result;
+            return newSearchParams.toString();
+        },
+        [searchParams],
+    );
 }

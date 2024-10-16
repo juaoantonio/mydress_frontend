@@ -9,11 +9,15 @@ export function useQueryParams<T extends Record<string, any>>(
 
     Object.keys(defaultValues).forEach((param) => {
         const value = searchParams.get(param);
-
         if (value !== null) {
-            if (typeof defaultValues[param] === "number") {
-                result[param as keyof T] = parseFloat(value) as T[keyof T];
-            } else if (typeof defaultValues[param] === "boolean") {
+            const defaultValueType = typeof defaultValues[param];
+
+            if (defaultValueType === "number") {
+                const parsedValue = parseFloat(value);
+                result[param as keyof T] = isNaN(parsedValue)
+                    ? defaultValues[param]
+                    : (parsedValue as T[keyof T]);
+            } else if (defaultValueType === "boolean") {
                 result[param as keyof T] = (value === "true") as T[keyof T];
             } else {
                 result[param as keyof T] = value as T[keyof T];

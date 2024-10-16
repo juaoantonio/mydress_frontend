@@ -4,6 +4,7 @@ import { Appointment } from "@/types/appointment.types";
 export type GetPaginatedAppointmentsInputDto = GetPaginatedInputDto & {
     appointmentDate?: string;
     customerName?: string;
+    includeAll?: boolean;
 };
 
 export type GetPaginatedAppointmentsOutputDto =
