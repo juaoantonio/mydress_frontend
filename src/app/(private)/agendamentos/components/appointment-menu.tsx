@@ -17,14 +17,18 @@ export function AppointmentMenu({
     onRescheduleClick,
     onCancel,
     onComplete,
+    onOpenChange,
 }: {
     appointmentId: string;
     onRescheduleClick: (id: string) => void;
     onCancel: (id: string) => void;
     onComplete: (id: string) => void;
+    onOpenChange?: (open: boolean) => void;
 }) {
     return (
-        <DropdownMenu>
+        <DropdownMenu
+            onOpenChange={(open) => onOpenChange && onOpenChange(open)}
+        >
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <MoreHorizontal className="h-4 w-4" />

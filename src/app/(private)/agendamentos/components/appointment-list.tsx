@@ -22,15 +22,14 @@ export function AppointmentList({
         string | null
     >(null);
     const [selectedDate, setSelectedDate] = useState<Date>();
-
     const handleRescheduleClick = (id: string) => {
         setSelectedAppointmentId(id);
         setModalOpen(true);
     };
 
-    const handleReschedule = () => {
-        if (selectedAppointmentId && selectedDate) {
-            onReschedule(selectedAppointmentId, selectedDate);
+    const handleReschedule = (data: { newDate: string }) => {
+        if (selectedAppointmentId) {
+            onReschedule(selectedAppointmentId, new Date(data.newDate));
             setModalOpen(false);
             setSelectedDate(undefined);
         }
@@ -51,6 +50,7 @@ export function AppointmentList({
                         key={appointment.id}
                         appointment={appointment}
                         onRescheduleClick={handleRescheduleClick}
+                        setSelectedDate={setSelectedDate}
                         onCancel={onCancel}
                         onComplete={onComplete}
                     />
@@ -58,9 +58,11 @@ export function AppointmentList({
             )}
             <AppointmentRescheduleDialog
                 isOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}
+                onClose={() => {
+                    setModalOpen(false);
+                    setSelectedDate(undefined);
+                }}
                 selectedDate={selectedDate}
-                onDateChange={setSelectedDate}
                 onConfirm={handleReschedule}
             />
         </div>

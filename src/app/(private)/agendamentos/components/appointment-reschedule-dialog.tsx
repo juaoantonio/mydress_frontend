@@ -14,8 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 
 const appointmentRescheduleSchema = z.object({
-    appointmentDate: z
-        .string()
+    newDate: z
+        .string({ message: "A data de agendamento é obrigatória" })
         .datetime()
         .refine((date) => {
             return new Date(date) > new Date();
@@ -29,56 +29,52 @@ export function AppointmentRescheduleDialog({
     isOpen,
     onClose,
     selectedDate,
-    onDateChange,
     onConfirm,
 }: {
     isOpen: boolean;
     onClose: () => void;
     selectedDate?: Date;
-    onDateChange: (date: Date | undefined) => void;
-    onConfirm: () => void;
+    onConfirm: (data: AppointmentRescheduleFormType) => void;
 }) {
     const form = useForm<AppointmentRescheduleFormType>({
-        defaultValues: {
-            appointmentDate: selectedDate?.toISOString(),
-        },
         resolver: zodResolver(appointmentRescheduleSchema),
     });
 
     function handleSubmit(data: AppointmentRescheduleFormType) {
-        onDateChange(new Date(data.appointmentDate));
+        onConfirm(data);
         onClose();
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Reagendar Visita</DialogTitle>
-                    <DialogDescription>
-                        Escolha uma nova data para o agendamento
-                    </DialogDescription>
-                </DialogHeader>
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
+                        <DialogHeader>
+                            <DialogTitle>Reagendar Visita</DialogTitle>
+                            <DialogDescription>
+                                Escolha uma nova data para o agendamento
+                            </DialogDescription>
+                        </DialogHeader>
+
                         <DatePicker
                             control={form.control}
-                            name="appointmentDate"
+                            name="newDate"
                             label="Data da visita"
                             placeholder="Selecione a data da visita"
+                            defaultDate={selectedDate}
                         />
+
+                        <DialogFooter className={"pt-4"}>
+                            <Button variant="secondary" onClick={onClose}>
+                                Cancelar
+                            </Button>
+                            <Button variant="default" type={"submit"}>
+                                Confirmar
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </Form>
-
-                <DialogFooter>
-                    <Button variant="secondary" onClick={onClose}>
-                        Cancelar
-                    </Button>
-                    <Button variant="default" onClick={onConfirm}>
-                        Confirmar
-                    </Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

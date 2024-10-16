@@ -33,7 +33,6 @@ export class AppointmentService {
     }
 
     async reescheduleAppointment(input: RescheduleAppointmentInputDto) {
-        console.log(input);
         await axiosClient.patch(
             `/appointments/${input.appointmentId}/reschedule`,
             {

@@ -22,11 +22,13 @@ export function DatePicker({
     name,
     label,
     placeholder,
+    defaultDate,
 }: {
     control: Control<any>;
     name: string;
     label: string;
     placeholder?: string;
+    defaultDate?: Date;
 }) {
     return (
         <Controller
@@ -56,6 +58,10 @@ export function DatePicker({
                                                     locale: ptBR,
                                                 },
                                             )
+                                        ) : defaultDate ? (
+                                            format(defaultDate, "PPP", {
+                                                locale: ptBR,
+                                            })
                                         ) : (
                                             <span>
                                                 {placeholder ||
@@ -70,7 +76,7 @@ export function DatePicker({
                                         selected={
                                             field.value
                                                 ? new Date(field.value)
-                                                : undefined
+                                                : defaultDate
                                         }
                                         onSelect={(date) =>
                                             field.onChange(date?.toISOString())

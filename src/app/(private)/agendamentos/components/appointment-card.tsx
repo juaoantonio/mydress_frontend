@@ -13,12 +13,14 @@ export function AppointmentCard({
     onCancel,
     onComplete,
     onClick,
+    setSelectedDate,
 }: {
     appointment: Appointment;
     onRescheduleClick: (id: string) => void;
     onCancel: (id: string) => void;
     onComplete: (id: string) => void;
     onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    setSelectedDate: (date?: Date) => void;
 }) {
     return (
         <div className="space-y-4 rounded-lg bg-white p-4 shadow-md">
@@ -29,7 +31,14 @@ export function AppointmentCard({
                 {appointment.status === AppointmentStatus.SCHEDULED && (
                     <AppointmentMenu
                         appointmentId={appointment.id}
-                        onRescheduleClick={onRescheduleClick}
+                        onOpenChange={(open) => {
+                            open
+                                ? setSelectedDate(
+                                      new Date(appointment.appointmentDate),
+                                  )
+                                : setSelectedDate(undefined);
+                        }}
+                        onRescheduleClick={(id) => onRescheduleClick(id)}
                         onCancel={onCancel}
                         onComplete={onComplete}
                     />

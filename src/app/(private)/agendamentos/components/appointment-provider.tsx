@@ -33,7 +33,7 @@ export function AppointmentProvider() {
         page: 1,
         limit: 5,
         sort: "appointmentDate",
-        sortDir: "desc" as SortDirection,
+        sortDir: "asc" as SortDirection,
         appointmentDate: undefined,
         customerName: undefined,
         includeAll: false,
