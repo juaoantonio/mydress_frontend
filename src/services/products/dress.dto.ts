@@ -1,14 +1,5 @@
-import { DressStatus } from "@/types/products/product.enums";
+import { IBaseProductCreationInputDto } from "./base.dto";
 
-export type CreateDressInputDTO = {
-    img: File;
-    description: string;
-    price: number;
-    rentable: boolean;
-    purchasable: boolean;
-    status: DressStatus;
+export interface CreateDressInputDTO extends IBaseProductCreationInputDto {
     fabric: string;
-    color: string;
-    model: string;
-    available_for_adjustment: boolean;
-};
+}

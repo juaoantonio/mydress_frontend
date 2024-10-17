@@ -55,6 +55,7 @@ services:
       AWS_SECRET_ACCESS_KEY: dev12345678
       AWS_REGION: us-east-1
       AWS_S3_BUCKET_NAME: mydressprod
+      NODE_ENV: development
       USERS: '[{"userId":"1e240626-80eb-4b17-9597-f39a4d48d665","username":"admin","password":"admin"}]'
       JWT_SECRET: secret
 

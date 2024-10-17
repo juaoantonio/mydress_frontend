@@ -23,15 +23,6 @@ import { ImagePlaceholder } from "@/components/image-placeholder/image-placehold
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { PurseService } from "@/services/products/purse.service";
 import { CreatePurseInputDTO } from "@/services/products/purse.dto";
 import { getSession } from "next-auth/react";
@@ -56,14 +47,10 @@ export function PurseFormCreate() {
     const form = useForm<PurseFormType>({
         resolver: zodResolver(createPurseSchema),
         defaultValues: {
-            img: null,
-            price: 100.5,
-            description: "",
-            purchasable: false,
-            rentable: true,
+            image: null,
+            rentPrice: 100.5,
             color: "",
             model: "",
-            status: "AVAILABLE",
         },
     });
     const router = useRouter();
@@ -103,7 +90,7 @@ export function PurseFormCreate() {
                 <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
                     <FormField
                         control={form.control}
-                        name="img"
+                        name="image"
                         render={({ field: { onChange, value, ...rest } }) => {
                             return (
                                 <FormItem>
@@ -126,7 +113,7 @@ export function PurseFormCreate() {
                                                     }
                                                     onClick={() => {
                                                         form.setValue(
-                                                            "img",
+                                                            "image",
                                                             null,
                                                         );
                                                         setPreview(undefined);
@@ -175,10 +162,10 @@ export function PurseFormCreate() {
 
                     <FormField
                         control={form.control}
-                        name={"price"}
+                        name={"rentPrice"}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor={"price"}>
+                                <FormLabel htmlFor={"rentPrice"}>
                                     Preço de Aluguel
                                 </FormLabel>
                                 <FormControl>
@@ -190,31 +177,13 @@ export function PurseFormCreate() {
                                         R$
                                         <Input
                                             type={"number"}
-                                            id={"price"}
+                                            id={"rentPrice"}
                                             {...field}
                                         />
                                     </div>
                                 </FormControl>
                                 <FormMessage>
-                                    {form.formState.errors.price?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"description"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={"description"}>
-                                    Descrição da Bolsa
-                                </FormLabel>
-                                <FormControl>
-                                    <Input id={"description"} {...field} />
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.description?.message}
+                                    {form.formState.errors.rentPrice?.message}
                                 </FormMessage>
                             </FormItem>
                         )}
@@ -251,43 +220,6 @@ export function PurseFormCreate() {
                                 </FormControl>
                                 <FormMessage>
                                     {form.formState.errors.model?.message}
-                                </FormMessage>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name={"status"}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Status</FormLabel>
-                                <FormControl>
-                                    <Select {...field}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Selecione um status" />
-                                        </SelectTrigger>
-
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>
-                                                    Status
-                                                </SelectLabel>
-                                                <SelectItem value="AVAILABLE">
-                                                    Disponível
-                                                </SelectItem>
-                                                <SelectItem value="OUT_OF_STOCK">
-                                                    Sem estoque
-                                                </SelectItem>
-                                                <SelectItem value="DAMAGED">
-                                                    Danificado
-                                                </SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage>
-                                    {form.formState.errors.status?.message}
                                 </FormMessage>
                             </FormItem>
                         )}

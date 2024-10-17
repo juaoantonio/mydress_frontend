@@ -6,22 +6,14 @@ import { CreateDressInputDTO } from "@/services/products/dress.dto";
 export class DressService implements Service<DressType> {
     async create({ data }: { data: CreateDressInputDTO }): Promise<DressType> {
         const formData = new FormData();
-        formData.append("img", data.img);
-        formData.append("price", data.price.toString());
-        formData.append("description", data.description);
-        formData.append("rentable", data.rentable.toString());
-        formData.append("purchasable", data.purchasable.toString());
+        formData.append("image", data.image);
+        formData.append("rentPrice", data.rentPrice.toString());
         formData.append("color", data.color);
         formData.append("model", data.model);
-        formData.append("status", data.status);
         formData.append("fabric", data.fabric);
-        formData.append(
-            "available_for_adjustment",
-            data.available_for_adjustment.toString(),
-        );
 
         const response = await axiosClient.post<DressType>(
-            "/products/dresses",
+            "/dresses",
             formData,
             {
                 headers: {
@@ -34,16 +26,13 @@ export class DressService implements Service<DressType> {
     }
 
     async getById({ id }: { id: string }) {
-        const response = await axiosClient.get<DressType>(
-            `/products/dresses/${id}`,
-        );
+        const response = await axiosClient.get<DressType>(`/dresses/${id}`);
 
         return response.data;
     }
 
     async getAll() {
-        const response =
-            await axiosClient.get<DressType[]>("/products/dresses");
+        const response = await axiosClient.get<DressType[]>("/dresses");
 
         return response.data;
     }
