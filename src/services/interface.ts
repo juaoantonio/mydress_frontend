@@ -1,4 +1,4 @@
-import { IResourceList } from "@/types/list";
+import { GetPaginatedOutputDto } from "./types";
 
 export interface Service<Entity> {
     create(options: { data: any; signal?: AbortSignal }): Promise<Entity>;
@@ -6,7 +6,7 @@ export interface Service<Entity> {
     getAll(options?: {
         filters?: any;
         signal?: AbortSignal;
-    }): Promise<IResourceList<Entity>>;
+    }): Promise<GetPaginatedOutputDto<Entity>>;
 
     getById(options: { id: string; signal?: AbortSignal }): Promise<Entity>;
 

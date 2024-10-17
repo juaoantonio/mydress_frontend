@@ -1,8 +1,8 @@
+import { GetPaginatedOutputDto } from "./../types";
 import { Service } from "@/services/interface";
 import { PurseType } from "@/types/products/purse.types";
 import { axiosClient } from "@/lib/axios.client";
 import { CreatePurseInputDTO } from "@/services/products/purse.dto";
-import { IResourceList } from "@/types/list";
 
 export class PurseService implements Service<PurseType> {
     async create({ data }: { data: CreatePurseInputDTO }): Promise<PurseType> {
@@ -31,9 +31,11 @@ export class PurseService implements Service<PurseType> {
         return response.data;
     }
 
-    async getAll(): Promise<IResourceList<PurseType>> {
+    async getAll(): Promise<GetPaginatedOutputDto<PurseType>> {
         const response =
-            await axiosClient.get<IResourceList<PurseType>>("/clutches");
+            await axiosClient.get<GetPaginatedOutputDto<PurseType>>(
+                "/clutches",
+            );
 
         return response.data;
     }

@@ -1,8 +1,8 @@
+import { GetPaginatedOutputDto } from "./../types";
 import { axiosClient } from "@/lib/axios.client";
 import { Service } from "@/services/interface";
 import { DressType } from "@/types/products/dress.types";
 import { CreateDressInputDTO } from "@/services/products/dress.dto";
-import { IResourceList } from "@/types/list";
 
 export class DressService implements Service<DressType> {
     async create({ data }: { data: CreateDressInputDTO }): Promise<DressType> {
@@ -32,9 +32,9 @@ export class DressService implements Service<DressType> {
         return response.data;
     }
 
-    async getAll(): Promise<IResourceList<DressType>> {
+    async getAll(): Promise<GetPaginatedOutputDto<DressType>> {
         const response =
-            await axiosClient.get<IResourceList<DressType>>("/dresses");
+            await axiosClient.get<GetPaginatedOutputDto<DressType>>("/dresses");
 
         return response.data;
     }
