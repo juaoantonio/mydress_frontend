@@ -1,10 +1,12 @@
+import { IResourceList } from "@/types/list";
+
 export interface Service<Entity> {
     create(options: { data: any; signal?: AbortSignal }): Promise<Entity>;
 
     getAll(options?: {
         filters?: any;
         signal?: AbortSignal;
-    }): Promise<Entity[]>;
+    }): Promise<IResourceList<Entity>>;
 
     getById(options: { id: string; signal?: AbortSignal }): Promise<Entity>;
 
