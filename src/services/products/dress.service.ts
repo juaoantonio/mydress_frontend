@@ -13,7 +13,7 @@ export class DressService implements Service<DressType> {
         formData.append("fabric", data.fabric);
 
         const response = await axiosClient.post<DressType>(
-            "/products/dresses",
+            "/dresses",
             formData,
             {
                 headers: {
@@ -26,16 +26,13 @@ export class DressService implements Service<DressType> {
     }
 
     async getById({ id }: { id: string }) {
-        const response = await axiosClient.get<DressType>(
-            `/products/dresses/${id}`,
-        );
+        const response = await axiosClient.get<DressType>(`/dresses/${id}`);
 
         return response.data;
     }
 
     async getAll() {
-        const response =
-            await axiosClient.get<DressType[]>("/products/dresses");
+        const response = await axiosClient.get<DressType[]>("/dresses");
 
         return response.data;
     }

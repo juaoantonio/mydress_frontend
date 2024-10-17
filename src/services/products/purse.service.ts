@@ -12,7 +12,7 @@ export class PurseService implements Service<PurseType> {
         formData.append("model", data.model);
 
         const response = await axiosClient.post<PurseType>(
-            "/products/clutches",
+            "/clutches",
             formData,
             {
                 headers: {
@@ -25,15 +25,13 @@ export class PurseService implements Service<PurseType> {
     }
 
     async getById({ id }: { id: string }): Promise<PurseType> {
-        const response = await axiosClient.get<PurseType>(
-            `/products/clutches/${id}`,
-        );
+        const response = await axiosClient.get<PurseType>(`/clutches/${id}`);
 
         return response.data;
     }
 
     async getAll(): Promise<PurseType[]> {
-        const response = await axiosClient.get<PurseType[]>("/products/purses");
+        const response = await axiosClient.get<PurseType[]>("/clutches");
 
         return response.data;
     }
