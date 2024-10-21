@@ -40,6 +40,59 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
         );
     };
 
+    if (data.lastPage > 3) {
+        return (
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            href={`?page=${Math.max(data.currentPage - 1, 1)}`}
+                            text={"Anterior"}
+                            disabled={data.isFirstPage}
+                            onClick={handlePreviousPage}
+                        />
+                    </PaginationItem>
+
+                    {currentPageStartRange > 1 && (
+                        <PaginationEllipsisButton
+                            onClick={handlePreviousNavigationPage}
+                        />
+                    )}
+
+                    {Array.from({ length: perNavigationRange }).map(
+                        (_, index) =>
+                            index + currentPageStartRange <= data.lastPage && (
+                                <PaginationItemButton
+                                    key={index}
+                                    index={index}
+                                    currentPageStartRange={
+                                        currentPageStartRange
+                                    }
+                                    currentPage={data.currentPage}
+                                />
+                            ),
+                    )}
+
+                    {currentPageStartRange + perNavigationRange - 1 <
+                        data.lastPage && (
+                        <PaginationEllipsisButton
+                            onClick={handleNextNavigationPage}
+                        />
+                    )}
+
+                    <PaginationItem>
+                        <PaginationNext
+                            href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
+                            text={"Próximo"}
+                            disabled={data.isLastPage}
+                            onClick={handleNextPage}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        );
+    }
+
     return (
         <Pagination>
             <PaginationContent>
@@ -52,30 +105,14 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
                     />
                 </PaginationItem>
 
-                {currentPageStartRange > 1 && (
-                    <PaginationEllipsisButton
-                        onClick={handlePreviousNavigationPage}
+                {Array.from({ length: data.lastPage }).map((_, index) => (
+                    <PaginationItemButton
+                        key={index}
+                        index={index}
+                        currentPageStartRange={1}
+                        currentPage={data.currentPage}
                     />
-                )}
-
-                {Array.from({ length: perNavigationRange }).map(
-                    (_, index) =>
-                        index + currentPageStartRange <= data.lastPage && (
-                            <PaginationItemButton
-                                key={index}
-                                index={index}
-                                currentPageStartRange={currentPageStartRange}
-                                currentPage={data.currentPage}
-                            />
-                        ),
-                )}
-
-                {currentPageStartRange + perNavigationRange - 1 <
-                    data.lastPage && (
-                    <PaginationEllipsisButton
-                        onClick={handleNextNavigationPage}
-                    />
-                )}
+                ))}
 
                 <PaginationItem>
                     <PaginationNext
