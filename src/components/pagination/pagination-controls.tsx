@@ -21,100 +21,65 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
     perNavigationRange: number;
 }) {
     const handlePreviousNavigationPage = () => {
-        setCurrentPageStartRange((prevState) => prevState - 1);
+        setCurrentPageStartRange((prevState) => Math.max(prevState - 1, 1));
     };
 
     const handleNextNavigationPage = () => {
-        setCurrentPageStartRange((prevState) => prevState + 1);
+        setCurrentPageStartRange((prevState) =>
+            Math.min(prevState + 1, data.lastPage),
+        );
     };
 
     const handlePreviousPage = () => {
-        setCurrentPageStartRange((prevState) => prevState - 1);
+        setCurrentPageStartRange((prevState) => Math.max(prevState - 1, 1));
     };
 
     const handleNextPage = () => {
-        setCurrentPageStartRange((prevState) => prevState + 1);
-    };
-
-    if (data.lastPage > 3)
-        return (
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious
-                            href={`?page=${data.currentPage - 1}`}
-                            text={"Anterior"}
-                            disabled={data.isFirstPage}
-                            onClick={handlePreviousPage}
-                        />
-                    </PaginationItem>
-
-                    {currentPageStartRange > 1 && (
-                        <PaginationEllipsisButton
-                            onClick={handlePreviousNavigationPage}
-                        />
-                    )}
-
-                    {Array.from({ length: perNavigationRange }).map(
-                        (_, index) =>
-                            index + currentPageStartRange <= data.lastPage && (
-                                <PaginationItemButton
-                                    key={index}
-                                    index={index}
-                                    currentPageStartRange={
-                                        currentPageStartRange
-                                    }
-                                    currentPage={data.currentPage}
-                                />
-                            ),
-                    )}
-
-                    {currentPageStartRange + perNavigationRange - 1 <
-                        data.lastPage && (
-                        <PaginationEllipsisButton
-                            onClick={handleNextNavigationPage}
-                        />
-                    )}
-
-                    <PaginationItem>
-                        <PaginationNext
-                            href={`?page=${data.currentPage + 1}`}
-                            text={"Próximo"}
-                            disabled={data.isLastPage}
-                            onClick={handleNextPage}
-                        />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+        setCurrentPageStartRange((prevState) =>
+            Math.min(prevState + 1, data.lastPage),
         );
+    };
 
     return (
         <Pagination>
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
-                        href={`?page=${data.currentPage - 1}`}
+                        href={`?page=${Math.max(data.currentPage - 1, 1)}`}
                         text={"Anterior"}
                         disabled={data.isFirstPage}
                         onClick={handlePreviousPage}
                     />
                 </PaginationItem>
 
-                {Array.from({ length: data.lastPage }).map(
+                {currentPageStartRange > 1 && (
+                    <PaginationEllipsisButton
+                        onClick={handlePreviousNavigationPage}
+                    />
+                )}
+
+                {Array.from({ length: perNavigationRange }).map(
                     (_, index) =>
-                        index + 1 <= data.lastPage && (
+                        index + currentPageStartRange <= data.lastPage && (
                             <PaginationItemButton
                                 key={index}
                                 index={index}
-                                currentPageStartRange={1}
+                                currentPageStartRange={currentPageStartRange}
                                 currentPage={data.currentPage}
                             />
                         ),
                 )}
 
+                {currentPageStartRange + perNavigationRange - 1 <
+                    data.lastPage && (
+                    <PaginationEllipsisButton
+                        onClick={handleNextNavigationPage}
+                    />
+                )}
+
                 <PaginationItem>
                     <PaginationNext
-                        href={`?page=${data.currentPage + 1}`}
+                        href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
                         text={"Próximo"}
                         disabled={data.isLastPage}
                         onClick={handleNextPage}
