@@ -8,20 +8,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 import { cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
+import { PaginationControls } from "@/components/pagination/pagination-controls";
+import { useQueryParams } from "@/hooks/use-query-params";
+import { useState } from "react";
+
+const PER_NAVIGATION_RANGE = 3;
 
 export function ListDressSection() {
     const dressService = new DressService();
-    const { data, isPending, isError } = useQuery({
-        queryKey: ["dresses"],
-        queryFn: dressService.getAll,
+
+    const { page, limit } = useQueryParams({
+        page: 1,
+        limit: 10,
     });
+
+    const { data, isPending, isError } = useQuery({
+        queryKey: ["dresses", page, limit],
+        queryFn: () =>
+            dressService.getAll({
+                filters: {
+                    page,
+                    limit,
+                },
+            }),
+    });
+
+    const [currentPageStartRange, setCurrentPageStartRange] = useState(page);
 
     const mutation = useMutation({
         mutationFn: (id: string) => dressService.deleteById({ id }),
         onMutate: () => toast.loading("Removendo vestido"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["dresses"],
+                queryKey: ["dresses", page, limit],
             });
             toast.dismiss();
             toast.success("Vestido removido com sucesso");
@@ -31,6 +50,10 @@ export function ListDressSection() {
             toast.error("Erro ao remover vestido");
         },
     });
+
+    async function handleDressDelete(id: string) {
+        await mutation.mutateAsync(id);
+    }
 
     if (isPending) {
         return (
@@ -45,13 +68,9 @@ export function ListDressSection() {
         return;
     }
 
-    async function handleDressDelete(id: string) {
-        await mutation.mutateAsync(id);
-    }
-
     return (
         <div className={"space-y-4"}>
-            {data.items.length > 0 &&
+            {data?.items.length > 0 &&
                 data.items.map((dress) => (
                     <Card
                         key={dress.id}
@@ -97,6 +116,15 @@ export function ListDressSection() {
                         </CardContent>
                     </Card>
                 ))}
+
+            {data.items.length > 0 && (
+                <PaginationControls
+                    data={data}
+                    currentPageStartRange={currentPageStartRange}
+                    setCurrentPageStartRange={setCurrentPageStartRange}
+                    perNavigationRange={PER_NAVIGATION_RANGE}
+                />
+            )}
         </div>
     );
 }
