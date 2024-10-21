@@ -8,8 +8,6 @@ import { cn, numberToCurrency } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
-import { PurseStatusMapping } from "@/mappings/products.mapping";
-
 export function ListPurseSection() {
     const purseService = new PurseService();
     const { data, isPending, isError } = useQuery({
@@ -52,52 +50,48 @@ export function ListPurseSection() {
 
     return (
         <div className={"space-y-4"}>
-            {data.map((purse) => (
-                <Card
-                    key={purse.id}
-                    className={
-                        "grid grid-cols-[120px,1fr] overflow-hidden rounded-lg"
-                    }
-                >
-                    <div className={"relative"}>
-                        <div
-                            className={cn(
-                                "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
-                                mutation.isPending &&
-                                    "pointer-events-none cursor-not-allowed opacity-60",
-                            )}
-                            onClick={() => handlePurseDelete(purse.id)}
-                        >
-                            <Trash size={16} />
-                        </div>
-                        <Image
-                            src={purse.img ?? ""}
-                            alt={"Vestido"}
-                            width={200}
-                            height={200}
-                            className={"aspect-[5/6] h-full object-cover"}
-                        />
-                    </div>
-                    <CardContent className={"space-y-3 py-3"}>
-                        <div className={"space-y-2"}>
-                            <h3 className={"font-semibold"}>
-                                {purse.description}
-                            </h3>
-                            <span className={"inline-block text-[0.6rem]"}>
-                                {PurseStatusMapping[purse.status]}
-                            </span>
-                        </div>
-                        <List className={"gap-1.5 text-xs"}>
-                            <ListItem
-                                label={"Preço de aluguel"}
-                                value={numberToCurrency(purse.price)}
+            {data.items.length > 0 &&
+                data.items.map((purse) => (
+                    <Card
+                        key={purse.id}
+                        className={
+                            "grid grid-cols-[120px,1fr] overflow-hidden rounded-lg"
+                        }
+                    >
+                        <div className={"relative"}>
+                            <div
+                                className={cn(
+                                    "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
+                                    mutation.isPending &&
+                                        "pointer-events-none cursor-not-allowed opacity-60",
+                                )}
+                                onClick={() => handlePurseDelete(purse.id)}
+                            >
+                                <Trash size={16} />
+                            </div>
+                            <Image
+                                src={purse.imagePath}
+                                alt={"Vestido"}
+                                width={200}
+                                height={200}
+                                className={"aspect-[5/6] h-full object-cover"}
                             />
-                            <ListItem label={"Modelo"} value={purse.model} />
-                            <ListItem label={"Cor"} value={purse.color} />
-                        </List>
-                    </CardContent>
-                </Card>
-            ))}
+                        </div>
+                        <CardContent className={"space-y-3 py-3"}>
+                            <List className={"gap-1.5 text-xs"}>
+                                <ListItem
+                                    label={"Preço de aluguel"}
+                                    value={numberToCurrency(purse.rentPrice)}
+                                />
+                                <ListItem
+                                    label={"Modelo"}
+                                    value={purse.model}
+                                />
+                                <ListItem label={"Cor"} value={purse.color} />
+                            </List>
+                        </CardContent>
+                    </Card>
+                ))}
         </div>
     );
 }

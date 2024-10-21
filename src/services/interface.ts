@@ -1,10 +1,12 @@
+import { GetPaginatedOutputDto } from "./types";
+
 export interface Service<Entity> {
     create(options: { data: any; signal?: AbortSignal }): Promise<Entity>;
 
     getAll(options?: {
         filters?: any;
         signal?: AbortSignal;
-    }): Promise<Entity[]>;
+    }): Promise<GetPaginatedOutputDto<Entity>>;
 
     getById(options: { id: string; signal?: AbortSignal }): Promise<Entity>;
 

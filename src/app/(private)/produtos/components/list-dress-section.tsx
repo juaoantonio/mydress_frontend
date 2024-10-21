@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 import { cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
-import { DressStatusMapping } from "@/mappings/products.mapping";
 
 export function ListDressSection() {
     const dressService = new DressService();
@@ -16,6 +15,7 @@ export function ListDressSection() {
         queryKey: ["dresses"],
         queryFn: dressService.getAll,
     });
+
     const mutation = useMutation({
         mutationFn: (id: string) => dressService.deleteById({ id }),
         onMutate: () => toast.loading("Removendo vestido"),
@@ -51,61 +51,52 @@ export function ListDressSection() {
 
     return (
         <div className={"space-y-4"}>
-            {data.map((dress) => (
-                <Card
-                    key={dress.id}
-                    className={
-                        "grid grid-cols-[120px,1fr] flex-row overflow-hidden rounded-lg"
-                    }
-                >
-                    <div className={"relative"}>
-                        <div
-                            className={cn(
-                                "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
-                                mutation.isPending &&
-                                    "pointer-events-none cursor-not-allowed opacity-60",
-                            )}
-                            onClick={() => handleDressDelete(dress.id)}
-                        >
-                            <Trash size={16} />
-                        </div>
-                        <Image
-                            src={dress.img ?? ""}
-                            alt={"Vestido"}
-                            width={200}
-                            height={200}
-                            className={"aspect-[5/6] h-full object-cover"}
-                        />
-                    </div>
-                    <CardContent className={"space-y-3 py-3"}>
-                        <div className={"space-y-2"}>
-                            <h3 className={"font-semibold"}>
-                                {dress.description}
-                            </h3>
-                            <span className={"inline-block text-[0.6rem]"}>
-                                {DressStatusMapping[dress.status]}
-                            </span>
-                        </div>
-                        <List className={"gap-1.5 text-xs"}>
-                            <ListItem
-                                label={"Preço de aluguel"}
-                                value={numberToCurrency(dress.price)}
+            {data.items.length > 0 &&
+                data.items.map((dress) => (
+                    <Card
+                        key={dress.id}
+                        className={
+                            "grid grid-cols-[120px,1fr] flex-row overflow-hidden rounded-lg"
+                        }
+                    >
+                        <div className={"relative"}>
+                            <div
+                                className={cn(
+                                    "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
+                                    mutation.isPending &&
+                                        "pointer-events-none cursor-not-allowed opacity-60",
+                                )}
+                                onClick={() => handleDressDelete(dress.id)}
+                            >
+                                <Trash size={16} />
+                            </div>
+                            <Image
+                                src={dress.imagePath}
+                                alt={"Vestido"}
+                                width={200}
+                                height={200}
+                                className={"aspect-[5/6] h-full object-cover"}
                             />
-                            <ListItem label={"Modelo"} value={dress.model} />
-                            <ListItem label={"Cor"} value={dress.color} />
-                            <ListItem label={"Tecido"} value={dress.fabric} />
-                            <ListItem
-                                label={"Disponível para ajustes"}
-                                value={
-                                    dress.available_for_adjustment
-                                        ? "Sim"
-                                        : "Não"
-                                }
-                            />
-                        </List>
-                    </CardContent>
-                </Card>
-            ))}
+                        </div>
+                        <CardContent className={"space-y-3 py-3"}>
+                            <List className={"gap-1.5 text-xs"}>
+                                <ListItem
+                                    label={"Preço de aluguel"}
+                                    value={numberToCurrency(dress.rentPrice)}
+                                />
+                                <ListItem
+                                    label={"Modelo"}
+                                    value={dress.model}
+                                />
+                                <ListItem label={"Cor"} value={dress.color} />
+                                <ListItem
+                                    label={"Tecido"}
+                                    value={dress.fabric}
+                                />
+                            </List>
+                        </CardContent>
+                    </Card>
+                ))}
         </div>
     );
 }

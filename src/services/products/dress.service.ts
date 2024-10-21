@@ -1,3 +1,4 @@
+import { GetPaginatedOutputDto } from "./../types";
 import { axiosClient } from "@/lib/axios.client";
 import { Service } from "@/services/interface";
 import { DressType } from "@/types/products/dress.types";
@@ -31,8 +32,9 @@ export class DressService implements Service<DressType> {
         return response.data;
     }
 
-    async getAll() {
-        const response = await axiosClient.get<DressType[]>("/dresses");
+    async getAll(): Promise<GetPaginatedOutputDto<DressType>> {
+        const response =
+            await axiosClient.get<GetPaginatedOutputDto<DressType>>("/dresses");
 
         return response.data;
     }
