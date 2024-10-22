@@ -46,10 +46,9 @@ export function DressesInput({
                 errorMessage={"Erro ao buscar vestidos"}
                 options={
                     dresses &&
-                    dresses.map(({ id, description, img }) => ({
+                    dresses.map(({ id, imagePath }) => ({
                         id,
-                        description,
-                        img,
+                        img: imagePath,
                     }))
                 }
             />

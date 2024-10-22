@@ -66,7 +66,7 @@ export function CreateAdjustmentsForm({
             return adjustmentService.createMany({
                 data: {
                     booking: bookingId,
-                    adjustments: data.adjustments,
+                    adjustments: data.adjustments as any,
                 },
             });
         },
@@ -105,17 +105,12 @@ export function CreateAdjustmentsForm({
                         {index !== 0 && <Separator className={"my-4"} />}
                         <div className={"space-y-5 rounded border p-3"}>
                             <ImageListItem
-                                label={dress.description}
                                 values={[
                                     {
                                         label: "Preço de aluguel",
-                                        value: numberToCurrency(dress.price),
-                                    },
-                                    {
-                                        label: "Disponível para ajuste",
-                                        value: dress.available_for_adjustment
-                                            ? "Sim"
-                                            : "Não",
+                                        value: numberToCurrency(
+                                            dress.rentPrice,
+                                        ),
                                     },
                                     {
                                         label: "Cor",
@@ -126,8 +121,9 @@ export function CreateAdjustmentsForm({
                                         value: dress.model,
                                     },
                                 ]}
-                                img={dress.img}
-                                imgAlt={dress.description}
+                                img={dress.imagePath}
+                                imgAlt={dress.imagePath}
+                                label={dress.imagePath}
                             />
                             <label
                                 className={

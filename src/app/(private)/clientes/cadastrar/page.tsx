@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreateCustomerForm } from "./components/create-customer-form";
 
 export default function CreateCustomerPage() {
     return (
@@ -8,9 +7,7 @@ export default function CreateCustomerPage() {
                 <CardHeader>
                     <CardTitle>Cadastrar novo cliente</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <CreateCustomerForm />
-                </CardContent>
+                <CardContent></CardContent>
             </Card>
         </section>
     );

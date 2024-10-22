@@ -25,5 +25,5 @@ export type BookingType = {
 export type SelectMultipleInputOption = {
     id: string;
     img: string;
-    description: string;
+    description?: string;
 };

@@ -14,15 +14,7 @@ export class BookingService implements Service<BookingType> {
         return response.data;
     }
 
-    async getAll({
-        filters,
-    }: {
-        filters: {
-            status?: string;
-            customer_name?: string;
-            event_date?: string;
-        };
-    }): Promise<BookingType[]> {
+    async getAll({ filters }: { filters: any }): Promise<any> {
         const response = await axiosClient.get<BookingType[]>("/bookings", {
             params: {
                 status: filters.status,

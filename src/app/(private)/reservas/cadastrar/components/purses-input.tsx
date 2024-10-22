@@ -44,10 +44,9 @@ export function PursesInput({
                 errorMessage={"Erro ao buscar bolsas"}
                 options={
                     purses &&
-                    purses.map(({ id, description, img }) => ({
+                    purses.map(({ id, imagePath }) => ({
                         id,
-                        description,
-                        img,
+                        img: imagePath,
                     }))
                 }
             />
