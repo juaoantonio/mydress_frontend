@@ -8,30 +8,22 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { ProductFilters } from "./filters/filters.products.types";
-import { FilterByDateProducts } from "./filters/filter-by-date.products";
-import { FilterAvailableProducts } from "./filters/filter-available.products";
+import { ProductFilters } from "./filters.products.types";
+import { FilterAvailableProducts } from "./filter-available.products";
+import { FilterProductsByDate } from "./filter-by-date.products";
+import useProductFilterParams from "../../hooks/filter-params";
 
 export function Filters({ handleClose }: { handleClose: () => void }) {
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
     const createQueryString = useCreateQueryString();
 
-    const available = searchParams.get("available") ?? "";
-
-    const start_date = searchParams.get("start_date")
-        ? searchParams.get("start_date") + "T00:00:00"
-        : "";
-
-    const end_date = searchParams.get("end_date")
-        ? searchParams.get("end_date") + "T00:00:00"
-        : "";
+    const { available, endDate, startDate } = useProductFilterParams();
 
     const [filters, setFilters] = useState<ProductFilters>({
         available,
-        start_date,
-        end_date,
+        start_date: startDate,
+        end_date: endDate,
     });
 
     function handleApplyFilters() {
@@ -57,14 +49,14 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
 
                 {filters.available && (
                     <>
-                        <FilterByDateProducts
+                        <FilterProductsByDate
                             value={filters.start_date}
                             setFilters={setFilters}
                             title="Data inicial"
                             param="start_date"
                         />
 
-                        <FilterByDateProducts
+                        <FilterProductsByDate
                             value={filters.end_date}
                             setFilters={setFilters}
                             title="Data final"

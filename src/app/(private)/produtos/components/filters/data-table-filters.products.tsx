@@ -6,7 +6,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Filter } from "lucide-react";
 import { setDefaultOptions } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Filters } from "../filters.products";
+import { Filters } from "./filters.products";
 
 setDefaultOptions({
     locale: ptBR,
