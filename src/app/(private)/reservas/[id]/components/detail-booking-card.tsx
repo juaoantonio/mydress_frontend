@@ -101,19 +101,12 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                     className={"space-y-2 rounded border p-3"}
                                 >
                                     <ImageListItem
-                                        label={product.description}
                                         values={[
                                             {
                                                 label: "Preço de aluguel",
                                                 value: numberToCurrency(
-                                                    product.price,
+                                                    product.rentPrice,
                                                 ),
-                                            },
-                                            {
-                                                label: "Disponível para ajuste",
-                                                value: product.available_for_adjustment
-                                                    ? "Sim"
-                                                    : "Não",
                                             },
                                             {
                                                 label: "Cor",
@@ -124,8 +117,9 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                                 value: product.model,
                                             },
                                         ]}
-                                        img={product.img}
-                                        imgAlt={product.description}
+                                        img={product.imagePath}
+                                        imgAlt={product.imagePath}
+                                        label={product.imagePath}
                                     />
 
                                     <div className={"space-y-2"}>

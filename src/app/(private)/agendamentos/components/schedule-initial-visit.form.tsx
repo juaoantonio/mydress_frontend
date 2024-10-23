@@ -53,7 +53,7 @@ export function ScheduleInitialVisitForm() {
         },
     });
 
-    async function handleSubmit(data: ScheduleInitialVisitFormType) {
+    async function handleSubmit(data: any) {
         mutation.mutate(data);
     }
 

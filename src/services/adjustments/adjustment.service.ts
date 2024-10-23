@@ -1,4 +1,4 @@
-import { Service } from "@/services/interface";
+import { IGetAllServiceInputProps, Service } from "@/services/interface";
 import { AdjustmentType } from "@/types/adjustment.types";
 import { axiosClient } from "@/lib/axios.client";
 import {
@@ -37,7 +37,7 @@ export class AdjustmentService implements Service<AdjustmentType> {
         throw new Error("Method not implemented.");
     }
 
-    async getAll(): Promise<AdjustmentType[]> {
+    async getAll(options: IGetAllServiceInputProps): Promise<any> {
         throw new Error("Method not implemented.");
     }
 

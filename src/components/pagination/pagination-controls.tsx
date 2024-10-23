@@ -21,28 +21,32 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
     perNavigationRange: number;
 }) {
     const handlePreviousNavigationPage = () => {
-        setCurrentPageStartRange((prevState) => prevState - 1);
+        setCurrentPageStartRange((prevState) => Math.max(prevState - 1, 1));
     };
 
     const handleNextNavigationPage = () => {
-        setCurrentPageStartRange((prevState) => prevState + 1);
+        setCurrentPageStartRange((prevState) =>
+            Math.min(prevState + 1, data.lastPage),
+        );
     };
 
     const handlePreviousPage = () => {
-        setCurrentPageStartRange((prevState) => prevState - 1);
+        setCurrentPageStartRange((prevState) => Math.max(prevState - 1, 1));
     };
 
     const handleNextPage = () => {
-        setCurrentPageStartRange((prevState) => prevState + 1);
+        setCurrentPageStartRange((prevState) =>
+            Math.min(prevState + 1, data.lastPage),
+        );
     };
 
-    if (data.lastPage > 3)
+    if (data.lastPage > 3) {
         return (
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
-                            href={`?page=${data.currentPage - 1}`}
+                            href={`?page=${Math.max(data.currentPage - 1, 1)}`}
                             text={"Anterior"}
                             disabled={data.isFirstPage}
                             onClick={handlePreviousPage}
@@ -78,7 +82,7 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
 
                     <PaginationItem>
                         <PaginationNext
-                            href={`?page=${data.currentPage + 1}`}
+                            href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
                             text={"Próximo"}
                             disabled={data.isLastPage}
                             onClick={handleNextPage}
@@ -87,34 +91,32 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
                 </PaginationContent>
             </Pagination>
         );
+    }
 
     return (
         <Pagination>
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
-                        href={`?page=${data.currentPage - 1}`}
+                        href={`?page=${Math.max(data.currentPage - 1, 1)}`}
                         text={"Anterior"}
                         disabled={data.isFirstPage}
                         onClick={handlePreviousPage}
                     />
                 </PaginationItem>
 
-                {Array.from({ length: data.lastPage }).map(
-                    (_, index) =>
-                        index + 1 <= data.lastPage && (
-                            <PaginationItemButton
-                                key={index}
-                                index={index}
-                                currentPageStartRange={1}
-                                currentPage={data.currentPage}
-                            />
-                        ),
-                )}
+                {Array.from({ length: data.lastPage }).map((_, index) => (
+                    <PaginationItemButton
+                        key={index}
+                        index={index}
+                        currentPageStartRange={1}
+                        currentPage={data.currentPage}
+                    />
+                ))}
 
                 <PaginationItem>
                     <PaginationNext
-                        href={`?page=${data.currentPage + 1}`}
+                        href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
                         text={"Próximo"}
                         disabled={data.isLastPage}
                         onClick={handleNextPage}

@@ -37,7 +37,7 @@ export class CustomerService implements Service<CustomerType> {
     async getAll(options?: {
         filters: { name?: string };
         signal?: AbortSignal;
-    }) {
+    }): Promise<any> {
         const response = await axiosClient.get<CustomerType[]>("/customers", {
             params: {
                 name: options?.filters.name,

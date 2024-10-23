@@ -9,10 +9,8 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer";
 import { FilterStatusBookings } from "@/app/(private)/reservas/components/filters/filter-status.bookings";
-import { FilterCustomerNameBookings } from "@/app/(private)/reservas/components/filters/filter-customer-name.bookings";
 import { FilterEventDateBookings } from "@/app/(private)/reservas/components/filters/filter-event-date.bookings";
 import { Button } from "@/components/ui/button";
-import { FilterEventReception } from "@/app/(private)/reservas/components/filters/filter-event-reception";
 
 export function Filters({ handleClose }: { handleClose: () => void }) {
     const router = useRouter();
@@ -55,16 +53,6 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
 
                 <FilterStatusBookings
                     value={filters.status}
-                    setFilters={setFilters}
-                />
-
-                <FilterCustomerNameBookings
-                    value={filters.customer_name}
-                    setFilters={setFilters}
-                />
-
-                <FilterEventReception
-                    value={filters.event_reception}
                     setFilters={setFilters}
                 />
             </div>

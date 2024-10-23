@@ -138,7 +138,10 @@ export function SelectMultipleInput<
                                                     />
                                                     <Image
                                                         src={option.img ?? ""}
-                                                        alt={option.description}
+                                                        alt={
+                                                            option.description ??
+                                                            ""
+                                                        }
                                                         width={500}
                                                         height={500}
                                                         className={

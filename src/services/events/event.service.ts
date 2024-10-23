@@ -20,7 +20,7 @@ export class EventService implements Service<EventType> {
         filters: {
             event_reception?: string;
         };
-    }): Promise<EventType[]> {
+    }): Promise<any> {
         const response = await axiosClient.get<EventType[]>("/events", {
             params: options?.filters,
         });

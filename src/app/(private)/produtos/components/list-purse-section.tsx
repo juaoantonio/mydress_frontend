@@ -1,26 +1,46 @@
-import { PurseService } from "@/services/products/purse.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { queryClient } from "@/providers/react-query.provider";
+import { PurseService } from "@/services/products/purse.service";
 import Loading from "@/app/loading";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn, numberToCurrency } from "@/lib/utils";
-import { Trash } from "lucide-react";
+import { toast } from "sonner";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
+import { Card, CardContent } from "@/components/ui/card";
+import { Trash } from "lucide-react";
+import { cn, numberToCurrency } from "@/lib/utils";
+import { queryClient } from "@/providers/react-query.provider";
+import { PaginationControls } from "@/components/pagination/pagination-controls";
+import { useQueryParams } from "@/hooks/use-query-params";
+import { useState } from "react";
+
+const PER_NAVIGATION_RANGE = 3;
+
 export function ListPurseSection() {
     const purseService = new PurseService();
-    const { data, isPending, isError } = useQuery({
-        queryKey: ["purses"],
-        queryFn: purseService.getAll,
+
+    const { page, limit } = useQueryParams({
+        page: 1,
+        limit: 10,
     });
+
+    const { data, isPending, isError } = useQuery({
+        queryKey: ["purses", page, limit],
+        queryFn: () =>
+            purseService.getAll({
+                filters: {
+                    page,
+                    limit,
+                },
+            }),
+    });
+
+    const [currentPageStartRange, setCurrentPageStartRange] = useState(page);
 
     const mutation = useMutation({
         mutationFn: (id: string) => purseService.deleteById({ id }),
         onMutate: () => toast.loading("Removendo bolsa"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["purses"],
+                queryKey: ["purses", page, limit],
             });
             toast.dismiss();
             toast.success("Bolsa removida com sucesso");
@@ -45,17 +65,17 @@ export function ListPurseSection() {
     }
 
     async function handlePurseDelete(id: string) {
-        mutation.mutate(id);
+        await mutation.mutateAsync(id);
     }
 
     return (
         <div className={"space-y-4"}>
-            {data.items.length > 0 &&
+            {data?.items.length > 0 &&
                 data.items.map((purse) => (
                     <Card
                         key={purse.id}
                         className={
-                            "grid grid-cols-[120px,1fr] overflow-hidden rounded-lg"
+                            "grid grid-cols-[120px,1fr] flex-row overflow-hidden rounded-lg"
                         }
                     >
                         <div className={"relative"}>
@@ -71,7 +91,7 @@ export function ListPurseSection() {
                             </div>
                             <Image
                                 src={purse.imagePath}
-                                alt={"Vestido"}
+                                alt={"Bolsa"}
                                 width={200}
                                 height={200}
                                 className={"aspect-[5/6] h-full object-cover"}
@@ -92,6 +112,15 @@ export function ListPurseSection() {
                         </CardContent>
                     </Card>
                 ))}
+
+            {data.items.length > 0 && (
+                <PaginationControls
+                    data={data}
+                    currentPageStartRange={currentPageStartRange}
+                    setCurrentPageStartRange={setCurrentPageStartRange}
+                    perNavigationRange={PER_NAVIGATION_RANGE}
+                />
+            )}
         </div>
     );
 }
