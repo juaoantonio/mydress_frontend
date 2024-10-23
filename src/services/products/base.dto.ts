@@ -8,7 +8,7 @@ export interface IBaseProductCreationInputDto {
 export interface IBaseListProductQueryParamsInputDTO {
     page?: number;
     limit?: number;
-    available?: string;
+    available?: boolean;
     startDate?: string;
     endDate?: string;
 }
