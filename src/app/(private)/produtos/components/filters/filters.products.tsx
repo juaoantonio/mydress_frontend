@@ -32,6 +32,16 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
         handleClose();
     }
 
+    function clearQueryParams() {
+        setFilters({
+            available: "",
+            end_date: "",
+            start_date: "",
+        });
+        const cleanUrl = pathname;
+        router.replace(cleanUrl, undefined);
+    }
+
     const invalidFilter =
         ["true", "false"].includes(filters.available) &&
         (!filters.start_date || !filters.end_date);
@@ -68,6 +78,9 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
             <DrawerFooter>
                 <Button disabled={!!invalidFilter} onClick={handleApplyFilters}>
                     Aplicar Filtros
+                </Button>
+                <Button onClick={clearQueryParams} variant="outline">
+                    Limpar Filtros
                 </Button>
                 <DrawerClose asChild>
                     <Button variant="outline">Cancelar</Button>
