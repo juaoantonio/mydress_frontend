@@ -33,7 +33,8 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
     }
 
     const invalidFilter =
-        (filters.available && !filters.start_date) || !filters.end_date;
+        ["true", "false"].includes(filters.available) &&
+        (!filters.start_date || !filters.end_date);
 
     return (
         <div>
