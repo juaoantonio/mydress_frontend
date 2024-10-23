@@ -1,4 +1,4 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCreateQueryString } from "@/hooks/use-create-query-string";
 import React, { useState } from "react";
 import {
@@ -47,23 +47,21 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
                     setFilters={setFilters}
                 />
 
-                {filters.available && (
-                    <>
-                        <FilterProductsByDate
-                            value={filters.start_date}
-                            setFilters={setFilters}
-                            title="Data inicial"
-                            param="start_date"
-                        />
+                <>
+                    <FilterProductsByDate
+                        value={filters.start_date}
+                        setFilters={setFilters}
+                        title="Data inicial"
+                        param="start_date"
+                    />
 
-                        <FilterProductsByDate
-                            value={filters.end_date}
-                            setFilters={setFilters}
-                            title="Data final"
-                            param="end_date"
-                        />
-                    </>
-                )}
+                    <FilterProductsByDate
+                        value={filters.end_date}
+                        setFilters={setFilters}
+                        title="Data final"
+                        param="end_date"
+                    />
+                </>
             </div>
 
             <DrawerFooter>
