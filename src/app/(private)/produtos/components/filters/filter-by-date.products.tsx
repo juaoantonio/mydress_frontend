@@ -6,7 +6,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, X } from "lucide-react";
-import { format } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 import React from "react";
@@ -17,12 +17,14 @@ interface Props extends FilterProps {
     param: "start_date" | "end_date";
 }
 
-export function FilterByDateProducts({
+export function FilterProductsByDate({
     value,
     setFilters,
     title,
     param,
 }: Props) {
+    const today = startOfDay(new Date());
+
     return (
         <div className={"flex items-center gap-2"}>
             <Popover>
@@ -54,6 +56,7 @@ export function FilterByDateProducts({
                                     : "",
                             }))
                         }
+                        disabled={(date) => isBefore(startOfDay(date), today)}
                         initialFocus
                     />
                 </PopoverContent>
