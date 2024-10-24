@@ -1,21 +1,23 @@
 import { useSearchParams } from "next/navigation";
+import { ProductAvailability } from "../components/filters/filters.products.types";
+import { useMemo } from "react";
 
 export default function useProductFilterParams() {
     const searchParams = useSearchParams();
 
-    const startDate = searchParams.get("start_date")
-        ? searchParams.get("start_date")
-        : "";
+    const startDate = searchParams.get("start_date") ?? "";
 
-    const available = searchParams.get("available") ?? "";
+    const available = (searchParams.get("available") ??
+        "") as ProductAvailability;
 
-    const endDate = searchParams.get("end_date")
-        ? searchParams.get("end_date")
-        : "";
+    const endDate = searchParams.get("end_date") ?? "";
 
-    return {
-        startDate,
-        endDate,
-        available,
-    };
+    return useMemo(
+        () => ({
+            startDate,
+            endDate,
+            available,
+        }),
+        [startDate, endDate, available],
+    );
 }

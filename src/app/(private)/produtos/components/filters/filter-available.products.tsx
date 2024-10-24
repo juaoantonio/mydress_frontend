@@ -11,10 +11,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import React from "react";
-import { FilterProps } from "./filters.products.types";
+import { FilterProps, ProductAvailability } from "./filters.products.types";
 
 export function FilterAvailableProducts({ value, setFilters }: FilterProps) {
-    function handleChange(value: string) {
+    function handleChange(value: ProductAvailability) {
         setFilters((prev) => ({
             ...prev,
             available: value,
@@ -24,7 +24,7 @@ export function FilterAvailableProducts({ value, setFilters }: FilterProps) {
     function handleClear() {
         setFilters((prev) => ({
             ...prev,
-            available: "",
+            available: ProductAvailability.Undefined,
         }));
     }
 
@@ -33,7 +33,7 @@ export function FilterAvailableProducts({ value, setFilters }: FilterProps) {
             <Label>Disponibilidade</Label>
             <Select
                 value={value}
-                onValueChange={(value) => handleChange(value)}
+                onValueChange={(value) => handleChange(value as ProductAvailability)}
             >
                 <SelectTrigger>
                     <SelectValue placeholder="Selecione um status" />
