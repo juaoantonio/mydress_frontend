@@ -8,7 +8,7 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { ProductFilters } from "./filters.products.types";
+import { ProductAvailability, ProductFilters } from "./filters.products.types";
 import { FilterAvailableProducts } from "./filter-available.products";
 import { FilterProductsByDate } from "./filter-by-date.products";
 import useProductFilterParams from "../../hooks/filter-params";
@@ -34,7 +34,7 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
 
     function clearQueryParams() {
         setFilters({
-            available: "",
+            available: ProductAvailability.Undefined,
             end_date: "",
             start_date: "",
         });
