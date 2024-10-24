@@ -48,7 +48,7 @@ export function ListDressSection() {
         onMutate: () => toast.loading("Removendo vestido"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["dresses", page, limit],
+                queryKey: ["dresses", filters],
             });
             toast.dismiss();
             toast.success("Vestido removido com sucesso");

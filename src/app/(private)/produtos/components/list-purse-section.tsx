@@ -48,7 +48,7 @@ export function ListPurseSection() {
         onMutate: () => toast.loading("Removendo bolsa"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["clutches", page, limit],
+                queryKey: ["clutches", filters],
             });
             toast.dismiss();
             toast.success("Bolsa removida com sucesso");

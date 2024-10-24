@@ -1,5 +1,11 @@
+export enum ProductAvailability {
+    Undefined = "",
+    Available = "true",
+    Unavailable = "false",
+}
+
 export type ProductFilters = {
-    available: string;
+    available: ProductAvailability;
     start_date: string;
     end_date: string;
 };
