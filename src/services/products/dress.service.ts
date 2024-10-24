@@ -75,11 +75,7 @@ export class DressService implements Service<DressType> {
     }
 
     async deleteById({ id }: { id: string }) {
-        const response = await axiosClient.delete<null>(
-            `/products/dresses/${id}`,
-        );
-
-        return;
+        await axiosClient.delete<null>(`/dresses/${id}`);
     }
 
     async updateById({ id, data }: { id: string; data: Partial<DressType> }) {

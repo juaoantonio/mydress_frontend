@@ -33,7 +33,7 @@ export function ListPurseSection() {
         limit,
     });
 
-    const { data, isPending, isError } = useQuery({
+    const { data, isPending, isError, refetch } = useQuery({
         queryKey: ["clutches", filters],
         queryFn: () =>
             purseService.getAll({
@@ -52,6 +52,7 @@ export function ListPurseSection() {
             });
             toast.dismiss();
             toast.success("Bolsa removida com sucesso");
+            refetch();
         },
         onError: () => {
             toast.dismiss();

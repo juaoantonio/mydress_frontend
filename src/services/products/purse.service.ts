@@ -74,7 +74,7 @@ export class PurseService implements Service<PurseType> {
     }
 
     async deleteById({ id }: { id: string }): Promise<void> {
-        await axiosClient.delete<null>(`/products/purses/${id}`);
+        await axiosClient.delete<null>(`/clutches/${id}`);
     }
 
     async updateById({
