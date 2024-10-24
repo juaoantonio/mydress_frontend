@@ -6,30 +6,38 @@ import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
-import { cn, numberToCurrency } from "@/lib/utils";
+import { cleanParams, cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
 import { PaginationControls } from "@/components/pagination/pagination-controls";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { useState } from "react";
+import useProductFilterParams from "../hooks/filter-params";
 
 const PER_NAVIGATION_RANGE = 3;
 
 export function ListPurseSection() {
     const purseService = new PurseService();
 
+    const { available, startDate, endDate } = useProductFilterParams();
+
     const { page, limit } = useQueryParams({
         page: 1,
         limit: 10,
     });
 
+    const filters = cleanParams({
+        page,
+        available,
+        startDate,
+        endDate,
+        limit,
+    });
+
     const { data, isPending, isError } = useQuery({
-        queryKey: ["purses", page, limit],
+        queryKey: ["clutches", filters],
         queryFn: () =>
             purseService.getAll({
-                filters: {
-                    page,
-                    limit,
-                },
+                filters,
             }),
     });
 
@@ -40,7 +48,7 @@ export function ListPurseSection() {
         onMutate: () => toast.loading("Removendo bolsa"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["purses", page, limit],
+                queryKey: ["clutches", filters],
             });
             toast.dismiss();
             toast.success("Bolsa removida com sucesso");

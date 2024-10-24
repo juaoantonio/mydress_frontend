@@ -6,30 +6,38 @@ import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
-import { cn, numberToCurrency } from "@/lib/utils";
+import { cleanParams, cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
 import { PaginationControls } from "@/components/pagination/pagination-controls";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { useState } from "react";
+import useProductFilterParams from "../hooks/filter-params";
 
 const PER_NAVIGATION_RANGE = 3;
 
 export function ListDressSection() {
     const dressService = new DressService();
 
+    const { available, startDate, endDate } = useProductFilterParams();
+
     const { page, limit } = useQueryParams({
         page: 1,
         limit: 10,
     });
 
+    const filters = cleanParams({
+        page,
+        available,
+        startDate,
+        endDate,
+        limit,
+    });
+
     const { data, isPending, isError } = useQuery({
-        queryKey: ["dresses", page, limit],
+        queryKey: ["dresses", filters],
         queryFn: () =>
             dressService.getAll({
-                filters: {
-                    page,
-                    limit,
-                },
+                filters,
             }),
     });
 
@@ -40,7 +48,7 @@ export function ListDressSection() {
         onMutate: () => toast.loading("Removendo vestido"),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ["dresses", page, limit],
+                queryKey: ["dresses", filters],
             });
             toast.dismiss();
             toast.success("Vestido removido com sucesso");

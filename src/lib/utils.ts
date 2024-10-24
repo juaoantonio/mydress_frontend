@@ -95,3 +95,10 @@ export function getImageData(event: ChangeEvent<HTMLInputElement>) {
 export function getPercentage(partial: number, total: number) {
     return +((partial * 100) / total).toFixed(2);
 }
+
+export function cleanParams(params: Record<string, any>): Record<string, any> {
+    return Object.fromEntries(
+        Object.entries(params).filter(([_, value]) => value)
+    );
+}
+
