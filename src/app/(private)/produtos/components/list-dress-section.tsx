@@ -33,7 +33,7 @@ export function ListDressSection() {
         limit,
     });
 
-    const { data, isPending, isError } = useQuery({
+    const { data, isPending, isError, refetch } = useQuery({
         queryKey: ["dresses", filters],
         queryFn: () =>
             dressService.getAll({
@@ -52,6 +52,7 @@ export function ListDressSection() {
             });
             toast.dismiss();
             toast.success("Vestido removido com sucesso");
+            refetch();
         },
         onError: () => {
             toast.dismiss();
@@ -95,7 +96,7 @@ export function ListDressSection() {
                                 )}
                                 onClick={() => handleDressDelete(dress.id)}
                             >
-                                <Trash size={16} />
+                                <Trash className="cursor-pointer" size={16} />
                             </div>
                             <Image
                                 src={dress.imagePath}
