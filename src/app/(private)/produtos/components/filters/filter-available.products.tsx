@@ -33,7 +33,9 @@ export function FilterAvailableProducts({ value, setFilters }: FilterProps) {
             <Label>Disponibilidade</Label>
             <Select
                 value={value}
-                onValueChange={(value) => handleChange(value as ProductAvailability)}
+                onValueChange={(value: ProductAvailability) =>
+                    handleChange(value)
+                }
             >
                 <SelectTrigger>
                     <SelectValue placeholder="Selecione um status" />
