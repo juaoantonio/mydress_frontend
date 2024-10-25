@@ -5,13 +5,14 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
 import { Card, CardContent } from "@/components/ui/card";
-import { Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { cleanParams, cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
 import { PaginationControls } from "@/components/pagination/pagination-controls";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { useState } from "react";
 import useProductFilterParams from "../hooks/filter-params";
+import Link from "next/link";
 
 const PER_NAVIGATION_RANGE = 3;
 
@@ -88,15 +89,35 @@ export function ListPurseSection() {
                         }
                     >
                         <div className={"relative"}>
-                            <div
-                                className={cn(
-                                    "absolute left-2 top-2 flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
-                                    mutation.isPending &&
-                                        "pointer-events-none cursor-not-allowed opacity-60",
-                                )}
-                                onClick={() => handlePurseDelete(purse.id)}
-                            >
-                                <Trash size={16} />
+                            <div className="flex items-center bg-blue-50">
+                                <div className="absolute left-2 top-2 flex space-x-2">
+                                    <div
+                                        className={cn(
+                                            "flex aspect-square h-6 items-center justify-center rounded bg-red-500 text-white",
+                                            mutation.isPending &&
+                                                "pointer-events-none cursor-not-allowed opacity-60",
+                                        )}
+                                        onClick={() =>
+                                            handlePurseDelete(purse.id)
+                                        }
+                                    >
+                                        <Trash
+                                            className="cursor-pointer"
+                                            size={16}
+                                        />
+                                    </div>
+                                    <Link
+                                        href={`/produtos/editar/${purse.id}?type=clutche`}
+                                    >
+                                        <div className="rounded-md bg-blue-700 p-[0.18rem]">
+                                            <Pencil
+                                                color="white"
+                                                className="cursor-pointer"
+                                                size={18}
+                                            />
+                                        </div>
+                                    </Link>
+                                </div>
                             </div>
                             <Image
                                 src={purse.imagePath}
@@ -106,6 +127,7 @@ export function ListPurseSection() {
                                 className={"aspect-[5/6] h-full object-cover"}
                             />
                         </div>
+
                         <CardContent className={"space-y-3 py-3"}>
                             <List className={"gap-1.5 text-xs"}>
                                 <ListItem
