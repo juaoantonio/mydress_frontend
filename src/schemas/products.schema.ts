@@ -43,4 +43,8 @@ export const createDressSchema = createProductSchema.extend({
     }),
 });
 
+export const editDressSchema = createDressSchema.partial();
+
 export const createPurseSchema = createProductSchema.extend({});
+
+export const editClutcheSchema = createPurseSchema.partial();
