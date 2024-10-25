@@ -88,7 +88,9 @@ export class PurseService implements Service<PurseType> {
         data: UpdateClutcheInputDto;
     }): Promise<PurseType> {
         const formData = new FormData();
-        formData.append("image", data.image);
+        if (data.image) {
+            formData.append("image", data.image);
+        }
         formData.append("rentPrice", data.rentPrice.toString());
         formData.append("color", data.color);
         formData.append("model", data.model);

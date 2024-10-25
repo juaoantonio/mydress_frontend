@@ -79,7 +79,6 @@ export function ClutcheFormEdit({ id }: IBaseProductEditionInputProps) {
     useEffect(() => {
         if (data) {
             form.setValue("color", data.color);
-            form.setValue("image", data.imagePath);
             form.setValue("model", data.model);
             form.setValue("rentPrice", data.rentPrice);
         }

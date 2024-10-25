@@ -83,7 +83,9 @@ export class DressService implements Service<DressType> {
 
     async updateById({ id, data }: { id: string; data: UpdateDressInputDto }) {
         const formData = new FormData();
-        formData.append("image", data.image);
+        if (data.image) {
+            formData.append("image", data.image);
+        }
         formData.append("rentPrice", data.rentPrice.toString());
         formData.append("color", data.color);
         formData.append("model", data.model);
