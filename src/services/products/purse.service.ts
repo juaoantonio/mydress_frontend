@@ -2,7 +2,10 @@ import { GetPaginatedOutputDto } from "./../types";
 import { Service } from "@/services/interface";
 import { PurseType } from "@/types/products/purse.types";
 import { axiosClient } from "@/lib/axios.client";
-import { CreatePurseInputDTO } from "@/services/products/purse.dto";
+import {
+    CreatePurseInputDTO,
+    UpdateClutcheInputDto,
+} from "@/services/products/purse.dto";
 import { IBaseListProductQueryParamsInputDTO } from "./base.dto";
 
 interface IGetAllClutchesInputDTO {
@@ -82,11 +85,21 @@ export class PurseService implements Service<PurseType> {
         data,
     }: {
         id: string;
-        data: Partial<PurseType>;
+        data: UpdateClutcheInputDto;
     }): Promise<PurseType> {
-        const response = await axiosClient.put<PurseType>(
-            `/products/clutches/${id}`,
-            data,
+        const formData = new FormData();
+        formData.append("image", data.image);
+        formData.append("rentPrice", data.rentPrice.toString());
+        formData.append("color", data.color);
+        formData.append("model", data.model);
+        const response = await axiosClient.patch<PurseType>(
+            `clutches/${id}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
         );
 
         return response.data;

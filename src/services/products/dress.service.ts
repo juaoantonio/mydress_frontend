@@ -1,7 +1,10 @@
 import { GetPaginatedOutputDto } from "./../types";
 import { axiosClient } from "@/lib/axios.client";
 import { DressType } from "@/types/products/dress.types";
-import { CreateDressInputDTO } from "@/services/products/dress.dto";
+import {
+    CreateDressInputDTO,
+    UpdateDressInputDto,
+} from "@/services/products/dress.dto";
 import { IBaseListProductQueryParamsInputDTO } from "./base.dto";
 import { Service } from "../interface";
 
@@ -78,10 +81,21 @@ export class DressService implements Service<DressType> {
         await axiosClient.delete<null>(`/dresses/${id}`);
     }
 
-    async updateById({ id, data }: { id: string; data: Partial<DressType> }) {
-        const response = await axiosClient.put<DressType>(
-            `/products/dresses/${id}`,
-            data,
+    async updateById({ id, data }: { id: string; data: UpdateDressInputDto }) {
+        const formData = new FormData();
+        formData.append("image", data.image);
+        formData.append("rentPrice", data.rentPrice.toString());
+        formData.append("color", data.color);
+        formData.append("model", data.model);
+        formData.append("fabric", data.fabric);
+        const response = await axiosClient.patch<DressType>(
+            `/dresses/${id}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
         );
 
         return response.data;
