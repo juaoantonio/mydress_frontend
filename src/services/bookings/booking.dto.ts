@@ -7,7 +7,7 @@ export type CreateBookingInputDto = {
     start_date: string;
     end_date: string;
     dresses: string[];
-    purses: string[];
+    clutches: string[];
     jewels: string[];
     notes?: string;
 };

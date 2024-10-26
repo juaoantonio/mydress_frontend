@@ -20,7 +20,7 @@ export const createBookingSchema = z
             required_error: "Você deve selecionar um vestido",
         }),
 
-        purses: z.array(z.string(), {
+        clutches: z.array(z.string(), {
             required_error: "Você deve selecionar uma bolsa",
         }),
 
@@ -28,7 +28,7 @@ export const createBookingSchema = z
         customer: z.string().min(1, "Você deve selecionar um cliente"),
         notes: z.string().optional(),
     })
-    .refine((data) => data.dresses.length > 0 || data.purses.length > 0, {
+    .refine((data) => data.dresses.length > 0 || data.clutches.length > 0, {
         message: "É necessário selecionar pelo menos um item de cada categoria",
         path: ["dresses"],
     })

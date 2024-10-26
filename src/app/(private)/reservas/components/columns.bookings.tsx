@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/table-core";
 import { BookingType } from "@/types/booking.types";
 import { EventType } from "@/types/events/event.types";
 import { DressType } from "@/types/products/dress.types";
-import { PurseType } from "@/types/products/purse.types";
+import { ClutchType } from "@/types/products/clutch.types";
 import { BookingStatus } from "@/types/booking.enums";
 import { BookingStatusMapping } from "@/mappings/bookings.mapping";
 import { numberToCurrency } from "@/lib/utils";
@@ -46,11 +46,11 @@ export const columnsBookings: ColumnDef<BookingType>[] = [
         },
     },
     {
-        accessorKey: "purses",
+        accessorKey: "clutches",
         header: "Bolsas",
         cell: ({ row }) => {
-            const purses = row.getValue("purses") as PurseType[];
-            return purses.length;
+            const clutches = row.getValue("clutches") as ClutchType[];
+            return clutches.length;
         },
     },
     {

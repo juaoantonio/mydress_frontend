@@ -2,7 +2,7 @@
 
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { createPurseSchema } from "@/schemas/products.schema";
+import { createClutchSchema } from "@/schemas/products.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { getImageData, handleCreationFormError } from "@/lib/utils";
@@ -23,15 +23,15 @@ import { ImagePlaceholder } from "@/components/image-placeholder/image-placehold
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PurseService } from "@/services/products/purse.service";
-import { CreatePurseInputDTO } from "@/services/products/purse.dto";
+import { ClutchService } from "@/services/products/clutch.service";
+import { CreateClutchInputDTO } from "@/services/products/clutch.dto";
 import { getSession } from "next-auth/react";
 
-type PurseFormType = z.infer<typeof createPurseSchema>;
+type ClutchFormType = z.infer<typeof createClutchSchema>;
 
-function handlePurseCreationError(
+function handleClutchCreationError(
     error: unknown,
-    form: UseFormReturn<PurseFormType>,
+    form: UseFormReturn<ClutchFormType>,
 ) {
     handleCreationFormError(
         error,
@@ -41,11 +41,11 @@ function handlePurseCreationError(
     );
 }
 
-export function PurseFormCreate() {
+export function ClutchFormCreate() {
     const [preview, setPreview] = useState<string | undefined>();
 
-    const form = useForm<PurseFormType>({
-        resolver: zodResolver(createPurseSchema),
+    const form = useForm<ClutchFormType>({
+        resolver: zodResolver(createClutchSchema),
         defaultValues: {
             image: null,
             rentPrice: 100.5,
@@ -55,12 +55,12 @@ export function PurseFormCreate() {
     });
     const router = useRouter();
 
-    const service = new PurseService();
+    const service = new ClutchService();
     const mutation = useMutation({
-        mutationFn: (data: CreatePurseInputDTO) => service.create({ data }),
+        mutationFn: (data: CreateClutchInputDTO) => service.create({ data }),
         onError: (error) => {
             console.error(error);
-            handlePurseCreationError(error, form);
+            handleClutchCreationError(error, form);
         },
         onSuccess: () => {
             toast.success("Bolsa criada com sucesso!");
@@ -68,7 +68,7 @@ export function PurseFormCreate() {
         },
     });
 
-    async function handlePurseCreation(data: PurseFormType) {
+    async function handleClutchCreation(data: ClutchFormType) {
         const session = await getSession();
 
         if (!session) {
@@ -78,13 +78,13 @@ export function PurseFormCreate() {
             return;
         }
 
-        mutation.mutate(data as CreatePurseInputDTO);
+        mutation.mutate(data as CreateClutchInputDTO);
     }
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handlePurseCreation)}
+                onSubmit={form.handleSubmit(handleClutchCreation)}
                 className={"space-y-4"}
             >
                 <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>

@@ -13,7 +13,7 @@ export type BookingType = {
     start_date: string;
     end_date: string;
     dresses: DressType[];
-    purses: ProductType[];
+    clutches: ProductType[];
     jewels: ProductType[];
     adjustments: AdjustmentType[];
     payment_amount: number;

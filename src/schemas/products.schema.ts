@@ -37,10 +37,44 @@ const createProductSchema = z.object({
         .pipe(z.coerce.number().min(0.0001).max(999999999)),
 });
 
+const editProductSchema = z.object({
+    image: z
+        .any()
+        .optional()
+        .refine(
+            (file) => !file || file.size <= MAX_FILE_SIZE,
+            `A imagem deve ter no máximo 5MB.`,
+        )
+        .refine(
+            (file) => !file || ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type),
+            `A imagem deve ser do tipo ${ACCEPTED_IMAGE_TYPES.join(", ")}.`,
+        ),
+
+    color: z.string().optional(),
+
+    model: z.string().optional(),
+
+    rentPrice: z
+        .union([
+            z
+                .string()
+                .transform((x) => x.replace(/[^0-9.-]+/g, ""))
+                .optional(),
+            z.number().optional(),
+        ])
+        .pipe(z.coerce.number().max(999999999).optional()),
+});
+
 export const createDressSchema = createProductSchema.extend({
     fabric: z.string().min(1, {
         message: "O tipo de tecido deve ser preenchido",
     }),
 });
 
-export const createPurseSchema = createProductSchema.extend({});
+export const editDressSchema = editProductSchema.extend({
+    fabric: z.string().optional(),
+});
+
+export const createClutchSchema = createProductSchema.extend({});
+
+export const editClutchSchema = editProductSchema.partial();

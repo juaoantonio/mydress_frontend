@@ -28,7 +28,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
         queryFn: () => bookingService.getById({ id: bookingId }),
     });
     const dresses = booking?.dresses || [];
-    const purses = booking?.purses || [];
+    const clutches = booking?.clutches || [];
 
     if (isError) {
         return <p>Erro ao carregar reserva</p>;
@@ -185,8 +185,8 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         Bolsas reservadas
                     </h2>
                     <List>
-                        {purses.length > 0 ? (
-                            purses.map((product) => (
+                        {clutches.length > 0 ? (
+                            clutches.map((product) => (
                                 <div
                                     key={product.id}
                                     className={"rounded border px-3 py-2"}

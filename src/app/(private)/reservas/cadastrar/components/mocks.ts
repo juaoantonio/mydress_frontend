@@ -48,7 +48,7 @@ export const dresses: SelectMultipleInputOption[] = [
     },
 ];
 
-export const purses: SelectMultipleInputOption[] = [
+export const clutches: SelectMultipleInputOption[] = [
     {
         img: "https://img.irroba.com.br/fit-in/600x600/filters:fill(fff):quality(80)/arieiaou/catalog/camile/azul-2.JPG",
         id: "1",

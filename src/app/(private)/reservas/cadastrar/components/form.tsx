@@ -19,7 +19,7 @@ import { ptBR } from "date-fns/locale";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomerInput } from "@/app/(private)/reservas/cadastrar/components/customer-input";
 import { DressesInput } from "@/app/(private)/reservas/cadastrar/components/dresses-input";
-import { PursesInput } from "@/app/(private)/reservas/cadastrar/components/purses-input";
+import { ClutchesInput } from "@/app/(private)/reservas/cadastrar/components/clutches-input";
 import { EventInput } from "@/app/(private)/reservas/cadastrar/components/event-input";
 import { CalendarInput } from "@/app/(private)/reservas/cadastrar/components/calendar-input";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ export function CreateBookingForm() {
             },
             notes: "",
             dresses: [],
-            purses: [],
+            clutches: [],
         },
     });
 
@@ -73,7 +73,7 @@ export function CreateBookingForm() {
                     start_date: data.range_date.start_date!.toISOString(),
                     end_date: data.range_date.end_date!.toISOString(),
                     dresses: data.dresses,
-                    purses: data.purses,
+                    clutches: data.clutches,
                     jewels: [],
                     notes: data.notes,
                 },
@@ -110,7 +110,7 @@ export function CreateBookingForm() {
     const start_date = form.watch("range_date.start_date");
     const end_date = form.watch("range_date.end_date");
 
-    const areDressAndPurseInputsDisabled = !start_date || !end_date;
+    const areDressAndClutchInputsDisabled = !start_date || !end_date;
 
     return (
         <Form {...form}>
@@ -129,14 +129,14 @@ export function CreateBookingForm() {
                         form={form}
                         start_date={start_date}
                         end_date={end_date}
-                        disabled={areDressAndPurseInputsDisabled}
+                        disabled={areDressAndClutchInputsDisabled}
                     />
 
-                    <PursesInput
+                    <ClutchesInput
                         form={form}
                         start_date={start_date}
                         end_date={end_date}
-                        disabled={areDressAndPurseInputsDisabled}
+                        disabled={areDressAndClutchInputsDisabled}
                     />
 
                     <FormField

@@ -8,7 +8,7 @@ export enum DressStatus {
     DAMAGED = "DAMAGED",
 }
 
-export enum PurseStatus {
+export enum ClutchStatus {
     AVAILABLE = "AVAILABLE",
     OUT_OF_STOCK = "OUT_OF_STOCK",
     BOOKED = "BOOKED",

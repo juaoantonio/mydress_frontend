@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreateDressCard, CreatePurseCard } from "./components";
+import { CreateDressCard, CreateClutchCard } from "./components";
 
 export default function CreateProductsPage() {
     return (
@@ -7,15 +7,15 @@ export default function CreateProductsPage() {
             <Tabs defaultValue={"dress"}>
                 <TabsList className={"grid w-full grid-cols-2"}>
                     <TabsTrigger value={"dress"}>Vestido</TabsTrigger>
-                    <TabsTrigger value={"purse"}>Bolsa</TabsTrigger>
+                    <TabsTrigger value={"clutch"}>Bolsa</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value={"dress"}>
                     <CreateDressCard />
                 </TabsContent>
 
-                <TabsContent value={"purse"}>
-                    <CreatePurseCard />
+                <TabsContent value={"clutch"}>
+                    <CreateClutchCard />
                 </TabsContent>
             </Tabs>
         </section>
