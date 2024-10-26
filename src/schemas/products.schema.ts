@@ -75,6 +75,6 @@ export const editDressSchema = editProductSchema.extend({
     fabric: z.string().optional(),
 });
 
-export const createPurseSchema = createProductSchema.extend({});
+export const createClutchSchema = createProductSchema.extend({});
 
-export const editClutcheSchema = editProductSchema.partial();
+export const editClutchSchema = editProductSchema.partial();

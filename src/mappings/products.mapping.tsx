@@ -1,4 +1,4 @@
-import { DressStatus, PurseStatus } from "@/types/products/product.enums";
+import { DressStatus, ClutchStatus } from "@/types/products/product.enums";
 import { ReactElement } from "react";
 
 export const DressStatusMapping: {
@@ -41,8 +41,8 @@ export const DressStatusMapping: {
     ),
 };
 
-export const PurseStatusMapping: {
-    [key in PurseStatus]: ReactElement;
+export const ClutchStatusMapping: {
+    [key in ClutchStatus]: ReactElement;
 } = {
     [DressStatus.AVAILABLE]: (
         <span className={"rounded bg-green-500 px-2 py-1 text-white"}>

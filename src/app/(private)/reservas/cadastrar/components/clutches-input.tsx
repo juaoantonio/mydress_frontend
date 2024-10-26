@@ -2,10 +2,10 @@ import { UseFormReturn } from "react-hook-form";
 import { SelectMultipleInput } from "@/components/select-multiple-input/select-multiple-input";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { PurseService } from "@/services/products/purse.service";
+import { ClutchService } from "@/services/products/clutch.service";
 import { cn } from "@/lib/utils";
 
-export function PursesInput({
+export function ClutchesInput({
     form,
     start_date,
     end_date,
@@ -16,16 +16,16 @@ export function PursesInput({
     end_date?: Date | null;
     disabled?: boolean;
 }) {
-    const purseService = new PurseService();
+    const clutchService = new ClutchService();
     const {
         isPending,
         isError,
-        data: purses,
+        data: clutches,
     } = useQuery({
         enabled: !!start_date && !!end_date,
-        queryKey: ["purses", start_date, end_date],
+        queryKey: ["clutches", start_date, end_date],
         queryFn: () =>
-            purseService.getAllAvailableBetweenDates({ start_date, end_date }),
+            clutchService.getAllAvailableBetweenDates({ start_date, end_date }),
     });
 
     return (
@@ -38,13 +38,13 @@ export function PursesInput({
                 label={"Selecionar bolsas"}
                 triggerText={"Adicionar bolsas"}
                 form={form}
-                fieldName={"purses"}
+                fieldName={"clutches"}
                 loading={isPending}
                 error={isError}
                 errorMessage={"Erro ao buscar bolsas"}
                 options={
-                    purses &&
-                    purses.map(({ id, imagePath }) => ({
+                    clutches &&
+                    clutches.map(({ id, imagePath }) => ({
                         id,
                         img: imagePath,
                     }))

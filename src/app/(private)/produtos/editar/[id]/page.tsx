@@ -2,7 +2,7 @@
 
 import { EditProductCard } from "./components/cards/edit.product.card";
 import { useParams, useSearchParams } from "next/navigation";
-import { ClutcheFormEdit } from "./components/form/clutche-form.edit";
+import { ClutchFormEdit } from "./components/form/clutch-form.edit";
 import { DressFormEdit } from "./components/form/dress-form.edit";
 
 export default function EditProductsPage() {
@@ -19,10 +19,10 @@ export default function EditProductsPage() {
                 render={<DressFormEdit id={id as string} />}
             />
         ),
-        clutche: (
+        clutch: (
             <EditProductCard
                 title="Editar Bolsa"
-                render={<ClutcheFormEdit id={id as string} />}
+                render={<ClutchFormEdit id={id as string} />}
             />
         ),
     };

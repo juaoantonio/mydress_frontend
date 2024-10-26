@@ -2,9 +2,9 @@
 
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { editClutcheSchema } from "@/schemas/products.schema";
+import { createClutchSchema } from "@/schemas/products.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getImageData, handleCreationFormError } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -18,76 +18,73 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ImagePlaceholder } from "@/components/image-placeholder/image-placeholder";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PurseService } from "@/services/products/purse.service";
-import { UpdateClutcheInputDto } from "@/services/products/purse.dto";
-import { IBaseProductEditionInputProps } from "../../interfaces/base.interface";
+import { ClutchService } from "@/services/products/clutch.service";
+import { CreateClutchInputDTO } from "@/services/products/clutch.dto";
+import { getSession } from "next-auth/react";
 
-type PurseFormType = Partial<z.infer<typeof editClutcheSchema>>;
+type ClutchFormType = z.infer<typeof createClutchSchema>;
 
-function handleClutcheError(
+function handleClutchCreationError(
     error: unknown,
-    form: UseFormReturn<PurseFormType>,
+    form: UseFormReturn<ClutchFormType>,
 ) {
     handleCreationFormError(
         error,
         form,
-        "Erro ao editar bolsa",
+        "Erro ao criar o bolsa",
         (message) => "A imagem deve ser do tipo jpeg, jpg, png ou webp",
     );
 }
 
-export function ClutcheFormEdit({ id }: IBaseProductEditionInputProps) {
+export function ClutchFormCreate() {
     const [preview, setPreview] = useState<string | undefined>();
 
-    const { data } = useQuery({
-        queryKey: ["clutches", id],
-        queryFn: () =>
-            service.getById({
-                id,
-            }),
+    const form = useForm<ClutchFormType>({
+        resolver: zodResolver(createClutchSchema),
+        defaultValues: {
+            image: null,
+            rentPrice: 100.5,
+            color: "",
+            model: "",
+        },
     });
-
     const router = useRouter();
 
-    const service = new PurseService();
-
-    const form = useForm<PurseFormType>({
-        resolver: zodResolver(editClutcheSchema),
-    });
-
+    const service = new ClutchService();
     const mutation = useMutation({
-        mutationFn: (data: UpdateClutcheInputDto) =>
-            service.updateById({ data, id }),
+        mutationFn: (data: CreateClutchInputDTO) => service.create({ data }),
         onError: (error) => {
-            handleClutcheError(error, form);
+            console.error(error);
+            handleClutchCreationError(error, form);
         },
         onSuccess: () => {
-            toast.success("Bolsa editada com sucesso!");
+            toast.success("Bolsa criada com sucesso!");
             router.back();
         },
     });
 
-    async function handleClutcheEdit(data: PurseFormType) {
-        mutation.mutate(data);
-    }
+    async function handleClutchCreation(data: ClutchFormType) {
+        const session = await getSession();
 
-    useEffect(() => {
-        if (data) {
-            form.setValue("color", data.color);
-            form.setValue("model", data.model);
-            form.setValue("rentPrice", data.rentPrice);
+        if (!session) {
+            toast.error(
+                "Você precisa estar logado para criar uma nova reserva!",
+            );
+            return;
         }
-    }, [data]);
+
+        mutation.mutate(data as CreateClutchInputDTO);
+    }
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleClutcheEdit)}
+                onSubmit={form.handleSubmit(handleClutchCreation)}
                 className={"space-y-4"}
             >
                 <div className={"grid gap-3 lg:grid-cols-2 lg:gap-4"}>
