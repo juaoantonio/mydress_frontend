@@ -12,6 +12,7 @@ import { ProductAvailability, ProductFilters } from "./filters.products.types";
 import { FilterAvailableProducts } from "./filter-available.products";
 import { FilterProductsByDate } from "./filter-by-date.products";
 import useProductFilterParams from "../../hooks/filter-params";
+import { Switch } from "@/components/ui/switch";
 
 export function Filters({ handleClose }: { handleClose: () => void }) {
     const router = useRouter();
@@ -25,9 +26,13 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
         start_date: startDate,
         end_date: endDate,
     });
+    const [useDateRange, setUseDateRange] = useState(false);
 
     function handleApplyFilters() {
-        const queryString = createQueryString(filters);
+        const queryString = createQueryString({
+            ...filters,
+            end_date: useDateRange ? filters.end_date : filters.start_date,
+        });
         router.push(`${pathname}?${queryString}`);
         handleClose();
     }
@@ -38,13 +43,14 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
             end_date: "",
             start_date: "",
         });
+        setUseDateRange(false);
         const cleanUrl = pathname;
         router.replace(cleanUrl, undefined);
     }
 
     const invalidFilter =
         ["true", "false"].includes(filters.available) &&
-        (!filters.start_date || !filters.end_date);
+        (!filters.start_date || (useDateRange && !filters.end_date));
 
     return (
         <div>
@@ -58,21 +64,30 @@ export function Filters({ handleClose }: { handleClose: () => void }) {
                     setFilters={setFilters}
                 />
 
-                <>
-                    <FilterProductsByDate
-                        value={filters.start_date}
-                        setFilters={setFilters}
-                        title="Data inicial"
-                        param="start_date"
+                <div className="flex items-center space-x-2">
+                    <label htmlFor="useDateRange">Intervalo de datas</label>
+                    <Switch
+                        id="useDateRange"
+                        checked={useDateRange}
+                        onCheckedChange={setUseDateRange}
                     />
+                </div>
 
+                <FilterProductsByDate
+                    value={filters.start_date}
+                    setFilters={setFilters}
+                    title="Data inicial"
+                    param="start_date"
+                />
+
+                {useDateRange && (
                     <FilterProductsByDate
                         value={filters.end_date}
                         setFilters={setFilters}
                         title="Data final"
                         param="end_date"
                     />
-                </>
+                )}
             </div>
 
             <DrawerFooter>
