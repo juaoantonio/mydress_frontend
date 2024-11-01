@@ -23,9 +23,14 @@ export function useQueryParams<T extends Record<string, any>>(
                 result[param as keyof T] = value as T[keyof T];
             }
         } else {
+            if (
+                typeof defaultValues[param] === null ||
+                typeof defaultValues[param] === "undefined"
+            ) {
+                return;
+            }
             result[param as keyof T] = defaultValues[param];
         }
     });
-
     return result;
 }

@@ -6,7 +6,6 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Filter } from "lucide-react";
 import { setDefaultOptions } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Filters } from "@/app/(private)/reservas/components/filters/filters.bookings";
 
 setDefaultOptions({
     locale: ptBR,
@@ -29,7 +28,7 @@ export function DataTableFiltersBookings() {
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent onOpenAutoFocus={(e) => e.stopPropagation()}>
-                    <Filters handleClose={() => setOpen(false)} />
+                    // TODO: Implement Filters component
                 </DrawerContent>
             </Drawer>
         </div>

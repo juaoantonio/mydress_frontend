@@ -2,7 +2,6 @@ import {
     ColumnDef,
     ColumnFiltersState,
     getCoreRowModel,
-    getPaginationRowModel,
     getSortedRowModel,
     SortingState,
     useReactTable,
@@ -12,12 +11,14 @@ import { useState } from "react";
 interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    perPage?: number;
     getRowId?: (row: TData) => string;
 }
 
 export function useTable<TData, TValue>({
     columns,
     data,
+    perPage,
     getRowId,
 }: TableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -27,7 +28,8 @@ export function useTable<TData, TValue>({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        manualPagination: true,
+        rowCount: perPage,
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,

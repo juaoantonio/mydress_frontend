@@ -9,26 +9,26 @@ import { BookingType } from "@/types/booking.types";
 import { useTable } from "@/hooks/use-table";
 import { columnsBookings } from "@/app/(private)/reservas/components/columns.bookings";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
+import { useQueryParams } from "@/hooks/use-query-params";
 
 export function DataTableBookings() {
-    const searchParams = useSearchParams();
-    const status = searchParams.get("status") ?? "";
-    const customer_name = searchParams.get("customer_name") ?? "";
-    const event_date = searchParams.get("event_date") ?? "";
-
     const service = new BookingService();
+
+    const params = useQueryParams({
+        page: 1,
+        limit: 10,
+        eventDate: null,
+        customerName: null,
+        expectedPickUpDate: null,
+        expectedReturnDate: null,
+        status: null,
+    });
+
     const { data, isError, isPending } = useQuery({
-        queryKey: ["bookings", status, customer_name, event_date],
-        queryFn: () =>
-            service.getAll({
-                filters: {
-                    status,
-                    customer_name,
-                    event_date,
-                },
-            }),
+        queryKey: ["bookings", params],
+        queryFn: () => service.getPaginated(params),
         placeholderData: keepPreviousData,
     });
 
@@ -44,14 +44,15 @@ export function DataTableBookings() {
         toast.error("Erro ao carregar reservas");
     }
 
-    return <Table data={isError ? [] : data} />;
+    return <Table data={isError ? [] : data.items} perPage={data.perPage} />;
 }
 
-function Table({ data }: { data: BookingType[] }) {
+function Table({ data, perPage }: { data: BookingType[]; perPage: number }) {
     const router = useRouter();
     const table = useTable({
         data,
         columns: columnsBookings,
+        perPage: perPage,
         getRowId: (row) => row.id,
     });
 
