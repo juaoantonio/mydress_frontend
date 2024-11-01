@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { List, ListItem } from "@/components/list/list";
 import { Card, CardContent } from "@/components/ui/card";
-import { Trash, Pencil } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { cleanParams, cn, numberToCurrency } from "@/lib/utils";
 import { queryClient } from "@/providers/react-query.provider";
 import { PaginationControls } from "@/components/pagination/pagination-controls";
@@ -53,7 +53,7 @@ export function ListDressSection() {
             });
             toast.dismiss();
             toast.success("Vestido removido com sucesso");
-            refetch();
+            await refetch();
         },
         onError: () => {
             toast.dismiss();

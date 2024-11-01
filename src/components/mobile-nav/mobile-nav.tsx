@@ -4,12 +4,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
     BookUser,
+    CalendarClock,
     LogOut,
     Package,
     Package2,
     PanelLeft,
-    Pin,
-    Users2,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -86,7 +85,7 @@ export default function MobileNav() {
                             Produtos
                         </Link>
                         <Link
-                            href="/ajustes"
+                            href="/agendamentos"
                             className={cn(
                                 "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
                                 isActiveLink("/eventos")
@@ -95,21 +94,8 @@ export default function MobileNav() {
                             )}
                             onClick={() => setOpenMobileNav(false)}
                         >
-                            <Pin className="h-5 w-5 rotate-45" />
-                            Ajustes
-                        </Link>
-                        <Link
-                            href="/clientes"
-                            className={cn(
-                                "flex items-center gap-4 rounded-lg px-4 py-2 text-muted-foreground hover:text-foreground",
-                                isActiveLink("/clientes")
-                                    ? "bg-accent text-accent-foreground"
-                                    : "text-muted-foreground",
-                            )}
-                            onClick={() => setOpenMobileNav(false)}
-                        >
-                            <Users2 className="h-5 w-5" />
-                            Clientes
+                            <CalendarClock className="h-5 w-5 rotate-45" />
+                            Agendamentos
                         </Link>
                     </nav>
 
