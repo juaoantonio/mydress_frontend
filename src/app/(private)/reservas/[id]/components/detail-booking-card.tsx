@@ -63,7 +63,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     />
                     <ListItem
                         label={"Valor pago pela cliente"}
-                        value={` (${getPercentage(booking?.amount_paid, booking?.payment_amount)}%) ${numberToCurrency(booking?.amount_paid)}`}
+                        value={` (${getPercentage(booking?.amountPaid, booking?.payment_amount)}%) ${numberToCurrency(booking?.amountPaid)}`}
                     />
                     <ListItem
                         label={"Cliente"}
@@ -233,7 +233,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                 <div className={"flex flex-col gap-2"}>
                     <UpdateBookingPaymentTrigger
                         bookingId={bookingId}
-                        defaultValue={booking.amount_paid}
+                        defaultValue={booking.amountPaid}
                     />
 
                     <UpdateEventReceptionTrigger

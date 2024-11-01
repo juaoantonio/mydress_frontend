@@ -71,7 +71,7 @@ export const columnsBookings: ColumnDef<BookingType>[] = [
         },
     },
     {
-        accessorKey: "amount_paid",
+        accessorKey: "amountPaid",
         header: () => <div className="text-nowrap">Valor Pago</div>,
 
         cell: ({ row }) => {
