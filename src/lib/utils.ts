@@ -98,7 +98,20 @@ export function getPercentage(partial: number, total: number) {
 
 export function cleanParams(params: Record<string, any>): Record<string, any> {
     return Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => value)
+        Object.entries(params).filter(([_, value]) => value),
     );
 }
 
+export function isValidUUID(uuid: string): boolean {
+    const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
+}
+
+export function replaceSearchParam(param: string, value: string) {
+    const currentSearchParams = new URLSearchParams(window.location.search);
+    currentSearchParams.set(param, value);
+
+    const newUrl = `${window.location.pathname}?${currentSearchParams.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+}
