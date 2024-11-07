@@ -74,9 +74,12 @@ export default function ItemsForm({ bookingId, service }: Props) {
         ?.toISOString();
     const areDressAndClutchInputsDisabled = !start_date || !end_date;
 
+    const clutchIds = bookingItemsForm.watch("clutchIds") ?? [];
+
+    const dressIds = bookingItemsForm.watch("dressIds") ?? [];
+
     const invalidBookingInsertion =
-        !bookingItemsForm.watch("clutchIds").length &&
-        !bookingItemsForm.watch("dressIds").length;
+        dressIds.length <= 0 || (dressIds.length > 0 && clutchIds.length < 0);
 
     return (
         <FormProvider {...bookingItemsForm}>
