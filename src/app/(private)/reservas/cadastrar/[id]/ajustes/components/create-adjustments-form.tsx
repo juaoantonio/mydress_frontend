@@ -1,8 +1,5 @@
 "use client";
-import { DressType } from "@/types/products/dress.types";
 
-import { ImageListItem } from "@/components/list/list";
-import { numberToCurrency } from "@/lib/utils";
 import React, { Fragment } from "react";
 import { z } from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -12,40 +9,37 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { AdjustmentService } from "@/services/adjustments/adjustment.service";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
-import { AdjustmentType } from "@/types/adjustment.types";
+import { BookingDressItemType } from "@/types/booking.types";
+import {
+    BookingService,
+    IAdjustments,
+} from "@/services/bookings/booking.service";
 
 const createAdjustmentsSchema = z.object({
     adjustments: z.array(
         z.object({
             label: z.string(),
             description: z.string(),
-            dress: z.string(),
-            booking: z.string(),
+            dressId: z.string(),
         }),
     ),
 });
-type CreateAdjustmentsFormType = z.infer<typeof createAdjustmentsSchema>;
+export type CreateAdjustmentsFormType = z.infer<typeof createAdjustmentsSchema>;
 
 export function CreateAdjustmentsForm({
     dresses,
     bookingId,
-    adjustments,
 }: {
-    dresses: DressType[];
+    dresses: BookingDressItemType[];
     bookingId: string;
-    adjustments: AdjustmentType[];
 }) {
     const router = useRouter();
     const form = useForm<CreateAdjustmentsFormType>({
         resolver: zodResolver(createAdjustmentsSchema),
-        defaultValues: {
-            adjustments,
-        },
     });
     const { fields, append, remove } = useFieldArray({
         control: form.control,
@@ -56,19 +50,13 @@ export function CreateAdjustmentsForm({
         append({
             label: "",
             description: "",
-            dress: dressId,
-            booking: bookingId,
+            dressId: dressId,
         });
     }
-    const adjustmentService = new AdjustmentService();
+    const bookingService = new BookingService();
     const mutation = useMutation({
         mutationFn: (data: CreateAdjustmentsFormType) => {
-            return adjustmentService.createMany({
-                data: {
-                    booking: bookingId,
-                    adjustments: data.adjustments as any,
-                },
-            });
+            return bookingService.adjustments(bookingId, data as IAdjustments);
         },
         onMutate: () => toast.loading("Salvando ajustes"),
         onError: (error) => {
@@ -104,27 +92,6 @@ export function CreateAdjustmentsForm({
                     <Fragment key={dress.id}>
                         {index !== 0 && <Separator className={"my-4"} />}
                         <div className={"space-y-5 rounded border p-3"}>
-                            <ImageListItem
-                                values={[
-                                    {
-                                        label: "Preço de aluguel",
-                                        value: numberToCurrency(
-                                            dress.rentPrice,
-                                        ),
-                                    },
-                                    {
-                                        label: "Cor",
-                                        value: dress.color,
-                                    },
-                                    {
-                                        label: "Modelo",
-                                        value: dress.model,
-                                    },
-                                ]}
-                                img={dress.imagePath}
-                                imgAlt={dress.imagePath}
-                                label={dress.imagePath}
-                            />
                             <label
                                 className={
                                     "flex items-center justify-between font-semibold"
@@ -133,7 +100,9 @@ export function CreateAdjustmentsForm({
                                 Ajustes{" "}
                                 <Button
                                     className={"aspect-square h-9 p-1"}
-                                    onClick={() => addNewAdjustment(dress.id)}
+                                    onClick={() =>
+                                        addNewAdjustment(dress.productId)
+                                    }
                                     type={"button"}
                                 >
                                     <Plus size={24} />
@@ -141,7 +110,7 @@ export function CreateAdjustmentsForm({
                             </label>
 
                             {fields.map((field, index) => {
-                                if (field.dress !== dress.id) return;
+                                if (field.dressId !== dress.productId) return;
 
                                 return (
                                     <div
