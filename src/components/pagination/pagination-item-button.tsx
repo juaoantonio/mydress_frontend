@@ -9,10 +9,16 @@ export function PaginationItemButton({
     currentPageStartRange: number;
     currentPage: number;
 }) {
+    const currentSearchParams = new URLSearchParams(window.location.search);
+
+    currentSearchParams.set("page", (index + currentPageStartRange).toString());
+
+    const newUrl = `?${currentSearchParams.toString()}`;
+
     return (
         <PaginationItem>
             <PaginationLink
-                href={`?page=${index + currentPageStartRange}`}
+                href={newUrl}
                 isActive={currentPage === index + currentPageStartRange}
             >
                 {index + currentPageStartRange}

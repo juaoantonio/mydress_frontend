@@ -40,13 +40,21 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
         );
     };
 
+    const generateUrlWithPage = (page: number) => {
+        const currentSearchParams = new URLSearchParams(window.location.search);
+        currentSearchParams.set("page", page.toString());
+        return `?${currentSearchParams.toString()}`;
+    };
+
     if (data.lastPage > 3) {
         return (
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
-                            href={`?page=${Math.max(data.currentPage - 1, 1)}`}
+                            href={generateUrlWithPage(
+                                Math.max(data.currentPage - 1, 1),
+                            )}
                             text={"Anterior"}
                             disabled={data.isFirstPage}
                             onClick={handlePreviousPage}
@@ -82,7 +90,9 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
 
                     <PaginationItem>
                         <PaginationNext
-                            href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
+                            href={generateUrlWithPage(
+                                Math.min(data.currentPage + 1, data.lastPage),
+                            )}
                             text={"Próximo"}
                             disabled={data.isLastPage}
                             onClick={handleNextPage}
@@ -98,7 +108,9 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
-                        href={`?page=${Math.max(data.currentPage - 1, 1)}`}
+                        href={generateUrlWithPage(
+                            Math.max(data.currentPage - 1, 1),
+                        )}
                         text={"Anterior"}
                         disabled={data.isFirstPage}
                         onClick={handlePreviousPage}
@@ -116,7 +128,9 @@ export function PaginationControls<T extends GetPaginatedOutputDto<any>>({
 
                 <PaginationItem>
                     <PaginationNext
-                        href={`?page=${Math.min(data.currentPage + 1, data.lastPage)}`}
+                        href={generateUrlWithPage(
+                            Math.min(data.currentPage + 1, data.lastPage),
+                        )}
                         text={"Próximo"}
                         disabled={data.isLastPage}
                         onClick={handleNextPage}
