@@ -49,6 +49,14 @@ export class DressService implements Service<DressType> {
             params: params.filters,
         });
 
+        if (params.filters.search) {
+            response.data.items = response.data.items.filter((dress) =>
+                dress.name
+                    .toLowerCase()
+                    .includes(params.filters.search.toLowerCase()),
+            );
+        }
+
         return response.data;
     }
 
