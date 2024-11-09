@@ -16,13 +16,10 @@ import { useRouter } from "next/navigation";
 import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
 import { UpdateEventReceptionTrigger } from "@/app/(private)/reservas/[id]/components/update-event-reception-trigger";
 import { toast } from "sonner";
-import { DressService } from "@/services/products/dress.service";
 
 export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     const router = useRouter();
     const bookingService = new BookingService();
-
-    const dressService = new DressService();
 
     const {
         data: booking,

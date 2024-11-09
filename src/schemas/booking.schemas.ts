@@ -1,10 +1,6 @@
 import { z } from "zod";
 
 export const bookingItemsSchema = z.object({
-    range_date: z.object({
-        start_date: z.date().nullable().optional(),
-        end_date: z.date().nullable().optional(),
-    }),
     dressIds: z
         .string({
             required_error: "Selecione o(s) vestido(s)",

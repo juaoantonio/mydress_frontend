@@ -1,16 +1,19 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { BookingService } from "@/services/bookings/booking.service";
 import { CreateAdjustmentsForm } from "@/app/(private)/reservas/cadastrar/[id]/ajustes/components/create-adjustments-form";
 
-export async function CreateAdjustmentsCard({
-    bookingId,
-}: {
-    bookingId: string;
-}) {
+export function CreateAdjustmentsCard({ bookingId }: { bookingId: string }) {
     const bookingService = new BookingService();
 
-    const booking = await bookingService.getById(bookingId);
+    const { data: booking } = useQuery({
+        queryKey: ["booking", bookingId],
+        queryFn: () => bookingService.getById(bookingId),
+    });
+
+    const dresses = booking?.dresses || [];
 
     const dressesDetails = booking?.dressesDetails || [];
 
@@ -21,7 +24,7 @@ export async function CreateAdjustmentsCard({
             </CardHeader>
             <CardContent className={"px-3"}>
                 <CreateAdjustmentsForm
-                    dresses={booking.dresses}
+                    dresses={dresses}
                     dressesDetails={dressesDetails}
                     bookingId={bookingId}
                 />
