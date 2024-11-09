@@ -9,7 +9,7 @@ export function CancelBookingTrigger({ bookingId }: { bookingId: string }) {
     const router = useRouter();
     const service = new BookingService();
     const mutation = useMutation({
-        mutationFn: () => service.cancelBookingById({ id: bookingId }),
+        mutationFn: () => service.cancel(bookingId),
         mutationKey: ["cancelBooking", bookingId],
         onMutate: () => toast.loading("Cancelando reserva..."),
         onSuccess: () => {

@@ -3,7 +3,8 @@ import { BookingType } from "@/types/booking.types";
 import { GetPaginatedBookingsInputDto } from "@/services/bookings/dtos/get-paginated-bookings.dto";
 import { GetPaginatedOutputDto } from "@/services/types";
 import { CreateBookingInputDto } from "./dtos/create-booking.dto";
-
+import { DressService } from "../products/dress.service";
+import { ClutchService } from "../products/clutch.service";
 export interface IBookingItems {
     dressIds: string[];
     clutchIds: string[];
@@ -18,8 +19,28 @@ export interface IAdjustments {
 }
 export class BookingService {
     async getById(id: string) {
+        const dressService = new DressService();
+        const clutchService = new ClutchService();
         const response = await axiosClient.get<BookingType>(`/bookings/${id}`);
-        return response.data;
+
+        const [dressesDetails, clutchesDetails] = await Promise.all([
+            Promise.all(
+                response.data.dresses.map((dress) =>
+                    dressService.getById({ id: dress.productId }),
+                ),
+            ),
+            Promise.all(
+                response.data.clutches.map((clutch) =>
+                    clutchService.getById({ id: clutch.productId }),
+                ),
+            ),
+        ]);
+
+        return {
+            ...response.data,
+            dressesDetails,
+            clutchesDetails,
+        };
     }
 
     async create(dto: CreateBookingInputDto) {
@@ -29,16 +50,30 @@ export class BookingService {
         return response.data;
     }
 
-    async initProcess(id: string) {
-        await axiosClient.patch(`/bookings/${id}/init`);
+    async processInit(id: string) {
+        return axiosClient.patch(`/bookings/${id}/init`);
+    }
+
+    async processStart(id: string) {
+        return axiosClient.patch(`/bookings/${id}/start`);
     }
 
     async bookingItems(id: string, data: IBookingItems) {
-        await axiosClient.patch(`/bookings/${id}/items`, data);
+        return axiosClient.patch(`/bookings/${id}/items`, data);
+    }
+
+    async payment(id: string, value: number) {
+        return axiosClient.patch(`/bookings/${id}/payment`, {
+            amount: value,
+        });
     }
 
     async adjustments(id: string, data: IAdjustments) {
         await axiosClient.patch(`/bookings/${id}/adjustments`, data);
+    }
+
+    async cancel(id: string) {
+        await axiosClient.delete(`/bookings/${id}`);
     }
 
     async getPaginated(

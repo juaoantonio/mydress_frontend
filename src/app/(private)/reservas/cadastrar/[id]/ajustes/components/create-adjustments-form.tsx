@@ -18,6 +18,9 @@ import {
     BookingService,
     IAdjustments,
 } from "@/services/bookings/booking.service";
+import { DressType } from "@/types/products/dress.types";
+import { ImageListItem } from "@/components/list/list";
+import { numberToCurrency } from "@/lib/utils";
 
 const createAdjustmentsSchema = z.object({
     adjustments: z.array(
@@ -32,9 +35,11 @@ export type CreateAdjustmentsFormType = z.infer<typeof createAdjustmentsSchema>;
 
 export function CreateAdjustmentsForm({
     dresses,
+    dressesDetails,
     bookingId,
 }: {
     dresses: BookingDressItemType[];
+    dressesDetails: DressType[];
     bookingId: string;
 }) {
     const router = useRouter();
@@ -100,6 +105,28 @@ export function CreateAdjustmentsForm({
                     <Fragment key={dress.id}>
                         {index !== 0 && <Separator className={"my-4"} />}
                         <div className={"space-y-5 rounded border p-3"}>
+                            <ImageListItem
+                                values={[
+                                    {
+                                        label: "Preço de aluguel",
+                                        value: numberToCurrency(
+                                            dressesDetails[index].rentPrice,
+                                        ),
+                                    },
+                                    {
+                                        label: "Cor",
+                                        value: dressesDetails[index].color,
+                                    },
+                                    {
+                                        label: "Modelo",
+                                        value: dressesDetails[index].model,
+                                    },
+                                ]}
+                                img={dressesDetails[index].imagePath}
+                                imgAlt={dressesDetails[index].name}
+                                label={dressesDetails[index].name}
+                            />
+
                             <label
                                 className={
                                     "flex items-center justify-between font-semibold"

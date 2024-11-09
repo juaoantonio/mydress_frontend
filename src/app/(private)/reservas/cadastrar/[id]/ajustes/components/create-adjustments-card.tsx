@@ -12,6 +12,8 @@ export async function CreateAdjustmentsCard({
 
     const booking = await bookingService.getById(bookingId);
 
+    const dressesDetails = booking?.dressesDetails || [];
+
     return (
         <Card className={"mx-auto h-fit max-w-[800px] flex-1"}>
             <CardHeader className={"px-3"}>
@@ -20,6 +22,7 @@ export async function CreateAdjustmentsCard({
             <CardContent className={"px-3"}>
                 <CreateAdjustmentsForm
                     dresses={booking.dresses}
+                    dressesDetails={dressesDetails}
                     bookingId={bookingId}
                 />
             </CardContent>
