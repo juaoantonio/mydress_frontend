@@ -40,6 +40,14 @@ export function CreateAdjustmentsForm({
     const router = useRouter();
     const form = useForm<CreateAdjustmentsFormType>({
         resolver: zodResolver(createAdjustmentsSchema),
+        defaultValues: {
+            adjustments: dresses.flatMap((dress) =>
+                dress.adjustments.map((adjustment) => ({
+                    ...adjustment,
+                    dressId: dress.productId,
+                })),
+            ),
+        },
     });
     const { fields, append, remove } = useFieldArray({
         control: form.control,
