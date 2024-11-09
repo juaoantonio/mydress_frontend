@@ -183,7 +183,7 @@ export default function BasicForm({ service }: Props) {
                         name={"expectedPickUpDate"}
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Data de retirada</FormLabel>
+                                <FormLabel>Data de retirada esperada</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -234,7 +234,7 @@ export default function BasicForm({ service }: Props) {
                         name={"expectedReturnDate"}
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Data de devolução</FormLabel>
+                                <FormLabel>Data de devolução esperada</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
