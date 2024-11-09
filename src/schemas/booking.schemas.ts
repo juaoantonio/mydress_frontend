@@ -1,34 +1,21 @@
 import { z } from "zod";
 
-export const bookingItemsSchema = z
-    .object({
-        range_date: z.object({
-            start_date: z.date().nullable().optional(),
-            end_date: z.date().nullable().optional(),
-        }),
-        dressIds: z
-            .string({
-                required_error: "Selecione o(s) vestido(s)",
-            })
-            .array(),
-        clutchIds: z
-            .string({
-                required_error: "Selecione a(s) bolsa(s)",
-            })
-            .array(),
-    })
-    .refine(
-        (data) => {
-            if (data.range_date.start_date && data.range_date.end_date)
-                return data.range_date.start_date < data?.range_date.end_date;
-
-            return false;
-        },
-        {
-            message: "A data de início deve ser anterior à data de fim",
-            path: ["range_date"],
-        },
-    );
+export const bookingItemsSchema = z.object({
+    range_date: z.object({
+        start_date: z.date().nullable().optional(),
+        end_date: z.date().nullable().optional(),
+    }),
+    dressIds: z
+        .string({
+            required_error: "Selecione o(s) vestido(s)",
+        })
+        .array(),
+    clutchIds: z
+        .string({
+            required_error: "Selecione a(s) bolsa(s)",
+        })
+        .array(),
+});
 
 export const createBookingSchema = z
     .object({

@@ -79,12 +79,14 @@ export default function BasicForm({ service }: Props) {
             toast.error(String(error));
             handleBookingCreationError(error, form);
         },
-        onSuccess: async (data) => {
+        onSuccess: async (data, variables) => {
             toast.dismiss();
             toast.success("Reserva criada com sucesso!");
             const queryString = createQueryString({
                 step: 2,
                 bookingId: data.bookingId,
+                expectedDate: variables.expectedPickUpDate.toISOString(),
+                returnDate: variables.expectedReturnDate.toISOString(),
             });
             router.push(`?${queryString}`);
         },
@@ -234,7 +236,9 @@ export default function BasicForm({ service }: Props) {
                         name={"expectedReturnDate"}
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Data de devolução esperada</FormLabel>
+                                <FormLabel>
+                                    Data de devolução esperada
+                                </FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>

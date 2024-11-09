@@ -13,9 +13,8 @@ import { getSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { DressesInput } from "./dresses-input";
-import { CalendarInput } from "./calendar-input";
 import { ClutchesInput } from "./clutches-input";
-
+import { useSearchParams } from "next/navigation";
 interface Props {
     bookingId: string;
     service: BookingService;
@@ -24,15 +23,13 @@ interface Props {
 export default function ItemsForm({ bookingId, service }: Props) {
     const router = useRouter();
 
+    const searchParams = useSearchParams();
+
     const bookingItemsForm = useForm<BookingItemsType>({
         resolver: zodResolver(bookingItemsSchema),
         defaultValues: {
             clutchIds: [],
             dressIds: [],
-            range_date: {
-                start_date: null,
-                end_date: null,
-            },
         },
     });
 
@@ -66,20 +63,23 @@ export default function ItemsForm({ bookingId, service }: Props) {
         bookingItemsMutation.mutate(data);
     }
 
-    const start_date = bookingItemsForm
-        .watch("range_date.start_date")
-        ?.toISOString();
-    const end_date = bookingItemsForm
-        .watch("range_date.end_date")
-        ?.toISOString();
-    const areDressAndClutchInputsDisabled = !start_date || !end_date;
-
     const clutchIds = bookingItemsForm.watch("clutchIds") ?? [];
 
     const dressIds = bookingItemsForm.watch("dressIds") ?? [];
 
     const invalidBookingInsertion =
         dressIds.length <= 0 || (dressIds.length > 0 && clutchIds.length < 0);
+
+    const start_date = searchParams.get("expectedDate");
+
+    const end_date = searchParams.get("returnDate");
+
+    const areDressAndClutchInputsDisabled = !start_date || !end_date;
+
+    if (areDressAndClutchInputsDisabled) {
+        router.back();
+        return;
+    }
 
     return (
         <FormProvider {...bookingItemsForm}>
@@ -88,14 +88,11 @@ export default function ItemsForm({ bookingId, service }: Props) {
                 className={"space-y-4"}
             >
                 <div className={"space-y-4"}>
-                    <CalendarInput form={bookingItemsForm} />
-
                     <DressesInput
                         form={bookingItemsForm}
                         available
                         start_date={start_date}
                         end_date={end_date}
-                        disabled={areDressAndClutchInputsDisabled}
                     />
 
                     <ClutchesInput
@@ -103,7 +100,6 @@ export default function ItemsForm({ bookingId, service }: Props) {
                         available
                         start_date={start_date}
                         end_date={end_date}
-                        disabled={areDressAndClutchInputsDisabled}
                     />
 
                     <div className={"flex gap-2"}>
@@ -120,7 +116,6 @@ export default function ItemsForm({ bookingId, service }: Props) {
                             type={"submit"}
                             disabled={
                                 bookingItemsForm.formState.isSubmitting ||
-                                areDressAndClutchInputsDisabled ||
                                 invalidBookingInsertion
                             }
                         >
