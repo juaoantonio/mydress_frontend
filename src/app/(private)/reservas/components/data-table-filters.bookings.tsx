@@ -27,9 +27,9 @@ export function DataTableFiltersBookings() {
                         <Filter className={"text-foreground"} size={18} />
                     </Button>
                 </DrawerTrigger>
-                <DrawerContent onOpenAutoFocus={(e) => e.stopPropagation()}>
-                    // TODO: Implement Filters component
-                </DrawerContent>
+                <DrawerContent
+                    onOpenAutoFocus={(e) => e.stopPropagation()}
+                ></DrawerContent>
             </Drawer>
         </div>
     );

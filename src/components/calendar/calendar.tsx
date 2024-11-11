@@ -8,6 +8,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { EventClickArg } from "@fullcalendar/core";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { BookingStatus } from "@/types/booking.enums";
 
 export function Calendar({
     view,
@@ -26,12 +27,10 @@ export function Calendar({
     const { data, isError } = useQuery({
         queryKey: ["bookings", status, customer_name, event_date],
         queryFn: () =>
-            service.getAll({
-                filters: {
-                    status,
-                    customer_name,
-                    event_date,
-                },
+            service.getPaginated({
+                status: status as BookingStatus,
+                customerName: customer_name,
+                eventDate: event_date,
             }),
         placeholderData: keepPreviousData,
     });
@@ -52,10 +51,10 @@ export function Calendar({
         }
     }, [view]);
 
-    const events = data?.map((booking) => ({
-        title: booking.customer.name,
-        start: booking.start_date,
-        end: booking.end_date,
+    const events = data?.items.map((booking) => ({
+        title: booking.customerName,
+        start: booking.expectedPickupDate,
+        end: booking.expectedReturnDate,
         id: booking.id,
     }));
 

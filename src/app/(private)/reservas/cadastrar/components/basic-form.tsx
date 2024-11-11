@@ -25,7 +25,7 @@ import {
     PopoverPortal,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -54,8 +54,6 @@ function handleBookingCreationError(
 
 export default function BasicForm({ service }: Props) {
     const router = useRouter();
-
-    const { data: session } = useSession();
 
     const form = useForm<BookingFormType>({
         resolver: zodResolver(createBookingSchema),
@@ -95,6 +93,7 @@ export default function BasicForm({ service }: Props) {
     });
 
     async function handleBookingCreation(data: BookingFormType) {
+        const session = await getSession();
         if (!session) {
             toast.error(
                 "Você precisa estar logado para criar uma nova reserva!",
