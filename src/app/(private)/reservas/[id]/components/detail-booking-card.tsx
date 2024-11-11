@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import React from "react";
 import { BookingService } from "@/services/bookings/booking.service";
 import { ImageListItem, List, ListItem } from "@/components/list/list";
@@ -10,24 +9,40 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { UpdateBookingPaymentTrigger } from "@/app/(private)/reservas/[id]/components/update-booking-payment-trigger";
 import { BookingStatusMapping } from "@/mappings/bookings.mapping";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
-import { UpdateEventReceptionTrigger } from "@/app/(private)/reservas/[id]/components/update-event-reception-trigger";
+import { toast } from "sonner";
 
 export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     const router = useRouter();
     const bookingService = new BookingService();
+
     const {
         data: booking,
         isError,
+        refetch,
         isPending,
     } = useQuery({
         queryKey: ["booking", bookingId],
-        queryFn: () => bookingService.getById({ id: bookingId }),
+        queryFn: () => bookingService.getById(bookingId),
     });
+
+    const mutation = useMutation({
+        mutationFn: () => bookingService.processInit(bookingId),
+        onSuccess: () => {
+            refetch();
+            toast.success("Processo iniciado com sucesso!");
+        },
+        onError: () => {
+            toast.error("Não foi possível iniciar o processo");
+        },
+    });
+
     const dresses = booking?.dresses || [];
+    const dressesDetails = booking?.dressesDetails || [];
+    const clutchDetails = booking?.clutchesDetails || [];
     const clutches = booking?.clutches || [];
 
     if (isError) {
@@ -36,6 +51,10 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
 
     if (isPending) {
         return <Loading />;
+    }
+
+    function handleProcessInit() {
+        mutation.mutate();
     }
 
     return (
@@ -50,36 +69,41 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         "items-center justify-between text-lg leading-tight"
                     }
                 >
-                    Reserva de {booking.customer.name}{" "}
+                    Reserva de {booking.customerName}{" "}
                 </CardTitle>
-
                 {BookingStatusMapping[booking.status]}
             </CardHeader>
             <CardContent className={"space-y-6"}>
                 <List className={"grid gap-2 text-sm"}>
                     <ListItem
                         label={"Valor total do aluguel"}
-                        value={numberToCurrency(booking?.payment_amount)}
+                        value={numberToCurrency(booking?.totalBookingPrice)}
                     />
                     <ListItem
                         label={"Valor pago pela cliente"}
-                        value={` (${getPercentage(booking?.amountPaid, booking?.payment_amount)}%) ${numberToCurrency(booking?.amountPaid)}`}
+                        value={` (${
+                            booking?.totalBookingPrice
+                                ? getPercentage(
+                                      booking?.amountPaid,
+                                      booking?.totalBookingPrice,
+                                  )
+                                : 0
+                        }%) ${numberToCurrency(booking?.amountPaid)}`}
                     />
-                    <ListItem
-                        label={"Cliente"}
-                        value={booking?.customer.name}
-                    />
+                    <ListItem label={"Cliente"} value={booking?.customerName} />
                     <ListItem
                         label={"Data de início"}
-                        value={format(booking?.start_date, "dd/MM/yyyy")}
+                        value={
+                            booking.expectedPickupDate &&
+                            format(booking.expectedPickupDate, "dd/MM/yyyy")
+                        }
                     />
                     <ListItem
                         label={"Data de término"}
-                        value={format(booking?.end_date, "dd/MM/yyyy")}
-                    />
-                    <ListItem
-                        label={"Recepção do evento"}
-                        value={booking?.event.event_reception}
+                        value={
+                            booking.expectedReturnDate &&
+                            format(booking.expectedReturnDate, "dd/MM/yyyy")
+                        }
                     />
                 </List>
 
@@ -95,7 +119,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     </h2>
                     <List className={"gap-2"}>
                         {dresses.length > 0 ? (
-                            dresses.map((product) => (
+                            dresses.map((product, index) => (
                                 <div
                                     key={product.id}
                                     className={"space-y-2 rounded border p-3"}
@@ -105,64 +129,40 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                             {
                                                 label: "Preço de aluguel",
                                                 value: numberToCurrency(
-                                                    product.rentPrice,
+                                                    dressesDetails[index]
+                                                        .rentPrice,
                                                 ),
                                             },
                                             {
                                                 label: "Cor",
-                                                value: product.color,
+                                                value: dressesDetails[index]
+                                                    .color,
                                             },
                                             {
                                                 label: "Modelo",
-                                                value: product.model,
+                                                value: dressesDetails[index]
+                                                    .model,
                                             },
                                         ]}
-                                        img={product.imagePath}
-                                        imgAlt={product.imagePath}
-                                        label={product.imagePath}
+                                        img={dressesDetails[index].imagePath}
+                                        imgAlt={dressesDetails[index].name}
+                                        label={dressesDetails[index].name}
                                     />
 
                                     <div className={"space-y-2"}>
                                         <h3 className={"text-sm font-semibold"}>
                                             Ajustes
                                         </h3>
-
-                                        <List className={"gap-2 text-xs"}>
-                                            {booking.adjustments.filter(
-                                                (adjustment) =>
-                                                    adjustment.dress ===
-                                                    product.id,
-                                            ).length > 0 ? (
-                                                booking.adjustments
-                                                    .filter(
-                                                        (adjustment) =>
-                                                            adjustment.dress ===
-                                                            product.id,
-                                                    )
-                                                    .map((adjustment) => (
-                                                        <ListItem
-                                                            className={
-                                                                "grid grid-cols-2"
-                                                            }
-                                                            key={adjustment.id}
-                                                            label={
-                                                                adjustment.label
-                                                            }
-                                                            value={
-                                                                adjustment.description
-                                                            }
-                                                        />
-                                                    ))
-                                            ) : (
-                                                <p
-                                                    className={
-                                                        "text-muted-foreground"
-                                                    }
-                                                >
-                                                    Sem ajustes
-                                                </p>
+                                        <div>
+                                            {product.adjustments.map(
+                                                (adjustment, id) => (
+                                                    <p key={id}>
+                                                        {adjustment.label} -{" "}
+                                                        {adjustment.description}
+                                                    </p>
+                                                ),
                                             )}
-                                        </List>
+                                        </div>
                                     </div>
                                 </div>
                             ))
@@ -186,37 +186,34 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     </h2>
                     <List>
                         {clutches.length > 0 ? (
-                            clutches.map((product) => (
+                            clutches.map((product, index) => (
                                 <div
                                     key={product.id}
                                     className={"rounded border px-3 py-2"}
                                 >
                                     <ImageListItem
-                                        label={product.description}
                                         values={[
                                             {
                                                 label: "Preço de aluguel",
                                                 value: numberToCurrency(
-                                                    product.price,
+                                                    clutchDetails[index]
+                                                        .rentPrice,
                                                 ),
                                             },
                                             {
-                                                label: "Disponível para ajuste",
-                                                value: product.available_for_adjustment
-                                                    ? "Sim"
-                                                    : "Não",
-                                            },
-                                            {
                                                 label: "Cor",
-                                                value: product.color,
+                                                value: clutchDetails[index]
+                                                    .color,
                                             },
                                             {
                                                 label: "Modelo",
-                                                value: product.model,
+                                                value: clutchDetails[index]
+                                                    .model,
                                             },
                                         ]}
-                                        img={product.img}
-                                        imgAlt={product.description}
+                                        img={clutchDetails[index].imagePath}
+                                        imgAlt={clutchDetails[index].name}
+                                        label={clutchDetails[index].name}
                                     />
                                 </div>
                             ))
@@ -232,15 +229,22 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
 
                 <div className={"flex flex-col gap-2"}>
                     <UpdateBookingPaymentTrigger
+                        total={booking.totalBookingPrice}
+                        status={booking.status}
                         bookingId={bookingId}
                         defaultValue={booking.amountPaid}
                     />
 
-                    <UpdateEventReceptionTrigger
-                        eventId={booking?.event.id}
-                        bookingId={bookingId}
-                        defaultValue={booking?.event.event_reception}
-                    />
+                    {booking.status === "NOT_INITIATED" && (
+                        <Button
+                            className={"w-full flex-1"}
+                            type="button"
+                            variant={"outline"}
+                            onClick={handleProcessInit}
+                        >
+                            Iniciar Processo
+                        </Button>
+                    )}
 
                     <Button
                         className={"w-full flex-1"}
@@ -248,7 +252,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         variant={"outline"}
                         onClick={() =>
                             router.push(
-                                `/reservas/cadastrar/ajustes/${bookingId}`,
+                                `/reservas/cadastrar/${bookingId}/ajustes`,
                             )
                         }
                     >

@@ -1,6 +1,6 @@
 export class CreateBookingInputDto {
     customerName: string;
     eventDate: string;
-    expectedPickupDate: string;
+    expectedPickUpDate: string;
     expectedReturnDate: string;
 }

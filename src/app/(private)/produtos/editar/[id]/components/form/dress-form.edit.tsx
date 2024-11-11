@@ -87,7 +87,7 @@ export function DressFormEdit({ id }: IBaseProductEditionInputProps) {
             form.setValue("rentPrice", data.rentPrice);
             form.setValue("fabric", data.fabric);
         }
-    }, [data]);
+    }, [data, form]);
 
     return (
         <Form {...form}>

@@ -1,70 +1,45 @@
 import { z } from "zod";
 
+export const bookingItemsSchema = z.object({
+    dressIds: z
+        .string({
+            required_error: "Selecione o(s) vestido(s)",
+        })
+        .array(),
+    clutchIds: z
+        .string({
+            required_error: "Selecione a(s) bolsa(s)",
+        })
+        .array(),
+});
+
 export const createBookingSchema = z
     .object({
-        status: z
-            .enum([
-                "CONFIRMED",
-                "CANCELED",
-                "IN_PROGRESS",
-                "OVERDUE",
-                "CONCLUDED",
-            ])
-            .default("CONFIRMED"),
+        customer: z.string().min(1, "Informe o nome do cliente"),
 
-        range_date: z.object({
-            start_date: z.date().nullable().optional(),
-            end_date: z.date().nullable().optional(),
-        }),
-        dresses: z.array(z.string(), {
-            required_error: "Você deve selecionar um vestido",
+        eventDate: z.date({
+            message: "Data do evento é obrigatória",
         }),
 
-        clutches: z.array(z.string(), {
-            required_error: "Você deve selecionar uma bolsa",
+        expectedPickUpDate: z.date({
+            message: "A data de retirada é obrigatória",
         }),
-
-        event: z.string().min(1, "Você deve selecionar um evento"),
-        customer: z.string().min(1, "Você deve selecionar um cliente"),
-        notes: z.string().optional(),
+        expectedReturnDate: z.date({
+            message: "A data de devolução é obrigatória",
+        }),
     })
-    .refine((data) => data.dresses.length > 0 || data.clutches.length > 0, {
-        message: "É necessário selecionar pelo menos um item de cada categoria",
-        path: ["dresses"],
+
+    .refine((data) => data.expectedPickUpDate >= data.eventDate, {
+        message:
+            "A data de retirada deve ser igual ou posterior à data do evento",
+        path: ["expectedPickUpDate"],
     })
-    .refine(
-        (data) => {
-            if (data.range_date.start_date && data.range_date.end_date)
-                return data.range_date.start_date < data?.range_date.end_date;
+    .refine((data) => data.expectedReturnDate >= data.expectedPickUpDate, {
+        message:
+            "A data de devolução deve ser igual ou posterior à data de retirada",
+        path: ["expectedReturnDate"],
+    });
 
-            return false;
-        },
-        {
-            message: "A data de início deve ser anterior à data de fim",
-            path: ["range_date"],
-        },
-    )
+export type BookingFormType = z.infer<typeof createBookingSchema>;
 
-    .refine(
-        (data) => {
-            if (data.range_date.start_date && data.range_date.end_date) {
-                const now = new Date();
-                const currentDate = new Date(
-                    now.getFullYear(),
-                    now.getMonth(),
-                    now.getDate(),
-                );
-                const startDate = new Date(data.range_date.start_date);
-                const endDate = new Date(data.range_date.end_date);
-
-                return startDate >= currentDate && endDate >= currentDate;
-            }
-
-            return false;
-        },
-        {
-            message:
-                "A data de início e fim devem ser posteriores à data atual",
-            path: ["range_date"],
-        },
-    );
+export type BookingItemsType = z.infer<typeof bookingItemsSchema>;

@@ -20,50 +20,57 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { BookingService } from "@/services/bookings/booking.service";
 import { queryClient } from "@/providers/react-query.provider";
+import { getPercentage } from "@/lib/utils";
 
-const updatePaymentSchema = z.object({
-    amount_paid: z
-        .union([
-            z.string().transform((x) => x.replace(/[^0-9.-]+/g, "")),
-            z.number(),
-        ])
-        .pipe(
-            z.coerce
-                .number({
-                    message: "O valor deve ser um número",
-                })
-                .min(0.0, {
-                    message: "O valor deve ser positivo",
-                })
-                .max(999999999),
-        ),
-});
+function createUpdatePaymentSchema(total: number) {
+    return z.object({
+        amount_paid: z
+            .union([
+                z.string().transform((x) => x.replace(/[^0-9.-]+/g, "")),
+                z.number(),
+            ])
+            .pipe(
+                z.coerce
+                    .number({
+                        message: "O valor deve ser um número",
+                    })
+                    .min(0.0, {
+                        message: "O valor deve ser positivo",
+                    })
+                    .max(total, {
+                        message:
+                            "O valor pago não pode ser maior que o valor total da reserva",
+                    }),
+            ),
+    });
+}
 
-type UpdatePaymentType = z.infer<typeof updatePaymentSchema>;
+type UpdatePaymentType = z.infer<ReturnType<typeof createUpdatePaymentSchema>>;
 
 export function UpdateBookingPaymentTrigger({
     bookingId,
+    total,
+    status,
     defaultValue,
 }: {
     bookingId: string;
+    status: string;
+    total: number;
     defaultValue: number;
 }) {
     const [open, setOpen] = React.useState(false);
 
     const service = new BookingService();
     const form = useForm<UpdatePaymentType>({
-        resolver: zodResolver(updatePaymentSchema),
+        resolver: zodResolver(createUpdatePaymentSchema(total)),
         defaultValues: {
             amount_paid: defaultValue,
         },
     });
     const mutation = useMutation({
         mutationKey: ["update-booking-payment"],
-        mutationFn: (data: UpdatePaymentType) =>
-            service.updatePaymentById({
-                id: bookingId,
-                amount_paid: data.amount_paid,
-            }),
+        mutationFn: async (data: UpdatePaymentType) =>
+            await service.payment(bookingId, data.amount_paid),
         onMutate: () => {
             toast.loading("Salvando pagamento...");
         },
@@ -72,8 +79,9 @@ export function UpdateBookingPaymentTrigger({
             toast.dismiss();
             toast.error("Erro ao salvar pagamento");
         },
-        onSuccess: () => {
+        onSuccess: async (data) => {
             queryClient.invalidateQueries({ queryKey: ["booking", bookingId] });
+
             setOpen(false);
             toast.dismiss();
             toast.success("Pagamento salvo com sucesso");
@@ -87,7 +95,11 @@ export function UpdateBookingPaymentTrigger({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className={"w-full flex-1"} type="button">
+                <Button
+                    disabled={status === "NOT_INITIATED"}
+                    className={"w-full flex-1"}
+                    type="button"
+                >
                     Informar Pagamento
                 </Button>
             </DialogTrigger>

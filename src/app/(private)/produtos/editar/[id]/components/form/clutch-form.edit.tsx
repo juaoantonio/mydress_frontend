@@ -29,7 +29,10 @@ import { IBaseProductEditionInputProps } from "../../interfaces/base.interface";
 
 type ClutchFormType = Partial<z.infer<typeof editClutchSchema>>;
 
-function handleClutchError(error: unknown, form: UseFormReturn<ClutchFormType>) {
+function handleClutchError(
+    error: unknown,
+    form: UseFormReturn<ClutchFormType>,
+) {
     handleCreationFormError(
         error,
         form,
@@ -79,7 +82,7 @@ export function ClutchFormEdit({ id }: IBaseProductEditionInputProps) {
             form.setValue("model", data.model);
             form.setValue("rentPrice", data.rentPrice);
         }
-    }, [data]);
+    }, [data, form]);
 
     return (
         <Form {...form}>
