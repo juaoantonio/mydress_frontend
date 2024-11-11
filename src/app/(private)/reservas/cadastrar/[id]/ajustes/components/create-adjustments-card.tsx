@@ -8,10 +8,22 @@ import { CreateAdjustmentsForm } from "@/app/(private)/reservas/cadastrar/[id]/a
 export function CreateAdjustmentsCard({ bookingId }: { bookingId: string }) {
     const bookingService = new BookingService();
 
-    const { data: booking } = useQuery({
+    const {
+        data: booking,
+        isLoading,
+        error,
+    } = useQuery({
         queryKey: ["booking", bookingId],
         queryFn: () => bookingService.getById(bookingId),
     });
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading booking details</div>;
+    }
 
     const dresses = booking?.dresses || [];
 
