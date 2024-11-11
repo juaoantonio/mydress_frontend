@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import React from "react";
 import { BookingService } from "@/services/bookings/booking.service";
 import { ImageListItem, List, ListItem } from "@/components/list/list";
@@ -10,11 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { UpdateBookingPaymentTrigger } from "@/app/(private)/reservas/[id]/components/update-booking-payment-trigger";
 import { BookingStatusMapping } from "@/mappings/bookings.mapping";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
-import { UpdateEventReceptionTrigger } from "@/app/(private)/reservas/[id]/components/update-event-reception-trigger";
 import { toast } from "sonner";
 
 export function DetailBookingCard({ bookingId }: { bookingId: string }) {
@@ -30,6 +28,18 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
         queryKey: ["booking", bookingId],
         queryFn: () => bookingService.getById(bookingId),
     });
+
+    const mutation = useMutation({
+        mutationFn: () => bookingService.processInit(bookingId),
+        onSuccess: () => {
+            refetch();
+            toast.success("Processo iniciado com sucesso!");
+        },
+        onError: () => {
+            toast.error("Não foi possível iniciar o processo");
+        },
+    });
+
     const dresses = booking?.dresses || [];
     const dressesDetails = booking?.dressesDetails || [];
     const clutchDetails = booking?.clutchesDetails || [];
@@ -43,14 +53,8 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
         return <Loading />;
     }
 
-    async function handleProcessInit() {
-        try {
-            await bookingService.processInit(bookingId);
-            refetch();
-            toast.success("Processo iniciado com sucesso!");
-        } catch (err) {
-            toast.error("Não foi possível iniciar o processo");
-        }
+    function handleProcessInit() {
+        mutation.mutate();
     }
 
     return (
@@ -67,7 +71,6 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                 >
                     Reserva de {booking.customerName}{" "}
                 </CardTitle>
-
                 {BookingStatusMapping[booking.status]}
             </CardHeader>
             <CardContent className={"space-y-6"}>
@@ -114,7 +117,6 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     >
                         Vestidos reservados
                     </h2>
-
                     <List className={"gap-2"}>
                         {dresses.length > 0 ? (
                             dresses.map((product, index) => (
@@ -153,15 +155,11 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                         </h3>
                                         <div>
                                             {product.adjustments.map(
-                                                (adjustment) => (
-                                                    <>
-                                                        <p>
-                                                            {adjustment.label} -{" "}
-                                                            {
-                                                                adjustment.description
-                                                            }
-                                                        </p>
-                                                    </>
+                                                (adjustment, id) => (
+                                                    <p key={id}>
+                                                        {adjustment.label} -{" "}
+                                                        {adjustment.description}
+                                                    </p>
                                                 ),
                                             )}
                                         </div>
@@ -236,12 +234,6 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         bookingId={bookingId}
                         defaultValue={booking.amountPaid}
                     />
-
-                    {/* <UpdateEventReceptionTrigger
-                        eventId={booking?.event.id}
-                        bookingId={bookingId}
-                        defaultValue={booking?.event.event_reception}
-                    /> */}
 
                     {booking.status === "NOT_INITIATED" && (
                         <Button
