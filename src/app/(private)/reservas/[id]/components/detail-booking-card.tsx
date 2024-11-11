@@ -78,7 +78,14 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     />
                     <ListItem
                         label={"Valor pago pela cliente"}
-                        value={` (${getPercentage(booking?.amountPaid, booking?.totalBookingPrice)}%) ${numberToCurrency(booking?.amountPaid)}`}
+                        value={` (${
+                            booking?.totalBookingPrice
+                                ? getPercentage(
+                                      booking?.amountPaid,
+                                      booking?.totalBookingPrice,
+                                  )
+                                : 0
+                        }%) ${numberToCurrency(booking?.amountPaid)}`}
                     />
                     <ListItem label={"Cliente"} value={booking?.customerName} />
                     <ListItem
