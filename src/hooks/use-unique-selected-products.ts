@@ -8,23 +8,23 @@ export default function useUniqueSelectedProducts(
     const [items, setItems] = useState<IBaseProductOutputType[]>([]);
 
     useEffect(() => {
-        if (!data.items?.length) return;
+        if (!data?.items?.length) return;
 
         const selectedItems = data.items.filter((item) =>
             ids.includes(item.id),
         );
 
         setItems((prevItems) => {
-            const uniqueItems = [
-                ...prevItems.filter((item) => ids.includes(item.id)),
-                ...selectedItems,
-            ];
-
-            return Array.from(new Set(uniqueItems.map((item) => item.id))).map(
-                (id) => uniqueItems.find((item) => item.id === id),
+            const itemMap = new Map(
+                [
+                    ...prevItems.filter((item) => ids.includes(item.id)),
+                    ...selectedItems,
+                ].map((item) => [item.id, item]),
             );
+
+            return Array.from(itemMap.values());
         });
-    }, [data.items, ids]);
+    }, [data?.items, ids]);
 
     return items;
 }
