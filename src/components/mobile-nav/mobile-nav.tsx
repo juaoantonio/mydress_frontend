@@ -118,7 +118,7 @@ export default function MobileNav() {
                         className="overflow-hidden rounded-full"
                     >
                         <Image
-                            src="https://randomuser.me/api/portraits/women/24.jpg"
+                            src="/profile.png"
                             width={36}
                             height={36}
                             alt="Avatar"

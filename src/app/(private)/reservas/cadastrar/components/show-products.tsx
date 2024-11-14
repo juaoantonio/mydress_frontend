@@ -17,7 +17,7 @@ export default function ShowSelectedProducts({ items, content }: Props) {
                     {items.map((item) => (
                         <div
                             key={item.id}
-                            className="mb-2 flex flex-col items-start justify-between"
+                            className="mb-2 flex flex-col justify-between"
                         >
                             <ImageListItem
                                 values={[

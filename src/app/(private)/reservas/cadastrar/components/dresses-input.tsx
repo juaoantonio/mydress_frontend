@@ -66,13 +66,13 @@ export function DressesInput({
     return (
         <div
             className={cn(
+                "space-y-2",
                 disabled && "pointer-events-none cursor-not-allowed opacity-70",
             )}
         >
             <ShowSelectedProducts items={items} title="Vestidos selecionados" />
 
             <SelectMultipleProducts
-                label="Selecionar vestidos"
                 data={data}
                 searchName="Pesquisar Vestido"
                 searchHandler={setSearch}

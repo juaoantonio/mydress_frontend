@@ -3,7 +3,7 @@ import { AdjustmentType } from "@/types/adjustment.types";
 
 export type BookingType = {
     id: string;
-    expectedPickupDate: string;
+    expectedPickUpDate: string;
     expectedReturnDate: string;
     pickUpDate: string;
     returnDate: string;

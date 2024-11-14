@@ -42,6 +42,7 @@ export function DataTableBookings() {
 
     if (isError) {
         toast.error("Erro ao carregar reservas");
+        return;
     }
 
     return <Table data={isError ? [] : data.items} perPage={data.perPage} />;

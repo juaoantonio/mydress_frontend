@@ -2,7 +2,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import {
@@ -29,14 +28,11 @@ import { Input } from "../ui/input";
 import { replaceSearchParam } from "@/lib/utils";
 
 interface Props<T, K> {
-    label: string;
     data: any;
     triggerText: string;
     page: number;
     searchName: string;
     reloadPageOnClose: boolean;
-    searchHandler(value: string): void;
-    pageHandler(value: number): void;
     form: UseFormReturn<T>;
     fieldName: K;
     options?: SelectMultipleInputOption[];
@@ -44,13 +40,16 @@ interface Props<T, K> {
     error?: boolean;
     errorMessage?: string;
     disabled?: boolean;
+
+    searchHandler(value: string): void;
+
+    pageHandler(value: number): void;
 }
 
 export function SelectMultipleProducts<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-    label,
     data,
     triggerText,
     form,
@@ -76,7 +75,6 @@ export function SelectMultipleProducts<
             name={fieldName}
             render={({ field }) => (
                 <FormItem className={"space-y-1"}>
-                    <FormLabel>{label}</FormLabel>
                     <FormControl>
                         <Popover
                             onOpenChange={(open) => {

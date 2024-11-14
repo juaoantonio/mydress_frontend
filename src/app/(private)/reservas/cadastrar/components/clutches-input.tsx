@@ -71,6 +71,7 @@ export function ClutchesInput({
     return (
         <div
             className={cn(
+                "space-y-2",
                 disabled && "pointer-events-none cursor-not-allowed opacity-70",
             )}
         >
@@ -78,7 +79,7 @@ export function ClutchesInput({
                 items={items}
                 title="Bolsas selecionadas"
                 content={(item) => (
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-2 self-end">
                         <Switch
                             checked={
                                 clutches.find(
@@ -98,13 +99,12 @@ export function ClutchesInput({
                                 );
                             }}
                         />
-                        <h1>Cortesia</h1>
+                        <p className={"text-sm"}>Cortesia</p>
                     </div>
                 )}
             />
 
             <SelectMultipleProducts
-                label={"Selecionar bolsas"}
                 data={data}
                 triggerText={"Adicionar bolsas"}
                 form={form}

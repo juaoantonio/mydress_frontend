@@ -9,11 +9,12 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { UpdateBookingPaymentTrigger } from "@/app/(private)/reservas/[id]/components/update-booking-payment-trigger";
 import { BookingStatusMapping } from "@/mappings/bookings.mapping";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { CancelBookingTrigger } from "@/app/(private)/reservas/[id]/components/cancel-booking-trigger";
 import { toast } from "sonner";
+import { BookingStatus } from "@/types/booking.enums";
 
 export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     const router = useRouter();
@@ -94,8 +95,8 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     <ListItem
                         label={"Data de início"}
                         value={
-                            booking.expectedPickupDate &&
-                            format(booking.expectedPickupDate, "dd/MM/yyyy")
+                            booking.expectedPickUpDate &&
+                            format(booking.expectedPickUpDate, "dd/MM/yyyy")
                         }
                     />
                     <ListItem
@@ -243,6 +244,21 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                             onClick={handleProcessInit}
                         >
                             Iniciar Processo
+                        </Button>
+                    )}
+
+                    {booking.status === BookingStatus.NOT_INITIATED && (
+                        <Button
+                            className={"w-full flex-1"}
+                            type="button"
+                            variant={"outline"}
+                            onClick={() =>
+                                router.push(
+                                    `/reservas/cadastrar?bookingId=${bookingId}&step=2&expectedDate=${booking.expectedPickUpDate}&returnDate=${booking.expectedReturnDate}`,
+                                )
+                            }
+                        >
+                            Adicionar items da reserva
                         </Button>
                     )}
 
