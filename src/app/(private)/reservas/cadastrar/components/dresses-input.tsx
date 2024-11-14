@@ -4,7 +4,7 @@ import { DressService } from "@/services/products/dress.service";
 import { useQuery } from "@tanstack/react-query";
 import { cn, numberToCurrency } from "@/lib/utils";
 import { useQueryParams } from "@/hooks/use-query-params";
-import { SelectMultipleInputWithPagination } from "@/components/select-multiple-input/select-multiple-input-with-pagination";
+import { SelectMultipleProducts } from "@/components/select-multiple-input/select-multiple-products";
 import ShowSelectedProducts from "./show-products";
 import { BookingItemsType } from "@/schemas/booking.schemas";
 import useUniqueSelectedProducts from "@/hooks/use-unique-selected-products";
@@ -54,13 +54,13 @@ export function DressesInput({
             }),
     });
 
-    const dressIds = form.watch("dressIds");
+    const dresses = form.watch("dresses");
 
     const items = useUniqueSelectedProducts(
         {
             items: data?.items,
         },
-        dressIds,
+        dresses.map((dress) => dress.dressId),
     );
 
     return (
@@ -71,7 +71,7 @@ export function DressesInput({
         >
             <ShowSelectedProducts items={items} title="Vestidos selecionados" />
 
-            <SelectMultipleInputWithPagination
+            <SelectMultipleProducts
                 label="Selecionar vestidos"
                 data={data}
                 searchName="Pesquisar Vestido"
@@ -81,7 +81,7 @@ export function DressesInput({
                 pageHandler={setCurrentPage}
                 page={currentPage}
                 form={form}
-                fieldName="dressIds"
+                fieldName="dresses"
                 loading={isPending}
                 error={isError}
                 errorMessage="Erro ao buscar vestidos"
