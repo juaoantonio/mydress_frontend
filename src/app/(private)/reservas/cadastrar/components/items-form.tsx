@@ -4,7 +4,10 @@ import {
     bookingItemsSchema,
     BookingItemsType,
 } from "@/schemas/booking.schemas";
-import { BookingService } from "@/services/bookings/booking.service";
+import {
+    BookingService,
+    IBookingItems,
+} from "@/services/bookings/booking.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { FormProvider, useForm } from "react-hook-form";
@@ -28,17 +31,14 @@ export default function ItemsForm({ bookingId, service }: Props) {
     const bookingItemsForm = useForm<BookingItemsType>({
         resolver: zodResolver(bookingItemsSchema),
         defaultValues: {
-            clutchIds: [],
-            dressIds: [],
+            dresses: [],
+            clutches: [],
         },
     });
 
     const bookingItemsMutation = useMutation({
         mutationFn: async (data: BookingItemsType) => {
-            return service.bookingItems(bookingId, {
-                clutchIds: data.clutchIds,
-                dressIds: data.dressIds,
-            });
+            return service.bookingItems(bookingId, data as IBookingItems);
         },
         onMutate: () => toast.loading("Adicionando Items a Reserva"),
         onError: (error) => {
@@ -63,12 +63,12 @@ export default function ItemsForm({ bookingId, service }: Props) {
         bookingItemsMutation.mutate(data);
     }
 
-    const clutchIds = bookingItemsForm.watch("clutchIds") ?? [];
+    const clutches = bookingItemsForm.watch("clutches") ?? [];
 
-    const dressIds = bookingItemsForm.watch("dressIds") ?? [];
+    const dresses = bookingItemsForm.watch("dresses") ?? [];
 
     const invalidBookingInsertion =
-        dressIds.length <= 0 || (dressIds.length > 0 && clutchIds.length < 0);
+        dresses.length <= 0 || (dresses.length > 0 && clutches.length < 0);
 
     const start_date = searchParams.get("expectedDate");
 

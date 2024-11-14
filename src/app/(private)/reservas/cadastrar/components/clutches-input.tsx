@@ -4,10 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { ClutchService } from "@/services/products/clutch.service";
 import { cn, numberToCurrency } from "@/lib/utils";
 import { useQueryParams } from "@/hooks/use-query-params";
-import { SelectMultipleInputWithPagination } from "@/components/select-multiple-input/select-multiple-input-with-pagination";
+import { SelectMultipleProducts } from "@/components/select-multiple-input/select-multiple-products";
 import ShowSelectedProducts from "./show-products";
 import { BookingItemsType } from "@/schemas/booking.schemas";
 import useUniqueSelectedProducts from "@/hooks/use-unique-selected-products";
+import { Switch } from "@/components/ui/switch";
 
 interface Props {
     form: UseFormReturn<BookingItemsType>;
@@ -25,7 +26,6 @@ export function ClutchesInput({
     available,
 }: Props) {
     const clutchService = new ClutchService();
-
     const [search, setSearch] = useState("");
 
     const { page, limit } = useQueryParams({
@@ -59,13 +59,13 @@ export function ClutchesInput({
             }),
     });
 
-    const clutchIds = form.watch("clutchIds");
+    const clutches = form.watch("clutches");
 
     const items = useUniqueSelectedProducts(
         {
             items: data?.items,
         },
-        clutchIds,
+        clutches.map((clutch) => clutch.clutchId),
     );
 
     return (
@@ -74,14 +74,41 @@ export function ClutchesInput({
                 disabled && "pointer-events-none cursor-not-allowed opacity-70",
             )}
         >
-            <ShowSelectedProducts items={items} title="Bolsas selecionadas" />
+            <ShowSelectedProducts
+                items={items}
+                title="Bolsas selecionadas"
+                content={(item) => (
+                    <div className="flex items-center justify-center gap-2">
+                        <Switch
+                            checked={
+                                clutches.find(
+                                    (clutch) => clutch.clutchId === item.id,
+                                )?.isCourtesy || false
+                            }
+                            onCheckedChange={(checked) => {
+                                const updatedClutches = clutches.map(
+                                    (clutch) =>
+                                        clutch.clutchId === item.id
+                                            ? { ...clutch, isCourtesy: checked }
+                                            : clutch,
+                                );
+                                form.setValue(
+                                    "clutches",
+                                    updatedClutches as BookingItemsType["clutches"],
+                                );
+                            }}
+                        />
+                        <h1>Cortesia</h1>
+                    </div>
+                )}
+            />
 
-            <SelectMultipleInputWithPagination
+            <SelectMultipleProducts
                 label={"Selecionar bolsas"}
                 data={data}
                 triggerText={"Adicionar bolsas"}
                 form={form}
-                fieldName={"clutchIds"}
+                fieldName={"clutches"}
                 reloadPageOnClose
                 pageHandler={setCurrentPageStartRange}
                 page={currentPageStartRange}

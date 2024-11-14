@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import {
     FieldPath,
     FieldValues,
@@ -46,7 +46,7 @@ interface Props<T, K> {
     disabled?: boolean;
 }
 
-export function SelectMultipleInputWithPagination<
+export function SelectMultipleProducts<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
@@ -141,9 +141,18 @@ export function SelectMultipleInputWithPagination<
                                                             "checkbox-products-" +
                                                             option.id
                                                         }
-                                                        checked={field.value?.includes(
-                                                            option.id,
-                                                        )}
+                                                        checked={
+                                                            Array.isArray(
+                                                                field.value,
+                                                            ) &&
+                                                            field.value.some(
+                                                                (item: any) =>
+                                                                    item.clutchId ===
+                                                                        option.id ||
+                                                                    item.dressId ===
+                                                                        option.id,
+                                                            )
+                                                        }
                                                         onCheckedChange={(
                                                             checked,
                                                         ) => {
@@ -155,7 +164,19 @@ export function SelectMultipleInputWithPagination<
                                                                     fieldName,
                                                                     [
                                                                         ...currentValue,
-                                                                        option.id,
+
+                                                                        fieldName ===
+                                                                        "dresses"
+                                                                            ? {
+                                                                                  dressId:
+                                                                                      option.id,
+                                                                              }
+                                                                            : {
+                                                                                  clutchId:
+                                                                                      option.id,
+                                                                                  isCourtesy:
+                                                                                      false,
+                                                                              },
                                                                     ] as PathValue<
                                                                         TFieldValues,
                                                                         TName
@@ -166,10 +187,12 @@ export function SelectMultipleInputWithPagination<
                                                                     fieldName,
                                                                     currentValue.filter(
                                                                         (
-                                                                            id: string,
+                                                                            item: any,
                                                                         ) =>
-                                                                            id !==
-                                                                            option.id,
+                                                                            item.clutchId !==
+                                                                                option.id &&
+                                                                            item.dressId !==
+                                                                                option.id,
                                                                     ) as PathValue<
                                                                         TFieldValues,
                                                                         TName
@@ -190,7 +213,6 @@ export function SelectMultipleInputWithPagination<
                                                             "h-16 w-16 rounded-md object-cover"
                                                         }
                                                     />
-
                                                     <p
                                                         className={
                                                             "text-sm text-gray-800"

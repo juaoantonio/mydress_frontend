@@ -1,5 +1,5 @@
 import { IBaseProductOutputType } from "@/types/products/base.interface";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export default function useUniqueSelectedProducts(
     data: { items: IBaseProductOutputType[] },
@@ -7,24 +7,32 @@ export default function useUniqueSelectedProducts(
 ) {
     const [items, setItems] = useState<IBaseProductOutputType[]>([]);
 
+    const selectedItems = useMemo(() => {
+        if (!data?.items?.length) return [];
+        return data.items.filter((item) => ids.includes(item.id));
+    }, [data?.items, ids]);
+
     useEffect(() => {
-        if (!data?.items?.length) return;
-
-        const selectedItems = data.items.filter((item) =>
-            ids.includes(item.id),
-        );
-
         setItems((prevItems) => {
-            const itemMap = new Map(
+            const newItemsMap = new Map(
                 [
                     ...prevItems.filter((item) => ids.includes(item.id)),
                     ...selectedItems,
                 ].map((item) => [item.id, item]),
             );
 
-            return Array.from(itemMap.values());
+            const newItems = Array.from(newItemsMap.values());
+
+            if (
+                newItems.length !== prevItems.length ||
+                newItems.some((item, index) => item.id !== prevItems[index]?.id)
+            ) {
+                return newItems;
+            }
+
+            return prevItems;
         });
-    }, [data?.items, ids]);
+    }, [selectedItems, ids]);
 
     return items;
 }

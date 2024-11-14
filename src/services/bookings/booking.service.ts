@@ -6,8 +6,13 @@ import { CreateBookingInputDto } from "./dtos/create-booking.dto";
 import { DressService } from "../products/dress.service";
 import { ClutchService } from "../products/clutch.service";
 export interface IBookingItems {
-    dressIds: string[];
-    clutchIds: string[];
+    dresses: Array<{
+        dressId: string;
+    }>;
+    clutches: Array<{
+        clutchId: string;
+        isCourtesy: boolean;
+    }>;
 }
 
 export interface IAdjustments {
