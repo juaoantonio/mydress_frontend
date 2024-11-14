@@ -1,14 +1,17 @@
 import { z } from "zod";
 
 export const bookingItemsSchema = z.object({
-    dressIds: z
-        .string({
-            required_error: "Selecione o(s) vestido(s)",
+    dresses: z
+        .object({
+            dressId: z.string().uuid(),
         })
-        .array(),
-    clutchIds: z
-        .string({
-            required_error: "Selecione a(s) bolsa(s)",
+        .array()
+        .min(1, "Selecione ao menos um vestido"),
+
+    clutches: z
+        .object({
+            clutchId: z.string().uuid(),
+            isCourtesy: z.boolean(),
         })
         .array(),
 });
@@ -29,9 +32,8 @@ export const createBookingSchema = z
         }),
     })
 
-    .refine((data) => data.expectedPickUpDate >= data.eventDate, {
-        message:
-            "A data de retirada deve ser igual ou posterior à data do evento",
+    .refine((data) => data.expectedPickUpDate <= data.eventDate, {
+        message: "A data de retirada deve antes ou igual à data do evento",
         path: ["expectedPickUpDate"],
     })
     .refine((data) => data.expectedReturnDate >= data.expectedPickUpDate, {
