@@ -49,39 +49,6 @@ export class DressService implements Service<DressType> {
             params: params.filters,
         });
 
-        if (params.filters.search) {
-            response.data.items = response.data.items.filter((dress) =>
-                dress.name
-                    .toLowerCase()
-                    .includes(params.filters.search.toLowerCase()),
-            );
-        }
-
-        return response.data;
-    }
-
-    /*
-     * This method is used to get all dresses that are available between two dates.
-     * @param {Date} start_date - The start date of the date range.
-     * @param {Date} end_date - The end date of the date range.
-     */
-    async getAllAvailableBetweenDates({
-        start_date,
-        end_date,
-    }: {
-        start_date?: Date | null;
-        end_date?: Date | null;
-    }) {
-        const response = await axiosClient.get<DressType[]>(
-            "/products/dresses/list_available_between_dates",
-            {
-                params: {
-                    start_date: start_date ? start_date.toISOString() : "",
-                    end_date: end_date ? end_date.toISOString() : "",
-                },
-            },
-        );
-
         return response.data;
     }
 

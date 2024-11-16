@@ -50,7 +50,7 @@ export function ClutchesInput({
             clutchService.getAll({
                 filters: {
                     startDate: start_date,
-                    search,
+                    name: search,
                     limit,
                     endDate: end_date,
                     available,

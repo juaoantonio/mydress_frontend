@@ -49,7 +49,7 @@ export function DressesInput({
                     available,
                     page,
                     limit,
-                    search,
+                    name: search,
                 },
             }),
     });

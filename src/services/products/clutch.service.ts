@@ -52,14 +52,6 @@ export class ClutchService implements Service<ClutchType> {
             params: params.filters,
         });
 
-        if (params.filters.search) {
-            response.data.items = response.data.items.filter((clutch) =>
-                clutch.name
-                    .toLowerCase()
-                    .includes(params.filters.search.toLowerCase()),
-            );
-        }
-
         return response.data;
     }
 
