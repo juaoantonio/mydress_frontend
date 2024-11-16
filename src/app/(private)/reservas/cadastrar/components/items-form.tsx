@@ -1,5 +1,3 @@
-"use client";
-
 import {
     bookingItemsSchema,
     BookingItemsType,
@@ -14,10 +12,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DressesInput } from "./dresses-input";
 import { ClutchesInput } from "./clutches-input";
-import { useSearchParams } from "next/navigation";
+
 interface Props {
     bookingId: string;
     service: BookingService;

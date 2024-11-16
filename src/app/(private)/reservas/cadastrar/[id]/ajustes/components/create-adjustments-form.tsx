@@ -80,7 +80,7 @@ export function CreateAdjustmentsForm({
         onSuccess: () => {
             toast.dismiss();
             toast.success("Ajustes salvos com sucesso");
-            router.back();
+            router.push(`/reservas/${bookingId}`);
         },
     });
 

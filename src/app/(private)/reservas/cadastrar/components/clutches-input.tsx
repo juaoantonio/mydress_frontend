@@ -22,8 +22,8 @@ export function ClutchesInput({
     form,
     start_date,
     end_date,
-    disabled = false,
     available,
+    disabled = false,
 }: Props) {
     const clutchService = new ClutchService();
     const [search, setSearch] = useState("");
