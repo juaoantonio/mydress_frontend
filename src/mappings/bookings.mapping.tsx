@@ -19,6 +19,13 @@ export const BookingStatusMapping: {
             Pagamento pendente
         </span>
     ),
+    [BookingStatus.CONFIRMED]: (
+        <span
+            className={"text-nowrap rounded bg-blue-500 px-2 py-1 text-white"}
+        >
+            Confirmada
+        </span>
+    ),
     [BookingStatus.READY]: (
         <span
             className={"text-nowrap rounded bg-green-500 px-2 py-1 text-white"}

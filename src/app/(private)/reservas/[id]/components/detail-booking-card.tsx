@@ -30,14 +30,57 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
         queryFn: () => bookingService.getById(bookingId),
     });
 
-    const mutation = useMutation({
+    const initBooking = useMutation({
         mutationFn: () => bookingService.processInit(bookingId),
+        onMutate: () => {
+            toast.loading("Iniciando processo de reserva");
+        },
         onSuccess: () => {
             refetch();
+            toast.dismiss();
             toast.success("Processo iniciado com sucesso!");
         },
         onError: () => {
+            toast.dismiss();
             toast.error("Não foi possível iniciar o processo");
+        },
+    });
+
+    const informItemsDelivery = useMutation({
+        mutationFn: () => bookingService.informItemsDelivery(bookingId),
+        onMutate: () => {
+            toast.loading("Informando entrega dos itens");
+        },
+        onSuccess: () => {
+            refetch();
+            toast.dismiss();
+            toast.success("Itens entregues notificados com sucesso!");
+        },
+        onError: () => {
+            toast.dismiss();
+            toast.error(
+                "Não foi possível informar a entrega dos itens da reserva",
+            );
+        },
+    });
+
+    const completeBooking = useMutation({
+        mutationFn: () => bookingService.complete(bookingId),
+        onMutate: () => {
+            toast.loading(
+                "Informando recebimento dos itens e finalizando reserva",
+            );
+        },
+        onSuccess: () => {
+            refetch();
+            toast.dismiss();
+            toast.success("Itens recebidos e reserva finalizada com sucesso!");
+        },
+        onError: () => {
+            toast.dismiss();
+            toast.error(
+                "Não foi possível informar o recebimento dos itens e finalizar a reserva",
+            );
         },
     });
 
@@ -55,7 +98,15 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     }
 
     function handleProcessInit() {
-        mutation.mutate();
+        initBooking.mutate();
+    }
+
+    function handleItemsDelivery() {
+        informItemsDelivery.mutate();
+    }
+
+    function handleItemsReceipt() {
+        completeBooking.mutate();
     }
 
     return (
@@ -229,7 +280,29 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                 <Separator />
 
                 <div className={"flex flex-col gap-2"}>
-                    {booking.status === "NOT_INITIATED" ? (
+                    {booking.status === BookingStatus.IN_PROGRESS && (
+                        <Button
+                            className={"w-full flex-1"}
+                            type="button"
+                            variant={"default"}
+                            onClick={handleItemsReceipt}
+                        >
+                            Informar recebimento dos items
+                        </Button>
+                    )}
+
+                    {booking.status === BookingStatus.READY && (
+                        <Button
+                            className={"w-full flex-1"}
+                            type="button"
+                            variant={"default"}
+                            onClick={handleItemsDelivery}
+                        >
+                            Informar entrega dos items
+                        </Button>
+                    )}
+
+                    {booking.status === BookingStatus.NOT_INITIATED && (
                         <Button
                             className={"w-full flex-1"}
                             type="button"
@@ -238,7 +311,12 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         >
                             Iniciar Processo
                         </Button>
-                    ) : (
+                    )}
+
+                    {[
+                        BookingStatus.CONFIRMED,
+                        BookingStatus.PAYMENT_PENDING,
+                    ].includes(booking.status) && (
                         <UpdateBookingPaymentTrigger
                             total={booking.totalBookingPrice}
                             status={booking.status}
@@ -262,20 +340,37 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         </Button>
                     )}
 
+                    {[
+                        BookingStatus.NOT_INITIATED,
+                        BookingStatus.PAYMENT_PENDING,
+                        BookingStatus.CONFIRMED,
+                    ].includes(booking.status) && (
+                        <Button
+                            className={"w-full flex-1"}
+                            type="button"
+                            variant={"outline"}
+                            onClick={() =>
+                                router.push(
+                                    `/reservas/cadastrar/${bookingId}/ajustes`,
+                                )
+                            }
+                        >
+                            Editar Ajustes
+                        </Button>
+                    )}
+
+                    {booking.status !== BookingStatus.COMPLETED && (
+                        <CancelBookingTrigger bookingId={bookingId} />
+                    )}
+
                     <Button
                         className={"w-full flex-1"}
                         type="button"
                         variant={"outline"}
-                        onClick={() =>
-                            router.push(
-                                `/reservas/cadastrar/${bookingId}/ajustes`,
-                            )
-                        }
+                        onClick={() => router.push(`/`)}
                     >
-                        Editar Ajustes
+                        Voltar
                     </Button>
-
-                    <CancelBookingTrigger bookingId={bookingId} />
                 </div>
             </CardContent>
         </Card>

@@ -5,6 +5,7 @@ import { GetPaginatedOutputDto } from "@/services/types";
 import { CreateBookingInputDto } from "./dtos/create-booking.dto";
 import { DressService } from "../products/dress.service";
 import { ClutchService } from "../products/clutch.service";
+
 export interface IBookingItems {
     dresses: Array<{
         dressId: string;
@@ -59,8 +60,12 @@ export class BookingService {
         return axiosClient.patch(`/bookings/${id}/init`);
     }
 
-    async processStart(id: string) {
+    async informItemsDelivery(id: string) {
         return axiosClient.patch(`/bookings/${id}/start`);
+    }
+
+    async complete(id: string) {
+        return axiosClient.patch(`/bookings/${id}/complete`);
     }
 
     async bookingItems(id: string, data: IBookingItems) {
