@@ -229,22 +229,22 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                 <Separator />
 
                 <div className={"flex flex-col gap-2"}>
-                    <UpdateBookingPaymentTrigger
-                        total={booking.totalBookingPrice}
-                        status={booking.status}
-                        bookingId={bookingId}
-                        defaultValue={booking.amountPaid}
-                    />
-
-                    {booking.status === "NOT_INITIATED" && (
+                    {booking.status === "NOT_INITIATED" ? (
                         <Button
                             className={"w-full flex-1"}
                             type="button"
-                            variant={"outline"}
+                            variant={"default"}
                             onClick={handleProcessInit}
                         >
                             Iniciar Processo
                         </Button>
+                    ) : (
+                        <UpdateBookingPaymentTrigger
+                            total={booking.totalBookingPrice}
+                            status={booking.status}
+                            bookingId={bookingId}
+                            defaultValue={booking.amountPaid}
+                        />
                     )}
 
                     {booking.status === BookingStatus.NOT_INITIATED && (

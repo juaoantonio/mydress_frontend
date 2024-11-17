@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ClutchService } from "@/services/products/clutch.service";
 import { cn, numberToCurrency } from "@/lib/utils";
@@ -9,6 +9,7 @@ import ShowSelectedProducts from "./show-products";
 import { BookingItemsType } from "@/schemas/booking.schemas";
 import useUniqueSelectedProducts from "@/hooks/use-unique-selected-products";
 import { Switch } from "@/components/ui/switch";
+import { BookingType } from "@/types/booking.types";
 
 interface Props {
     form: UseFormReturn<BookingItemsType>;
@@ -16,6 +17,7 @@ interface Props {
     start_date?: string | null;
     end_date?: string | null;
     disabled?: boolean;
+    booking: BookingType;
 }
 
 export function ClutchesInput({
@@ -23,6 +25,7 @@ export function ClutchesInput({
     start_date,
     end_date,
     available,
+    booking,
     disabled = false,
 }: Props) {
     const clutchService = new ClutchService();
@@ -42,6 +45,7 @@ export function ClutchesInput({
             start_date,
             end_date,
             available,
+            booking,
             search,
             page,
             limit,
@@ -55,6 +59,7 @@ export function ClutchesInput({
                     endDate: end_date,
                     available,
                     page,
+                    bookingId: booking.id,
                 },
             }),
     });
@@ -67,6 +72,16 @@ export function ClutchesInput({
         },
         clutches.map((clutch) => clutch.clutchId),
     );
+
+    useEffect(() => {
+        form.setValue(
+            "clutches",
+            booking.clutches.map((clutch) => ({
+                clutchId: clutch.productId,
+                isCourtesy: clutch.isCourtesy,
+            })),
+        );
+    }, [form, booking.clutches]);
 
     return (
         <div

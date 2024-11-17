@@ -7,7 +7,7 @@ import {
     IBookingItems,
 } from "@/services/bookings/booking.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getSession } from "next-auth/react";
@@ -32,6 +32,16 @@ export default function ItemsForm({ bookingId, service }: Props) {
             dresses: [],
             clutches: [],
         },
+    });
+
+    const {
+        data: booking,
+        isError,
+        isPending,
+    } = useQuery({
+        queryKey: ["booking", bookingId],
+        queryFn: () => service.getById(bookingId),
+        placeholderData: keepPreviousData,
     });
 
     const bookingItemsMutation = useMutation({
@@ -59,6 +69,14 @@ export default function ItemsForm({ bookingId, service }: Props) {
             return;
         }
         bookingItemsMutation.mutate(data);
+    }
+
+    if (isPending) {
+        return <div>Carregando...</div>;
+    }
+
+    if (isError) {
+        return <div>Ocorreu um erro ao carregar a reserva</div>;
     }
 
     const clutches = bookingItemsForm.watch("clutches") ?? [];
@@ -91,6 +109,7 @@ export default function ItemsForm({ bookingId, service }: Props) {
                         available
                         start_date={start_date}
                         end_date={end_date}
+                        booking={booking}
                     />
 
                     <ClutchesInput
@@ -98,6 +117,7 @@ export default function ItemsForm({ bookingId, service }: Props) {
                         available
                         start_date={start_date}
                         end_date={end_date}
+                        booking={booking}
                     />
 
                     <div className={"flex gap-2"}>

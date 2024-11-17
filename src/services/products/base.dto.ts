@@ -12,4 +12,5 @@ export interface IBaseListProductQueryParamsInputDTO {
     startDate?: string;
     endDate?: string;
     name?: string;
+    bookingId?: string;
 }
