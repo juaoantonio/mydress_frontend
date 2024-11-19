@@ -287,7 +287,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                             variant={"default"}
                             onClick={handleItemsReceipt}
                         >
-                            Informar recebimento dos items
+                            Informar recebimento dos itens
                         </Button>
                     )}
 
@@ -298,7 +298,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                             variant={"default"}
                             onClick={handleItemsDelivery}
                         >
-                            Informar entrega dos items
+                            Informar entrega dos itens
                         </Button>
                     )}
 
@@ -336,7 +336,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                 )
                             }
                         >
-                            Adicionar items da reserva
+                            Adicionar itens da reserva
                         </Button>
                     )}
 
