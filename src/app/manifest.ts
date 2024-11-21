@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
+    const environment = process.env.NODE_ENV;
     return {
         name: "My Dress Pro Suite - Sistema de Gerencimento de Aluguel de Vestidos",
-        short_name: "My Dress",
+        short_name: `My Dress${environment !== "production" ? "" : " - Dev"}`,
         description: "Sistema de Gerencimento de Aluguel de Vestidos",
         start_url: "/",
         display: "standalone",
