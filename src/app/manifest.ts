@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
     return {
         name: "My Dress Pro Suite - Sistema de Gerencimento de Aluguel de Vestidos",
-        short_name: "my-dress-pro-suite",
+        short_name: "My Dress",
         description: "Sistema de Gerencimento de Aluguel de Vestidos",
         start_url: "/",
         display: "standalone",
