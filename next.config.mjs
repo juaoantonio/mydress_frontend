@@ -66,7 +66,7 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "my-dress-prod.s3.amazonaws.com",
+                hostname: "s3.us-east-1.amazonaws.com",
             },
             {
                 protocol: "http",
