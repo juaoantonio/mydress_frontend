@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
+import React, { Fragment } from "react";
 import { BookingService } from "@/services/bookings/booking.service";
 import { ImageListItem, List, ListItem } from "@/components/list/list";
 import { format } from "date-fns";
@@ -107,6 +107,10 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
 
     function handleItemsReceipt() {
         completeBooking.mutate();
+    }
+
+    function handleAdjustmentReturn() {
+        router.push(`/agendamentos/agendar/retorno-para-ajustes/${bookingId}`);
     }
 
     return (
@@ -292,14 +296,25 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     )}
 
                     {booking.status === BookingStatus.READY && (
-                        <Button
-                            className={"w-full flex-1"}
-                            type="button"
-                            variant={"default"}
-                            onClick={handleItemsDelivery}
-                        >
-                            Informar entrega dos itens
-                        </Button>
+                        <Fragment>
+                            {" "}
+                            <Button
+                                className={"w-full flex-1"}
+                                type="button"
+                                variant={"default"}
+                                onClick={handleItemsDelivery}
+                            >
+                                Informar entrega dos itens
+                            </Button>
+                            <Button
+                                className={"w-full flex-1"}
+                                type="button"
+                                variant={"outline"}
+                                onClick={handleAdjustmentReturn}
+                            >
+                                Agendar visita para experimentar ajustes
+                            </Button>
+                        </Fragment>
                     )}
 
                     {booking.status === BookingStatus.NOT_INITIATED && (
@@ -317,12 +332,22 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                         BookingStatus.CONFIRMED,
                         BookingStatus.PAYMENT_PENDING,
                     ].includes(booking.status) && (
-                        <UpdateBookingPaymentTrigger
-                            total={booking.totalBookingPrice}
-                            status={booking.status}
-                            bookingId={bookingId}
-                            defaultValue={booking.amountPaid}
-                        />
+                        <Fragment>
+                            <UpdateBookingPaymentTrigger
+                                total={booking.totalBookingPrice}
+                                status={booking.status}
+                                bookingId={bookingId}
+                                defaultValue={booking.amountPaid}
+                            />
+                            <Button
+                                className={"w-full flex-1"}
+                                type="button"
+                                variant={"outline"}
+                                onClick={handleAdjustmentReturn}
+                            >
+                                Agendar visita para experimentar ajustes
+                            </Button>
+                        </Fragment>
                     )}
 
                     {booking.status === BookingStatus.NOT_INITIATED && (

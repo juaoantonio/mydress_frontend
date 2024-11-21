@@ -30,3 +30,17 @@ export const scheduleInitialVisitSchema = z
             path: ["appointmentDate"],
         },
     );
+
+export const scheduleAdjustmentReturnVisitSchema = z.object({
+    appointmentDate: z
+        .string({
+            required_error: "A data do agendamento é obrigatória.",
+        })
+        .datetime("A data do agendamento é inválida."),
+
+    bookingId: z
+        .string({
+            required_error: "O id da reserva é obrigatório.",
+        })
+        .uuid("O id da reserva é inválido."),
+});

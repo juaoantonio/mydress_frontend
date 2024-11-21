@@ -20,3 +20,8 @@ export type ScheduleInitialVisitInputDto = {
     customerName: string;
     eventDate: string;
 };
+
+export type ScheduleAdjustmentReturnInputDto = {
+    appointmentDate: string;
+    bookingId: string;
+};

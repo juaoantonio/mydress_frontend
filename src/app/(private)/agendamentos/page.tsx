@@ -11,7 +11,7 @@ export default function AppointmentsPage() {
             pageTitle={"Visitas"}
             pageActionsElement={
                 <div className={"flex items-center justify-between gap-2"}>
-                    <Link href={"/agendamentos/agendar"}>
+                    <Link href={"/agendamentos/agendar/visita-inicial"}>
                         <Button size={"sm"} className={"gap-1"}>
                             <Plus size={18} />
                             Agendar visita
