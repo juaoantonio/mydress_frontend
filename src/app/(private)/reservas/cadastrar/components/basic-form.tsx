@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import { format, setDefaultOptions } from "date-fns";
+import { format, isBefore, setDefaultOptions, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useCreateQueryString } from "@/hooks/use-create-query-string";
 
@@ -102,6 +102,7 @@ export default function BasicForm({ service }: Props) {
         }
         mutation.mutate(data);
     }
+    const today = startOfDay(new Date());
 
     return (
         <Form {...form}>
@@ -168,7 +169,10 @@ export default function BasicForm({ service }: Props) {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 disabled={(date) =>
-                                                    date < new Date()
+                                                    isBefore(
+                                                        startOfDay(date),
+                                                        today,
+                                                    )
                                                 }
                                                 initialFocus
                                             />
@@ -219,7 +223,10 @@ export default function BasicForm({ service }: Props) {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 disabled={(date) =>
-                                                    date < new Date()
+                                                    isBefore(
+                                                        startOfDay(date),
+                                                        today,
+                                                    )
                                                 }
                                                 initialFocus
                                             />
@@ -272,7 +279,10 @@ export default function BasicForm({ service }: Props) {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 disabled={(date) =>
-                                                    date < new Date()
+                                                    isBefore(
+                                                        startOfDay(date),
+                                                        today,
+                                                    )
                                                 }
                                                 initialFocus
                                             />

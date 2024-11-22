@@ -11,11 +11,9 @@ import { toast } from "sonner";
 import { AppointmentService } from "@/services/appointments/appointment.service";
 import { ScheduleAdjustmentReturnInputDto } from "@/services/appointments/appointment.dto";
 import { DatePicker } from "@/components/ui/date-picker";
-import {
-    scheduleAdjustmentReturnVisitSchema,
-    scheduleInitialVisitSchema,
-} from "@/schemas/appointment.schemas";
+import { scheduleAdjustmentReturnVisitSchema } from "@/schemas/appointment.schemas";
 import { DevTool } from "@hookform/devtools";
+import { startOfDay } from "date-fns";
 
 type ScheduleAdjustmentReturnFormType = z.infer<
     typeof scheduleAdjustmentReturnVisitSchema
@@ -28,7 +26,7 @@ export function ScheduleAdjustmentReturnForm({
 }) {
     const router = useRouter();
     const form = useForm<ScheduleAdjustmentReturnFormType>({
-        resolver: zodResolver(scheduleInitialVisitSchema),
+        resolver: zodResolver(scheduleAdjustmentReturnVisitSchema),
         defaultValues: {
             appointmentDate: "",
             bookingId,
@@ -48,16 +46,19 @@ export function ScheduleAdjustmentReturnForm({
         onSuccess: () => {
             toast.dismiss();
             toast.success("Visita agendada com sucesso!");
-            router.replace("/agendamentos");
+            router.back();
         },
     });
 
     async function handleSubmit(data: any) {
         mutation.mutate(data);
     }
+    const today = startOfDay(new Date());
 
+    console.log(form.formState.errors);
     return (
         <>
+            <DevTool control={form.control} />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(handleSubmit)}
@@ -68,6 +69,7 @@ export function ScheduleAdjustmentReturnForm({
                         name="appointmentDate"
                         label="Data da visita"
                         placeholder="Selecione a data da visita"
+                        disabled={(date) => startOfDay(date) < today}
                     />
 
                     <FormMessage>

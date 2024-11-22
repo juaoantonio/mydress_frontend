@@ -16,6 +16,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { Matcher } from "react-day-picker";
 
 export function DatePicker({
     control,
@@ -23,12 +24,14 @@ export function DatePicker({
     label,
     placeholder,
     defaultDate,
+    disabled,
 }: {
     control: Control<any>;
     name: string;
     label: string;
     placeholder?: string;
     defaultDate?: Date;
+    disabled?: Matcher | Matcher[];
 }) {
     return (
         <Controller
@@ -83,6 +86,7 @@ export function DatePicker({
                                         }
                                         locale={ptBR}
                                         initialFocus
+                                        disabled={disabled}
                                     />
                                 </PopoverContent>
                             </Popover>
