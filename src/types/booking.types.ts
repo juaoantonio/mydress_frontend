@@ -20,6 +20,10 @@ export class BookingDressItemType {
     id: string;
     productId: string;
     rentPrice: number;
+    imagePath: string;
+    color: string;
+    model: string;
+    fabric: string;
     adjustments: AdjustmentType[];
     isCourtesy: boolean;
 }
@@ -28,6 +32,9 @@ export class BookingClutchItemType {
     id: string;
     productId: string;
     rentPrice: number;
+    imagePath: string;
+    color: string;
+    model: string;
     isCourtesy: boolean;
 }
 

@@ -85,8 +85,6 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
     });
 
     const dresses = booking?.dresses || [];
-    const dressesDetails = booking?.dressesDetails || [];
-    const clutchDetails = booking?.clutchesDetails || [];
     const clutches = booking?.clutches || [];
 
     if (isError) {
@@ -175,7 +173,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     </h2>
                     <List className={"gap-2"}>
                         {dresses.length > 0 ? (
-                            dresses.map((product, index) => (
+                            dresses.map((product) => (
                                 <div
                                     key={product.id}
                                     className={"space-y-2 rounded border p-3"}
@@ -185,24 +183,21 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                             {
                                                 label: "Preço de aluguel",
                                                 value: numberToCurrency(
-                                                    dressesDetails[index]
-                                                        .rentPrice,
+                                                    product.rentPrice,
                                                 ),
                                             },
                                             {
                                                 label: "Cor",
-                                                value: dressesDetails[index]
-                                                    .color,
+                                                value: product.color,
                                             },
                                             {
                                                 label: "Modelo",
-                                                value: dressesDetails[index]
-                                                    .model,
+                                                value: product.model,
                                             },
                                         ]}
-                                        img={dressesDetails[index].imagePath}
-                                        imgAlt={dressesDetails[index].name}
-                                        label={dressesDetails[index].name}
+                                        img={product.imagePath}
+                                        imgAlt={`${product.model} - ${product.color} - ${product.fabric}`}
+                                        label={`${product.model} - ${product.color} - ${product.fabric}`}
                                     />
 
                                     <div className={"space-y-2"}>
@@ -242,7 +237,7 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                     </h2>
                     <List>
                         {clutches.length > 0 ? (
-                            clutches.map((product, index) => (
+                            clutches.map((product) => (
                                 <div
                                     key={product.id}
                                     className={"rounded border px-3 py-2"}
@@ -252,24 +247,21 @@ export function DetailBookingCard({ bookingId }: { bookingId: string }) {
                                             {
                                                 label: "Preço de aluguel",
                                                 value: numberToCurrency(
-                                                    clutchDetails[index]
-                                                        .rentPrice,
+                                                    product.rentPrice,
                                                 ),
                                             },
                                             {
                                                 label: "Cor",
-                                                value: clutchDetails[index]
-                                                    .color,
+                                                value: product.color,
                                             },
                                             {
                                                 label: "Modelo",
-                                                value: clutchDetails[index]
-                                                    .model,
+                                                value: product.model,
                                             },
                                         ]}
-                                        img={clutchDetails[index].imagePath}
-                                        imgAlt={clutchDetails[index].name}
-                                        label={clutchDetails[index].name}
+                                        img={product.imagePath}
+                                        imgAlt={`${product.model} - ${product.color}`}
+                                        label={`${product.model} - ${product.color}`}
                                     />
                                 </div>
                             ))

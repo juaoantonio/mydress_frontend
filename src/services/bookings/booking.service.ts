@@ -3,8 +3,6 @@ import { BookingType } from "@/types/booking.types";
 import { GetPaginatedBookingsInputDto } from "@/services/bookings/dtos/get-paginated-bookings.dto";
 import { GetPaginatedOutputDto } from "@/services/types";
 import { CreateBookingInputDto } from "./dtos/create-booking.dto";
-import { DressService } from "../products/dress.service";
-import { ClutchService } from "../products/clutch.service";
 
 export interface IBookingItems {
     dresses: Array<{
@@ -25,28 +23,8 @@ export interface IAdjustments {
 }
 export class BookingService {
     async getById(id: string) {
-        const dressService = new DressService();
-        const clutchService = new ClutchService();
         const response = await axiosClient.get<BookingType>(`/bookings/${id}`);
-
-        const [dressesDetails, clutchesDetails] = await Promise.all([
-            Promise.all(
-                response.data.dresses.map((dress) =>
-                    dressService.getById({ id: dress.productId }),
-                ),
-            ),
-            Promise.all(
-                response.data.clutches.map((clutch) =>
-                    clutchService.getById({ id: clutch.productId }),
-                ),
-            ),
-        ]);
-
-        return {
-            ...response.data,
-            dressesDetails,
-            clutchesDetails,
-        };
+        return response.data;
     }
 
     async create(dto: CreateBookingInputDto) {

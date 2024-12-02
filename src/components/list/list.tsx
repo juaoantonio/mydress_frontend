@@ -17,17 +17,27 @@ export function ListItem({
     label,
     value,
     className,
+    textLeft = false,
 }: {
     label: string;
     value: string | number | ReactElement | null;
     className?: string;
+    textLeft?: boolean;
 }) {
-    const mergedClassName = cn("flex items-center justify-between", className);
+    const mergedClassName = cn("flex items-center gap-2", className, {
+        "justify-between": !textLeft,
+    });
 
     return (
         <li className={mergedClassName}>
             <span className="inline-block text-muted-foreground">{label}</span>
-            <span className={"inline-block text-right"}>{value}</span>
+            <span
+                className={cn("inline-block", {
+                    "text-right": !textLeft,
+                })}
+            >
+                {value}
+            </span>
         </li>
     );
 }
@@ -41,7 +51,7 @@ export function ImageListItem({
     img: string | null;
     imgAlt: string;
     label: string;
-    values: { label: string; value: string }[];
+    values?: { label: string; value: string }[];
 }) {
     return (
         <li className="flex gap-3">
@@ -52,13 +62,19 @@ export function ImageListItem({
                 alt={imgAlt}
                 className="h-[125px] w-[125px] rounded object-cover object-center"
             />
-            <div className={"flex-1 space-y-2"}>
-                <h3 className="font-semibold">{label}</h3>
-                <List className={"gap-2 text-xs"}>
-                    {values.map(({ label, value }) => (
-                        <ListItem key={label} label={label} value={value} />
-                    ))}
-                </List>
+            <div
+                className={cn("flex-1 space-y-2", {
+                    "flex flex-col items-center justify-center": !values,
+                })}
+            >
+                <h3 className={"text-nowrap font-semibold"}>{label}</h3>
+                {values && (
+                    <List className={"gap-2 text-xs"}>
+                        {values.map(({ label, value }) => (
+                            <ListItem key={label} label={label} value={value} />
+                        ))}
+                    </List>
+                )}
             </div>
         </li>
     );

@@ -35,7 +35,6 @@ export type CreateAdjustmentsFormType = z.infer<typeof createAdjustmentsSchema>;
 
 export function CreateAdjustmentsForm({
     dresses,
-    dressesDetails,
     bookingId,
 }: {
     dresses: BookingDressItemType[];
@@ -110,21 +109,21 @@ export function CreateAdjustmentsForm({
                                     {
                                         label: "Preço de aluguel",
                                         value: numberToCurrency(
-                                            dressesDetails[index].rentPrice,
+                                            dress.rentPrice,
                                         ),
                                     },
                                     {
                                         label: "Cor",
-                                        value: dressesDetails[index].color,
+                                        value: dress.color,
                                     },
                                     {
                                         label: "Modelo",
-                                        value: dressesDetails[index].model,
+                                        value: dress.model,
                                     },
                                 ]}
-                                img={dressesDetails[index].imagePath}
-                                imgAlt={dressesDetails[index].name}
-                                label={dressesDetails[index].name}
+                                img={dress.imagePath}
+                                imgAlt={`${dress.model}, ${dress.color}, ${dress.fabric}`}
+                                label={`${dress.model}, ${dress.color}, ${dress.fabric}`}
                             />
 
                             <label
