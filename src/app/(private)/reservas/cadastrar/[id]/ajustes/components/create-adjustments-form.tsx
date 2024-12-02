@@ -18,7 +18,6 @@ import {
     BookingService,
     IAdjustments,
 } from "@/services/bookings/booking.service";
-import { DressType } from "@/types/products/dress.types";
 import { ImageListItem } from "@/components/list/list";
 import { numberToCurrency } from "@/lib/utils";
 
@@ -38,7 +37,6 @@ export function CreateAdjustmentsForm({
     bookingId,
 }: {
     dresses: BookingDressItemType[];
-    dressesDetails: DressType[];
     bookingId: string;
 }) {
     const router = useRouter();

@@ -41,7 +41,7 @@ export function PreviewBookingList() {
     return (
         <PageSection title={`Reservas do dia ${formatDate(date)}`}>
             <div>
-                {data ? (
+                {data.items ? (
                     <PreviewBookingsTable bookings={data.items} />
                 ) : (
                     <p>

@@ -12,12 +12,17 @@ import {
 import { ImageListItem, List, ListItem } from "@/components/list/list";
 import React from "react";
 import { getPercentage } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function PreviewBookingsTable({
     bookings,
 }: {
     bookings: BookingType[];
 }) {
+    const router = useRouter();
+    function handleClick(id: string) {
+        router.push(`/reservas/${id}`);
+    }
     return (
         <Table>
             <TableHeader>
@@ -31,7 +36,10 @@ export function PreviewBookingsTable({
             </TableHeader>
             <TableBody>
                 {bookings.map((booking) => (
-                    <TableRow key={booking.id}>
+                    <TableRow
+                        key={booking.id}
+                        onClick={() => handleClick(booking.id)}
+                    >
                         <TableCell className={"text-nowrap"}>
                             {booking.customerName}
                         </TableCell>
