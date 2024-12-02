@@ -1,20 +1,23 @@
 import { z } from "zod";
 
-export const bookingItemsSchema = z.object({
-    dresses: z
-        .object({
-            dressId: z.string().uuid(),
-        })
-        .array()
-        .min(1, "Selecione ao menos um vestido"),
+export const bookingItemsSchema = z
+    .object({
+        dresses: z
+            .object({
+                dressId: z.string().uuid(),
+            })
+            .array(),
 
-    clutches: z
-        .object({
-            clutchId: z.string().uuid(),
-            isCourtesy: z.boolean(),
-        })
-        .array(),
-});
+        clutches: z
+            .object({
+                clutchId: z.string().uuid(),
+                isCourtesy: z.boolean(),
+            })
+            .array(),
+    })
+    .refine((data) => data.dresses.length > 0 || data.clutches.length > 0, {
+        message: "Adicione pelo menos um item à reserva",
+    });
 
 export const createBookingSchema = z
     .object({
