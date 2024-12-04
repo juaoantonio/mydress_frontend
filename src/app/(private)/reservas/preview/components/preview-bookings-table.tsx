@@ -67,7 +67,7 @@ export function PreviewBookingsTable({
                                 )}
                             </List>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className={"pr-40"}>
                             {booking.clutches.map((clutch) => (
                                 <ImageListItem
                                     key={clutch.id}
