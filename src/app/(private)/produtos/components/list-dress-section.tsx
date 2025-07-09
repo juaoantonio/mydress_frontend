@@ -121,6 +121,7 @@ export function ListDressSection() {
                             </div>
                             <Image
                                 src={dress.imagePath}
+                                unoptimized={true}
                                 alt={"Vestido"}
                                 width={200}
                                 height={200}

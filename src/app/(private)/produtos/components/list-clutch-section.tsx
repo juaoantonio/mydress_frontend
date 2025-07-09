@@ -121,6 +121,7 @@ export function ListClutchSection() {
                             </div>
                             <Image
                                 src={Clutch.imagePath}
+                                unoptimized={true}
                                 alt={"Bolsa"}
                                 width={200}
                                 height={200}

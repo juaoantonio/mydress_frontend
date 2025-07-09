@@ -109,6 +109,7 @@ export function DressFormEdit({ id }: IBaseProductEditionInputProps) {
                                                     className={
                                                         "aspect-square w-full rounded-md object-cover object-center"
                                                     }
+                                                    unoptimized={true}
                                                     src={preview}
                                                     alt={"Imagem do vestido"}
                                                     width={200}

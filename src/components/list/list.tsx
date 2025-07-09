@@ -58,6 +58,7 @@ export function ImageListItem({
             <Image
                 width={100}
                 height={100}
+                unoptimized={true}
                 src={img ?? ""}
                 alt={imgAlt}
                 className="h-[125px] w-[125px] rounded object-cover object-center"
